@@ -33,6 +33,10 @@
     <!-- Aos CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/aos.css') }}">
 
+    <!-- Slick CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/plugins/slick/slick.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/slick/slick-theme.css') }}">
+
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/swiper/swiper-bundle.min.css') }}">
 
@@ -335,6 +339,9 @@
 
 <!-- Aos JS -->
 <script src="{{ asset('assets/js/aos.js') }}"></script>
+
+<!-- Slick Slider -->
+<script src="{{ asset('assets/plugins/slick/slick.js') }}"></script>
 
 <!-- Swiper JS -->
 <script src="{{ asset('assets/plugins/swiper/swiper-bundle.min.js') }}"></script>
