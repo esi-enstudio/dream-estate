@@ -46,6 +46,7 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
+    @livewireStyles
 </head>
 
 <body>
@@ -355,5 +356,7 @@
 
 <script src="{{ asset('assets/js/rocket-loader.min.js') }}" defer></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"></script>
+
+@livewireScripts
 </body>
 </html>
