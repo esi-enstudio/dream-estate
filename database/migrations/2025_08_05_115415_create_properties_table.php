@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('property', function (Blueprint $table) {
+        Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->comment('Owner of the property')->constrained()->cascadeOnDelete();
             // foreignIdFor(PropertyType::class) এর পরিবর্তে আমরা একটি সহজবোধ্য ক্যাটাগরি সিস্টেম ব্যবহার করতে পারি।
@@ -59,8 +59,7 @@ return new class extends Migration
 
             // --- Media ---
             // Filament Spatie Media Library ইন্টিগ্রেশনের জন্য আলাদা টেবিল ব্যবহার হবে।
-            // তাই এখানে শুধু একটি থাম্বনেইল ও ভিডিও লিংক রাখা হলো।
-            $table->string('thumbnail_path')->nullable();
+            // তাই এখানে শুধু ভিডিও লিংক রাখা হলো।
             $table->string('video_url')->nullable()->comment('Youtube or Vimeo video link');
 
             // --- Status & Visibility ---
