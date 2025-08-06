@@ -1447,7 +1447,7 @@ html.menu-opened body {
 
 .header.header-two {
   background: transparent;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 .header.header-two .navbar {
   background: var(--white);
@@ -3830,7 +3830,7 @@ select.form-control-sm:not([size]):not([multiple]) {
 }
 
 .breadcrumb-bar {
-  padding: 40px 0;
+  padding: 110px 0px 40px 0px;
   background: var(--dark);
   position: relative;
   overflow: hidden;
@@ -3877,12 +3877,12 @@ select.form-control-sm:not([size]):not([multiple]) {
 }
 
 .custom-breadcrumb-bar {
-  padding: 80px 0px 77px;
+  padding: 160px 0px 77px;
   background: transparent;
 }
 @media (max-width: 991.98px) {
   .custom-breadcrumb-bar {
-    padding: 50px 0px;
+    padding: 110px 0px 50px;
   }
 }
 
@@ -4725,7 +4725,7 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 
 .Home-banner-section {
-  padding: 137px 0px;
+  padding: 200px 0px 130px 0px;
   background: url(../img/home/bg/banner-bg.jpg);
   background-size: cover;
   background-repeat: no-repeat;
@@ -4803,7 +4803,7 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 @media (max-width: 991.98px) {
   .Home-banner-section {
-    padding: 45px 0px;
+    padding: 100px 0px 43px 0px;
   }
 }
 

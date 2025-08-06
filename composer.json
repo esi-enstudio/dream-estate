@@ -7,17 +7,18 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bezhansalleh/filament-language-switch": "^3.1",
+        "bezhansalleh/filament-shield": "^3.3",
         "filament/filament": "^3.3",
+        "filament/spatie-laravel-settings-plugin": "^3.2",
+        "joaopaulolndev/filament-edit-profile": "^1.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
-        "spatie/laravel-medialibrary": "^11.13",
-        "bezhansalleh/filament-language-switch": "^3.1",
-        "bezhansalleh/filament-shield": "^3.3",
-        "filament/spatie-laravel-settings-plugin": "^3.2",
-        "joaopaulolndev/filament-edit-profile": "^1.0",
         "mokhosh/filament-rating": "^1.4",
-        "spatie/eloquent-sortable": "^4.5"
+        "shurjomukhi/shurjopay-plugin-php": "^0.1.1",
+        "spatie/eloquent-sortable": "^4.5",
+        "spatie/laravel-medialibrary": "^11.13"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

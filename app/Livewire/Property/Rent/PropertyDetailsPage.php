@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Properties\Rent;
+namespace App\Livewire\Property\Rent;
 
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -9,10 +9,10 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 #[Layout('layouts.app')]
-class RentPropertiesPage extends Component
+class PropertyDetailsPage extends Component
 {
     public function render(): Factory|View|Application
     {
-        return view('livewire.properties.rent.rent-properties-page');
+        return view('livewire.property.rent.property-details-page');
     }
 }

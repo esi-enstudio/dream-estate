@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('properties', function (Blueprint $table) {
+        Schema::create('property', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->comment('Owner of the property')->constrained()->cascadeOnDelete();
             // foreignIdFor(PropertyType::class) এর পরিবর্তে আমরা একটি সহজবোধ্য ক্যাটাগরি সিস্টেম ব্যবহার করতে পারি।
@@ -85,6 +85,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('properties');
+        Schema::dropIfExists('property');
     }
 };
