@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Amenity;
 use App\Models\Property;
+use App\Models\Tenant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('amenity_property', function (Blueprint $table) {
+        Schema::create('property_tenant', function (Blueprint $table) {
             $table->foreignIdFor(Property::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Amenity::class)->constrained()->cascadeOnDelete();
-            $table->primary(['property_id', 'amenity_id']);
+            $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete();
+            $table->primary(['property_id', 'tenant_id']);
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('amenity_property');
+        Schema::dropIfExists('property_tenant_pivot');
     }
 };

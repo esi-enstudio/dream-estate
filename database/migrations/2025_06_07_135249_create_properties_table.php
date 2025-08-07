@@ -1,5 +1,11 @@
 <?php
 
+use App\Models\District;
+use App\Models\Division;
+use App\Models\PropertyType;
+use App\Models\Tenant;
+use App\Models\Union;
+use App\Models\Upazila;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,8 +21,8 @@ return new class extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->comment('Owner of the property')->constrained()->cascadeOnDelete();
-            // foreignIdFor(PropertyType::class) এর পরিবর্তে আমরা একটি সহজবোধ্য ক্যাটাগরি সিস্টেম ব্যবহার করতে পারি।
-            // foreignIdFor(Tenant::class) এখানে প্রয়োজন নেই, কারণ একটি প্রপার্টির একাধিক ভাড়াটিয়া থাকতে পারে (ভবিষ্যতে) এবং এটি একটি Booking/Rental চুক্তির মাধ্যমে হ্যান্ডেল করা উচিত।
+            $table->foreignIdFor(PropertyType::class)->constrained();
+            $table->foreignIdFor(Tenant::class)->constrained();
 
             // --- Core Information ---
             $table->string('title');
@@ -28,9 +34,10 @@ return new class extends Migration
 
             // --- Pricing Details ---
             $table->unsignedInteger('rent_price')->comment('Monthly rent amount');
+            $table->enum('rent_type', ['day', 'week', 'month', 'year'])->default('month');
             $table->unsignedInteger('service_charge')->nullable()->default(0);
             $table->unsignedInteger('security_deposit')->nullable()->default(0);
-            $table->boolean('is_negotiable')->default(true);
+            $table->enum('is_negotiable', ['negotiable', 'fixed'])->default('fixed');
 
             // --- Property Specifications ---
             $table->unsignedSmallInteger('bedrooms');
@@ -41,8 +48,13 @@ return new class extends Migration
             $table->unsignedSmallInteger('total_floors')->nullable();
             $table->string('facing_direction')->nullable()->comment('e.g., South, North-East');
             $table->year('year_built')->nullable();
+            $table->string('thumbnail')->nullable();
 
             // --- Location ---
+            $table->foreignIdFor(Division::class)->constrained();
+            $table->foreignIdFor(District::class)->constrained();
+            $table->foreignIdFor(Upazila::class)->constrained();
+            $table->foreignIdFor(Union::class)->nullable()->constrained();
             $table->text('address_street');
             $table->string('address_city');
             $table->string('address_area'); // e.g., Dhanmondi, Gulshan
