@@ -24,18 +24,6 @@ class PropertySeeder extends Seeder
                     ]);
                 }
 
-                // Attach Space Overviews (pivot with dimensions)
-                $spaceOverviews = SpaceOverview::inRandomOrder()->take(rand(1, 3))->get();
-                foreach ($spaceOverviews as $space) {
-                    $length = fake()->numberBetween(8, 20);
-                    $width = fake()->numberBetween(6, 15);
-                    $property->spaceOverviews()->attach($space->id, [
-                        'length' => $length,
-                        'width' => $width,
-                        'total_sq_feet' => $length * $width,
-                    ]);
-                }
-
                 // Attach extra tenants (if needed)
                 $tenants = Tenant::inRandomOrder()->take(rand(1, 3))->pluck('id');
                 $property->tenants()->attach($tenants);

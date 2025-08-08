@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -129,9 +133,89 @@ class Property extends Model implements HasMedia
             ->performOnCollections('properties'); // শুধু 'properties' কালেকশনের ছবির জন্য এটি প্রযোজ্য
     }
 
-    public function user()
+    // Belongs To User
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Belongs To Location Hierarchy
+    public function division(): BelongsTo
+    {
+        return $this->belongsTo(Division::class);
+    }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function upazila(): BelongsTo
+    {
+        return $this->belongsTo(Upazila::class);
+    }
+
+    public function union(): BelongsTo
+    {
+        return $this->belongsTo(Union::class);
+    }
+
+    /**
+     * Get the property type that owns the Property.
+     */
+    public function propertyType(): BelongsTo
+    {
+        return $this->belongsTo(PropertyType::class);
+    }
+
+    public function tenants(): BelongsToMany
+    {
+        return $this->belongsToMany(Tenant::class, 'property_tenant');
+    }
+
+    /**
+     * The amenities that belong to the property.
+     */
+    public function amenities(): BelongsToMany
+    {
+        // একটি প্রপার্টির অনেকগুলো সুবিধা থাকতে পারে
+        return $this->belongsToMany(Amenity::class)
+            ->withPivot('details','is_key_feature') // <-- পিভট টেবিলের 'details' কলামটি অ্যাক্সেস করার জন্য
+            ->withTimestamps();
+    }
+
+    /**
+     * একটি বাসার সকল রিভিউ।
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get all of the messages for the Property.
+     * একটি প্রপার্টির জন্য অনেকগুলো মেসেজ থাকতে পারে।
+     */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function wishlistedByUsers(): BelongsToMany
+    {
+        // একটি প্রপার্টি অনেক ইউজার দ্বারা wishlisted হতে পারে
+        return $this->belongsToMany(User::class, 'wishlists')
+            ->withTimestamps();
+    }
+
+    /**
+     * গড় রেটিং ক্যালকুলেট করার জন্য একটি Helper মেথড
+     */
+    public function averageRating(): float
+    {
+        // reviews_avg_rating নামে একটি অ্যাট্রিবিউট থাকলে সেটি ব্যবহার করবে,
+        // নাহলে সরাসরি ডাটাবেস থেকে অ্যাভারেজ ক্যালকুলেট করবে।
+        return $this->reviews()->avg('rating') ?? 0;
     }
 
 

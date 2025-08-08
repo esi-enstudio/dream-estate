@@ -17,7 +17,6 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
         "mokhosh/filament-rating": "^1.4",
-        "shurjomukhi/shurjopay-plugin-php": "^0.1.1",
         "spatie/eloquent-sortable": "^4.5",
         "spatie/laravel-medialibrary": "^11.13"
     },

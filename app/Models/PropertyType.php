@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasCustomSlug;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class PropertyType extends Model
 {
-    use HasCustomSlug;
+    use HasCustomSlug, HasFactory;
 
     protected $fillable = ['name', 'slug', 'properties_count'];
 
