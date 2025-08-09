@@ -2,7 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use App\Models\District;
+use App\Models\Union;
+use App\Models\Upazila;
 use Filament\Forms;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Tables;
 use App\Models\Property;
 use Filament\Forms\Form;
@@ -24,6 +29,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use App\Filament\Resources\PropertyResource\RelationManagers;
+use Illuminate\Support\Collection;
 
 class PropertyResource extends Resource
 {
@@ -109,12 +115,17 @@ class PropertyResource extends Resource
 
                                              Select::make('bedrooms')
                                                 ->label('বেডরুম')
-                                                ->options(array_combine(range(1, 10), range(1, 10))) // 1 থেকে 10 পর্যন্ত অপশন
+                                                ->options(array_combine(range(0, 10), range(0, 10))) // 0 থেকে 10 পর্যন্ত অপশন
                                                 ->required(),
 
                                             Select::make('bathrooms')
                                                 ->label('বাথরুম')
-                                                ->options(array_combine(range(1, 10), range(1, 10)))
+                                                ->options(array_combine(range(0, 10), range(0, 10)))
+                                                ->required(),
+
+                                            Select::make('balconies')
+                                                ->label('বারান্দা')
+                                                ->options(array_combine(range(0, 10), range(0, 10)))
                                                 ->required(),
 
                                             TextInput::make('size_sqft')
@@ -143,32 +154,8 @@ class PropertyResource extends Resource
                                         ])
                                     ]),
 
-                                Section::make('ছবি ও ভিডিও (Media)')
+                                Section::make('নিয়ম (Rules)')
                                     ->schema([
-                                        SpatieMediaLibraryFileUpload::make('media')
-                                            ->label('বাসার ছবি আপলোড করুন')
-                                            ->collection('properties') // ছবির কালেকশনের নাম
-                                            ->multiple()
-                                            ->reorderable()
-                                            ->image()
-                                            ->imageEditor()
-                                            ->maxSize(2048) // 2MB max size
-                                            ->columnSpanFull(),
-
-                                        TextInput::make('video_url')
-                                            ->label('ইউটিউব ভিডিও লিংক')
-                                            ->url()
-                                            ->maxLength(255)
-                                    ]),
-
-                                Section::make('অতিরিক্ত ফিচার ও নিয়ম (Additional Features & Rules)')
-                                    ->schema([
-                                        KeyValue::make('additional_features')
-                                            ->label('অন্যান্য সুবিধা')
-                                            ->keyLabel('ফিচারের নাম (যেমন: AC)')
-                                            ->valueLabel('সংখ্যা (যেমন: 2)')
-                                            ->addActionLabel('নতুন ফিচার যোগ করুন'),
-
                                         RichEditor::make('house_rules')
                                             ->label('বাসার নিয়মাবলী')
                                             ->columnSpanFull(),
@@ -192,9 +179,14 @@ class PropertyResource extends Resource
                                             ->default('pending')
                                             ->required(),
 
-                                        Toggle::make('is_negotiable')
+                                        Select::make('is_negotiable')
                                             ->label('মূল্য আলোচনা সাপেক্ষ')
-                                            ->default(true),
+                                            ->options([
+                                                'negotiable' => 'আলোচনা সাপেক্ষে (Negotiable)',
+                                                'fixed' => 'অপরিবর্তনীয় (Fixed)',
+                                            ])
+                                            ->default('fixed')
+                                            ->required(),
 
                                         Toggle::make('is_featured')
                                             ->label('ফিচার্ড হিসেবে দেখান')
@@ -207,11 +199,91 @@ class PropertyResource extends Resource
 
                                 Section::make('অবস্থান (Location)')
                                     ->schema([
+                                        Select::make('division_id')
+                                            ->label('বিভাগ')
+                                            ->required()
+                                            ->relationship('division', 'bn_name')
+                                            ->helperText('প্রপার্টিটি কোন বিভাগে অবস্থিত তা নির্বাচন করুন।')
+                                            ->searchable()
+                                            ->preload()
+                                            ->live()
+                                            ->afterStateUpdated(fn (Set $set) => $set('district_id', null)),
+
+                                        Select::make('district_id')
+                                            ->label('জেলা')
+                                            ->options(fn (Get $get): Collection => District::query()
+                                                ->where('division_id', $get('division_id'))
+                                                ->pluck('bn_name', 'id'))
+                                            ->getOptionLabelUsing(fn ($value): ?string => District::find($value)?->bn_name)
+                                            ->searchable()->live()->preload()
+                                            ->afterStateUpdated(fn (Set $set) => $set('upazila_id', null))
+                                            ->helperText('প্রপার্টিটি কোন জেলায় অবস্থিত তা নির্বাচন করুন।')
+                                            ->required(),
+
+                                        Select::make('upazila_id')
+                                            ->label('উপজেলা')
+                                            ->options(fn (Get $get): Collection => Upazila::query()
+                                                ->where('district_id', $get('district_id'))
+                                                ->pluck('bn_name', 'id'))
+                                            // --- এখানে getOptionLabel() যোগ করা হয়েছে ---
+                                            ->getOptionLabelUsing(fn ($value): ?string => Upazila::find($value)?->bn_name)
+                                            ->searchable()->live()->preload()
+                                            ->afterStateUpdated(fn (Set $set) => $set('union_id', null))
+                                            ->helperText('প্রপার্টিটি কোন উপজেলায় অবস্থিত তা নির্বাচন করুন।')
+                                            ->required(),
+
+                                        Select::make('union_id')
+                                            ->label('ইউনিয়ন')
+                                            ->helperText('প্রপার্টিটি কোন ইউনিয়নে অবস্থিত তা নির্বাচন করুন (যদি থাকে)।')
+                                            ->options(fn (Get $get): Collection => Union::query()
+                                                ->where('upazila_id', $get('upazila_id'))
+                                                ->pluck('bn_name', 'id'))
+                                            ->getOptionLabelUsing(fn ($value): ?string => Union::find($value)?->bn_name)
+                                            ->searchable()
+                                            ->preload()
+                                            ->nullable(),
                                         TextInput::make('address_street')->label('রাস্তার ঠিকানা')->required(),
-                                        TextInput::make('address_area')->label('এলাকা (যেমন: ধানমন্ডি)')->required(),
-                                        TextInput::make('address_city')->label('শহর')->required(),
+                                        TextInput::make('address_area')->label('এলাকা')->helperText('(যেমন: চন্ডিবেড় মধ্যপাড়া, ভৈরবপুর উত্তরপাড়া)')->required(),
                                         TextInput::make('address_zipcode')->label('জিপ কোড'),
                                         TextInput::make('google_maps_location_link')->label('গুগল ম্যাপস লিংক')->url(),
+                                    ]),
+
+                                Section::make('ছবি ও ভিডিও (Media)')
+                                    ->schema([
+                                        // --- ফিচার্ড বা প্রধান ছবির জন্য ---
+                                        SpatieMediaLibraryFileUpload::make('featured_image')
+                                            ->label('ফিচার্ড বা প্রধান ছবি (থাম্বনেইল)')
+                                            ->collection('featured_image') // <-- ডেডিকেটেড কালেকশন
+                                            ->multiple(false) // <-- একটি মাত্র ছবি আপলোড করা যাবে
+                                            ->required() // <-- এই ফিল্ডটি বাধ্যতামূলক
+                                            ->image() // <-- শুধুমাত্র ইমেজ ফাইল গ্রহণ করবে
+
+                                            // --- Validation ---
+                                            ->maxSize(2048) // সর্বোচ্চ সাইজ ২ মেগাবাইট (2048 کیلوبাইট)
+                                            ->rules(['image', 'max:2048']) // সার্ভার-সাইড ভ্যালিডেশন
+
+                                            // --- অন্যান্য ইউজফুল মেথড ---
+                                            ->imageCropAspectRatio('16:9') // এডিটরে ক্রপ করার জন্য ডিফল্ট অনুপাত
+                                            ->imageResizeMode('cover') // ছবির আকার পরিবর্তনের মোড
+                                            ->panelLayout('compact') // আপলোড UI-এর ডিজাইন
+                                            ->helperText('এটি আপনার প্রপার্টির প্রধান ছবি হিসেবে ওয়েবসাইটে দেখানো হবে। সাইজ ৮৩২x৪৭২ পিক্সেল হলে সবচেয়ে ভালো দেখাবে।'),
+
+                                        // --- গ্যালারির ছবির জন্য ---
+                                        SpatieMediaLibraryFileUpload::make('gallery_images')
+                                            ->label('গ্যালারির জন্য অতিরিক্ত ছবি')
+                                            ->collection('gallery') // <-- গ্যালারির জন্য আলাদা কালেকশন
+                                            ->multiple()
+                                            ->reorderable()
+                                            ->image()
+                                            ->maxSize(2048)
+                                            ->maxFiles(10) // সর্বোচ্চ ১০টি ছবি আপলোড করা যাবে
+                                            ->panelLayout('compact')
+                                            ->helperText('এখানে একাধিক ছবি যোগ করতে পারেন।'),
+
+                                        TextInput::make('video_url')
+                                            ->label('ইউটিউব ভিডিও লিংক')
+                                            ->url()
+                                            ->maxLength(255)
                                     ]),
                             ]),
                     ])
@@ -222,10 +294,11 @@ class PropertyResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('thumbnail')
+                SpatieMediaLibraryImageColumn::make('featured_image_thumbnail')
                     ->label('থাম্বনেইল')
-                    ->collection('properties')
-                    ->conversion('thumbnail'), // <-- আমরা যে কনভার্সন তৈরি করেছি, সেটি এখানে ব্যবহার করছি
+                    ->collection('featured_image') // <-- সঠিক কালেকশন থেকে ছবি আনবে
+                    ->conversion('thumbnail') // <-- আমাদের তৈরি করা কনভার্সন ব্যবহার করবে
+                    ->defaultImageUrl(url('/assets/img/property/placeholder.jpg')), // যদি ছবি না থাকে, একটি ডিফল্ট ছবি দেখাবে
 
                 TextColumn::make('title')
                     ->label('শিরোনাম')

@@ -126,11 +126,19 @@ class Property extends Model implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void
     {
+        // ফিচার্ড ছবির জন্য থাম্বনেইল কনভার্সন
         $this
             ->addMediaConversion('thumbnail')
-            ->fit(Fit::Crop, 832, 472) // <-- আমাদের মূল কাজটি এখানে হচ্ছে
-            ->nonQueued() // থাম্বনেইলটি আপলোডের সাথে সাথেই তৈরি হবে
-            ->performOnCollections('properties'); // শুধু 'properties' কালেকশনের ছবির জন্য এটি প্রযোজ্য
+            ->fit(Fit::Crop, 832, 472)
+            ->nonQueued()
+            ->performOnCollections('featured_image'); // <-- শুধুমাত্র 'featured_image' কালেকশনের জন্য
+
+        // (ঐচ্ছিক) গ্যালারির ছবির জন্য ছোট প্রিভিউ
+        $this
+            ->addMediaConversion('preview')
+            ->fit(Fit::Crop, 856, 500)
+            ->nonQueued()
+            ->performOnCollections('gallery');
     }
 
     // Belongs To User
