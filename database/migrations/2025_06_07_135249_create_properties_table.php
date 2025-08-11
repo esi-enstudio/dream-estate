@@ -25,44 +25,43 @@ return new class extends Migration
             $table->foreignIdFor(Tenant::class)->constrained();
 
             // --- Core Information ---
-//            $table->string('title');
-//            $table->string('slug')->unique();
-//            $table->longText('description');
-//            $table->string('property_code')->unique()->comment('Human-readable unique ID like BHARA-101');
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->longText('description');
+            $table->string('property_code')->unique()->comment('Human-readable unique ID like BHARA-101');
             $table->enum('purpose', ['rent', 'sell'])->default('rent')->comment('Purpose of the listing');
-//            $table->string('property_type')->comment('e.g., Apartment, Flat, Duplex'); // PropertyType মডেলের পরিবর্তে সাধারণ স্ট্রিং ব্যবহার সহজতর।
+            $table->string('property_type')->comment('e.g., Apartment, Flat, Duplex'); // PropertyType মডেলের পরিবর্তে সাধারণ স্ট্রিং ব্যবহার সহজতর।
 
             // --- Pricing Details ---
-//            $table->unsignedInteger('rent_price')->comment('Monthly rent amount');
+            $table->unsignedInteger('rent_price')->comment('Monthly rent amount');
             $table->enum('rent_type', ['day', 'week', 'month', 'year'])->default('month');
-//            $table->unsignedInteger('service_charge')->nullable()->default(0);
-//            $table->unsignedInteger('security_deposit')->nullable()->default(0);
-//            $table->enum('is_negotiable', ['negotiable', 'fixed'])->default('fixed');
+            $table->unsignedInteger('service_charge')->nullable()->default(0);
+            $table->unsignedInteger('security_deposit')->nullable()->default(0);
+            $table->enum('is_negotiable', ['negotiable', 'fixed'])->default('fixed');
 
             // --- Property Specifications ---
-//            $table->unsignedSmallInteger('bedrooms');
-//            $table->unsignedSmallInteger('bathrooms');
-//            $table->unsignedSmallInteger('balconies')->default(0);
-//            $table->unsignedInteger('size_sqft')->comment('Area in square feet');
-//            $table->string('floor_level')->nullable()->comment('e.g., 5th floor of 12');
+            $table->unsignedSmallInteger('bedrooms');
+            $table->unsignedSmallInteger('bathrooms');
+            $table->unsignedSmallInteger('balconies')->default(0);
+            $table->unsignedInteger('size_sqft')->comment('Area in square feet');
+            $table->string('floor_level')->nullable()->comment('e.g., 5th floor of 12');
             $table->unsignedSmallInteger('total_floors')->nullable();
-//            $table->string('facing_direction')->nullable()->comment('e.g., South, North-East');
-//            $table->year('year_built')->nullable();
-            $table->string('thumbnail')->nullable();
+            $table->string('facing_direction')->nullable()->comment('e.g., South, North-East');
+            $table->year('year_built')->nullable();
 
             // --- Location ---
             $table->foreignIdFor(Division::class)->constrained();
             $table->foreignIdFor(District::class)->constrained();
             $table->foreignIdFor(Upazila::class)->constrained();
             $table->foreignIdFor(Union::class)->nullable()->constrained();
-//            $table->text('address_street');
-//            $table->string('address_area'); // e.g., Dhanmondi, Gulshan
-//            $table->string('address_zipcode')->nullable();
-//            $table->string('google_maps_location_link')->nullable(); // সরাসরি গুগল ম্যাপের লিংক রাখার জন্য
+            $table->text('address_street');
+            $table->string('address_area'); // e.g., Dhanmondi, Gulshan
+            $table->string('address_zipcode')->nullable();
+            $table->string('google_maps_location_link')->nullable(); // সরাসরি গুগল ম্যাপের লিংক রাখার জন্য
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
 
-//            $table->text('house_rules')->nullable();
+            $table->text('house_rules')->nullable();
 
             // --- Media ---
             // Filament Spatie Media Library ইন্টিগ্রেশনের জন্য আলাদা টেবিল ব্যবহার হবে।
@@ -70,12 +69,12 @@ return new class extends Migration
             $table->string('video_url')->nullable()->comment('Youtube or Vimeo video link');
 
             // --- Status & Visibility ---
-//            $table->enum('status', ['pending', 'active', 'rented', 'inactive', 'sold_out'])->default('pending');
+            $table->enum('status', ['pending', 'active', 'rented', 'inactive', 'sold_out'])->default('pending');
             $table->boolean('is_available')->default(true);
-//            $table->date('available_from');
-//            $table->boolean('is_featured')->default(false)->comment('For "Featured" badge');
+            $table->date('available_from');
+            $table->boolean('is_featured')->default(false)->comment('For "Featured" badge');
             $table->boolean('is_trending')->default(false)->comment('For "Trending" badge');
-//            $table->boolean('is_verified')->default(false)->comment('Verified by platform admin');
+            $table->boolean('is_verified')->default(false)->comment('Verified by platform admin');
 
             // --- System & SEO ---
             $table->unsignedBigInteger('views_count')->default(0);

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('property_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name_en')->unique();
+            $table->string('name_bn')->unique();
             $table->string('slug')->unique();
             $table->unsignedInteger('properties_count')->default(0);
             $table->timestamps();

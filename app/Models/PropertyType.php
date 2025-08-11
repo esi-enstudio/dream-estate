@@ -17,14 +17,14 @@ class PropertyType extends Model
 {
     use HasCustomSlug, HasFactory;
 
-    protected $fillable = ['name', 'slug', 'properties_count'];
+    protected $fillable = ['name_en', 'name_bn', 'slug', 'properties_count'];
 
     /**
      * Define which field to use for slug generation.
      */
     public function getSluggableField(): string
     {
-        return 'name';
+        return 'name_en';
     }
 
     /**
