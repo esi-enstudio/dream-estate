@@ -2,29 +2,32 @@
 
 namespace Database\Seeders;
 
-use App\Models\Tenant;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Tenant;
+use Illuminate\Support\Str;
 
 class TenantSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $types = [
-            ['name' => 'Small Family'],
-            ['name' => 'Big Family'],
-            ['name' => 'Bachelor'],
-            ['name' => 'Girls'],
-            ['name' => 'Boys'],
+            ['Family', 'পরিবার'],
+            ['Bachelor Male', 'অবিবাহিত পুরুষ'],
+            ['Bachelor Female', 'অবিবাহিত মহিলা'],
+            ['Office', 'অফিস'],
+            ['Sublet', 'সাবলেট'],
+            ['Hostel', 'হোস্টেল'],
+            ['Other', 'অন্যান্য'],
         ];
 
-        foreach ($types as $type) {
-            Tenant::create([
-                'name' => $type['name'],
-            ]);
+        foreach ($types as [$en, $bn]) {
+            Tenant::updateOrCreate(
+                ['slug' => Str::slug($en)],
+                [
+                    'name' => $en,
+                    // বাংলা নাম রাখার জন্য আলাদা কলাম থাকলে সেটি এখানে দিন, যেমন 'name_bn' => $bn
+                ]
+            );
         }
     }
 }

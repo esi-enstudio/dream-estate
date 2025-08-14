@@ -2,28 +2,33 @@
 
 namespace Database\Seeders;
 
-use App\Models\PropertyType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\PropertyType;
+use Illuminate\Support\Str;
 
 class PropertyTypeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $types = [
-            ['name' => 'Tin Shed'],
-            ['name' => 'Semi Pucca'],
-            ['name' => 'Flat'],
-            ['name' => 'Duplex'],
+            ['Apartment', 'এপার্টমেন্ট'],
+            ['Duplex', 'ডুপ্লেক্স'],
+            ['Penthouse', 'পেন্টহাউস'],
+            ['Studio', 'স্টুডিও'],
+            ['Commercial Space', 'কমার্শিয়াল স্পেস'],
+            ['Warehouse', 'গুদামঘর'],
+            ['Shop', 'দোকান'],
         ];
 
-        foreach ($types as $type) {
-            PropertyType::create([
-                'name' => $type['name'],
-            ]);
+        foreach ($types as [$en, $bn]) {
+            PropertyType::updateOrCreate(
+                ['slug' => Str::slug($en)],
+                [
+                    'name_en' => $en,
+                    'name_bn' => $bn,
+                    'properties_count' => 0,
+                ]
+            );
         }
     }
 }

@@ -30,7 +30,6 @@ return new class extends Migration
             $table->longText('description');
             $table->string('property_code')->unique()->comment('Human-readable unique ID like BHARA-101');
             $table->enum('purpose', ['rent', 'sell'])->default('rent')->comment('Purpose of the listing');
-            $table->string('property_type')->comment('e.g., Apartment, Flat, Duplex'); // PropertyType মডেলের পরিবর্তে সাধারণ স্ট্রিং ব্যবহার সহজতর।
 
             // --- Pricing Details ---
             $table->unsignedInteger('rent_price')->comment('Monthly rent amount');
@@ -80,6 +79,7 @@ return new class extends Migration
             $table->unsignedBigInteger('views_count')->default(0);
             $table->unsignedInteger('reviews_count')->default(0);
             $table->decimal('average_rating', 2, 1)->default(0.0);
+            $table->integer('score')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

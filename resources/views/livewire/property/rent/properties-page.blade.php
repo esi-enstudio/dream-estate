@@ -1,6 +1,6 @@
 <div class="page-wrapper">
 
-    <!-- Start Breadscrumb -->
+    <!-- Start Breadcrumb -->
     <div class="breadcrumb-bar">
         <img src="{{ asset('assets/img/bg/breadcrumb-bg-01.png') }}" alt="" class="breadcrumb-bg-01 d-none d-lg-block">
         <img src="{{ asset('assets/img/bg/breadcrumb-bg-02.png') }}" alt="" class="breadcrumb-bg-02 d-none d-lg-block">
@@ -10,14 +10,14 @@
                 <h1 class="breadcrumb-title">Rent List Sidebar</h1>
                 <nav aria-label="breadcrumb" class="page-breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index-2.html"><span><i class="material-icons-outlined me-1">home</i></span>Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Rent List Sidebar</li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}"><span><i class="material-icons-outlined me-1">home</i></span>Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Rent Property List</li>
                     </ol>
                 </nav>
             </div>
         </div>
     </div>
-    <!-- End Breadscrumb -->
+    <!-- End Breadcrumb -->
 
     <!-- Start Content -->
     <div class="content">
@@ -366,400 +366,139 @@
                     <!-- start row -->
                     <div class="row mb-4">
 
-                        <!-- Items-1 -->
+                        <!-- property card -->
+                        @forelse($properties as $property)
                         <div class="col-lg-12 col-md-6">
                             <div class="property-card">
                                 <div class="property-listing-item p-0 mb-0 shadow-none d-flex flex-lg-nowrap flex-wrap">
                                     <div class="buy-grid-img buy-list-img rent-list-img  mb-0 rounded-0">
-                                        <a href="rent-details.html">
-                                            <img class="img-fluid" src="{{ asset('assets/img/rent/rent-grid-img-01.jpg') }}" alt="">
+
+                                        {{-- SEO: লিঙ্কে টাইটেল যোগ করা হয়েছে এবং slug ব্যবহার করা হয়েছে --}}
+                                        <a href="{{ route('listing.details', $property->slug) }}" title="View details for {{ $property->title }}">
+
+                                            {{-- SEO: ছবির alt ট্যাগ ডাইনামিক করা হয়েছে, যা খুবই গুরুত্বপূর্ণ --}}
+                                            <img
+                                                class="img-fluid"
+                                                src="{{ $property->getFirstMediaUrl('featured_image', 'thumbnail') }}"
+                                                alt="{{ $property->title }}"
+                                                title="{{ $property->title }}"
+                                            >
                                         </a>
+
                                         <div class="d-flex align-items-center justify-content-between position-absolute top-0 start-0 end-0 p-3 z-1">
                                             <div class="d-flex align-items-center gap-2">
-                                                <div class="badge badge-sm bg-danger d-flex align-items-center">
-                                                    <i class="material-icons-outlined">offline_bolt</i>New
-                                                </div>
-                                                <div class="badge badge-sm bg-orange d-flex align-items-center">
-                                                    <i class="material-icons-outlined">loyalty</i>Featured
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                            <h6 class="text-white mb-0">$21000 <span class="fs-14 fw-normal"> / Night </span></h6>
-                                            <a href="javascript:void(0)" class="favourite">
-                                                <i class="material-icons-outlined">favorite_border</i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="buy-grid-content w-100">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <span class="ms-1 fs-14">Excellent</span>
-                                            </div>
-                                            <span class="badge bg-secondary"> Lodge</span>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div>
-                                                <h6 class="title mb-1">
-                                                    <a href="rent-details.html">Serenity Condo Suite</a>
-                                                </h6>
-                                                <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>17, Grove Towers, New York, USA</p>
-                                            </div>
-                                        </div>
-                                        <ul class="d-flex buy-grid-details d-flex mb-3 bg-light rounded p-3 justify-content-between align-items-center flex-wrap gap-1">
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bed</i>
-                                                4 Bedroom
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bathtub</i>
-                                                4 Bath
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">straighten</i>
-                                                350 Sq Ft
-                                            </li>
-                                        </ul>
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top border-light-100 pt-3">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="avatar avatar-lg user-avatar">
-                                                    <img src="{{ asset('assets/img/users/user-10.jpg') }}" alt="" class="rounded-circle">
-                                                </div>
-                                                <h6 class="mb-0 fs-16 fw-medium text-dark">Ethan Brooks<span class="d-block fs-14 text-body pt-1">United States</span> </h6>
-                                            </div>
-                                            <a href="rental-booking.html" class="btn btn-dark">Book Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
+                                                {{-- শর্তসাপেক্ষ ব্যাজ: যদি প্রপার্টিটি নতুন হয় --}}
+                                                @if($property->created_at->gt(now()->subDays(7)))
+                                                    <div class="badge badge-sm bg-danger d-flex align-items-center">
+                                                        <i class="material-icons-outlined">offline_bolt</i>New
+                                                    </div>
+                                                @endif
 
-                        <!-- Items-2 -->
-                        <div class="col-lg-12 col-md-6">
-                            <div class="property-card">
-                                <div class="property-listing-item p-0 mb-0 shadow-none d-flex flex-lg-nowrap flex-wrap">
-                                    <div class="buy-grid-img buy-list-img rent-list-img  mb-0 rounded-0">
-                                        <a href="rent-details.html">
-                                            <img class="img-fluid" src="{{ asset('assets/img/rent/rent-grid-img-02.jpg') }}" alt="">
-                                        </a>
-                                        <div class="d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                            <h6 class="text-white mb-0">$1130 <span class="fs-14 fw-normal"> / Night </span></h6>
-                                            <a href="javascript:void(0)" class="favourite">
-                                                <i class="material-icons-outlined">favorite_border</i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="buy-grid-content w-100">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <span class="ms-1 fs-14">Excellent</span>
-                                            </div>
-                                            <span class="badge bg-secondary"> Apartment</span>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div>
-                                                <h6 class="title mb-1">
-                                                    <a href="rent-details.html">Getaway Apartment</a>
-                                                </h6>
-                                                <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>54, Coral Sands Apartments, Gold Coast, Australia</p>
+                                                {{-- শর্তসাপেক্ষ ব্যাজ: যদি প্রপার্টিটি ফিচার্ড হয় --}}
+                                                @if($property->is_featured)
+                                                    <div class="badge badge-sm bg-orange d-flex align-items-center">
+                                                        <i class="material-icons-outlined">loyalty</i>Featured
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
-                                        <ul class="d-flex buy-grid-details d-flex mb-3 bg-light rounded p-3 justify-content-between align-items-center flex-wrap gap-1">
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bed</i>
-                                                2 Bedroom
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bathtub</i>
-                                                4 Bath
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">straighten</i>
-                                                350 Sq Ft
-                                            </li>
-                                        </ul>
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top border-light-100 pt-3">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="avatar avatar-lg user-avatar">
-                                                    <img src="{{ asset('assets/img/users/user-11.jpg') }}" alt="" class="rounded-circle">
-                                                </div>
-                                                <h6 class="mb-0 fs-16 fw-medium text-dark">Olivia Hayes<span class="d-block fs-14 text-body pt-1">Australia</span> </h6>
-                                            </div>
-                                            <a href="rental-booking.html" class="btn btn-dark">Book Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
 
-                        <!-- Items-3 -->
-                        <div class="col-lg-12 col-md-6">
-                            <div class="property-card">
-                                <div class="property-listing-item p-0 mb-0 shadow-none d-flex flex-lg-nowrap flex-wrap">
-                                    <div class="buy-grid-img buy-list-img rent-list-img  mb-0 rounded-0">
-                                        <a href="rent-details.html">
-                                            <img class="img-fluid" src="{{ asset('assets/img/rent/rent-grid-img-03.jpg') }}" alt="">
-                                        </a>
                                         <div class="d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                            <h6 class="text-white mb-0">$2450 <span class="fs-14 fw-normal"> / Night </span></h6>
-                                            <a href="javascript:void(0)" class="favourite">
-                                                <i class="material-icons-outlined">favorite_border</i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="buy-grid-content w-100">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <span class="ms-1 fs-14">Excellent</span>
-                                            </div>
-                                            <span class="badge bg-secondary"> Condo</span>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div>
-                                                <h6 class="title mb-1">
-                                                    <a href="rent-details.html">Cozy Urban Condo</a>
-                                                </h6>
-                                                <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>130, Elmstone Flats, Manchester, UK</p>
-                                            </div>
-                                        </div>
-                                        <ul class="d-flex buy-grid-details d-flex mb-3 bg-light rounded p-3 justify-content-between align-items-center flex-wrap gap-1">
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bed</i>
-                                                4 Bedroom
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bathtub</i>
-                                                3 Bath
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">straighten</i>
-                                                520 Sq Ft
-                                            </li>
-                                        </ul>
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top border-light-100 pt-3">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="avatar avatar-lg user-avatar">
-                                                    <img src="{{ asset('assets/img/users/user-12.jpg') }}" alt="" class="rounded-circle">
-                                                </div>
-                                                <h6 class="mb-0 fs-16 fw-medium text-dark">Daniel Carter<span class="d-block fs-14 text-body pt-1">United Kingdom</span> </h6>
-                                            </div>
-                                            <a href="rental-booking.html" class="btn btn-dark">Book Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
+                                            {{-- ডাইনামিক মূল্য: ডাটাবেস থেকে আসছে --}}
+                                            <h6 class="text-white mb-0">৳{{ number_format($property->rent_price) }} <span class="fs-14 fw-normal">/ {{ $property->rent_type }}</span></h6>
 
-                        <!-- Items-4 -->
-                        <div class="col-lg-12 col-md-6">
-                            <div class="property-card">
-                                <div class="property-listing-item p-0 mb-0 shadow-none d-flex flex-lg-nowrap flex-wrap">
-                                    <div class="buy-grid-img buy-list-img rent-list-img  mb-0 rounded-0">
-                                        <a href="rent-details.html">
-                                            <img class="img-fluid" src="{{ asset('assets/img/rent/rent-grid-img-04.jpg') }}" alt="">
-                                        </a>
-                                        <div class="d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                            <h6 class="text-white mb-0">$1580 <span class="fs-14 fw-normal"> / Night </span></h6>
-                                            <a href="javascript:void(0)" class="favourite">
+                                            {{-- ভবিষ্যতের জন্য: Wishlist কার্যকারিতা যোগ করার জন্য --}}
+                                            <a href="javascript:void(0)" wire:click.prevent="toggleWishlist({{ $property->id }})" class="favourite">
                                                 <i class="material-icons-outlined">favorite_border</i>
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="buy-grid-content w-100">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <span class="ms-1 fs-14">Excellent</span>
-                                            </div>
-                                            <span class="badge bg-secondary"> Residency</span>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div>
-                                                <h6 class="title mb-1">
-                                                    <a href="rent-details.html">Coral Bay Cabins</a>
-                                                </h6>
-                                                <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>7, Rosewood Court, Brighton, UK</p>
-                                            </div>
-                                        </div>
-                                        <ul class="d-flex buy-grid-details d-flex mb-3 bg-light rounded p-3 justify-content-between align-items-center flex-wrap gap-1">
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bed</i>
-                                                5 Bedroom
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bathtub</i>
-                                                3 Bath
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">straighten</i>
-                                                700 Sq Ft
-                                            </li>
-                                        </ul>
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top border-light-100 pt-3">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="avatar avatar-lg user-avatar">
-                                                    <img src="{{ asset('assets/img/users/user-13.jpg') }}" alt="" class="rounded-circle">
-                                                </div>
-                                                <h6 class="mb-0 fs-16 fw-medium text-dark">Sophia Mitchell<span class="d-block fs-14 text-body pt-1">United Kingdom</span> </h6>
-                                            </div>
-                                            <a href="rental-booking.html" class="btn btn-dark">Book Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
 
-                        <!-- Items-5 -->
-                        <div class="col-lg-12 col-md-6">
-                            <div class="property-card">
-                                <div class="property-listing-item p-0 mb-0 shadow-none d-flex flex-lg-nowrap flex-wrap">
-                                    <div class="buy-grid-img buy-list-img rent-list-img  mb-0 rounded-0">
-                                        <a href="rent-details.html">
-                                            <img class="img-fluid" src="{{ asset('assets/img/rent/rent-grid-img-05.jpg') }}" alt="">
-                                        </a>
-                                        <div class="d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                            <h6 class="text-white mb-0">$4500 <span class="fs-14 fw-normal"> / Night </span></h6>
-                                            <a href="javascript:void(0)" class="favourite">
-                                                <i class="material-icons-outlined">favorite_border</i>
-                                            </a>
-                                        </div>
-                                    </div>
                                     <div class="buy-grid-content w-100">
                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                             <div class="d-flex align-items-center justify-content-center">
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <span class="ms-1 fs-14">Excellent</span>
-                                            </div>
-                                            <span class="badge bg-secondary"> Residency</span>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div>
-                                                <h6 class="title mb-1">
-                                                    <a href="rent-details.html">Majestic Stay</a>
-                                                </h6>
-                                                <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>10, Bella Vista Villas, Rome, Italy</p>
-                                            </div>
-                                        </div>
-                                        <ul class="d-flex buy-grid-details d-flex mb-3 bg-light rounded p-3 justify-content-between align-items-center flex-wrap gap-1">
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bed</i>
-                                                2 Bedroom
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bathtub</i>
-                                                1 Bath
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">straighten</i>
-                                                400 Sq Ft
-                                            </li>
-                                        </ul>
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top border-light-100 pt-3">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="avatar avatar-lg user-avatar">
-                                                    <img src="{{ asset('assets/img/users/user-14.jpg') }}" alt="" class="rounded-circle">
-                                                </div>
-                                                <h6 class="mb-0 fs-16 fw-medium text-dark">Leo Ramirez<span class="d-block fs-14 text-body pt-1">Italy</span> </h6>
-                                            </div>
-                                            <a href="rental-booking.html" class="btn btn-dark">Book Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
+                                                {{-- ডাইনামিক স্টার রেটিং --}}
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <i class="material-icons-outlined {{ $i <= round($property->average_rating) ? 'text-warning' : 'text-gray-300' }}">star</i>
+                                                @endfor
 
-                        <!-- Items-6 -->
-                        <div class="col-lg-12 col-md-6">
-                            <div class="property-card mb-0">
-                                <div class="property-listing-item p-0 mb-0 shadow-none d-flex flex-lg-nowrap flex-wrap">
-                                    <div class="buy-grid-img buy-list-img rent-list-img  mb-0 rounded-0">
-                                        <a href="rent-details.html">
-                                            <img class="img-fluid" src="{{ asset('assets/img/rent/rent-grid-img-06.jpg') }}" alt="">
-                                        </a>
-                                        <div class="d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                            <h6 class="text-white mb-0">$3000 <span class="fs-14 fw-normal"> / Night </span></h6>
-                                            <a href="javascript:void(0)" class="favourite">
-                                                <i class="material-icons-outlined">favorite_border</i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="buy-grid-content w-100">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <i class="material-icons-outlined text-warning">star</i>
-                                                <span class="ms-1 fs-14">Excellent</span>
+                                                <span class="ms-1 fs-14"> ({{ $property->reviews_count }} Reviews)</span>
                                             </div>
-                                            <span class="badge bg-secondary"> Lodge</span>
+
+                                            {{-- ডাইনামিক ক্যাটাগরি --}}
+                                            <span class="badge bg-secondary">{{ $property->property_type }}</span>
                                         </div>
+
                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                             <div>
                                                 <h6 class="title mb-1">
-                                                    <a href="rent-details.html">Noble Nest</a>
+                                                    <a href="{{ route('listing.details', $property->slug) }}">{{ $property->title }}</a>
                                                 </h6>
-                                                <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>76, Sakura Heights, Kyoto, Japan</p>
+
+                                                <p class="d-flex align-items-center fs-14 mb-0">
+                                                    <i class="material-icons-outlined me-1 ms-0">location_on</i>
+                                                    {{ $property->address_street }}
+                                                </p>
                                             </div>
                                         </div>
+
                                         <ul class="d-flex buy-grid-details d-flex mb-3 bg-light rounded p-3 justify-content-between align-items-center flex-wrap gap-1">
+                                            {{-- ডাইনামিক স্পেসিফিকেশন --}}
                                             <li class="d-flex align-items-center gap-1">
                                                 <i class="material-icons-outlined bg-white text-secondary">bed</i>
-                                                3 Bedroom
+                                                {{ $property->bedrooms }} Bed
                                             </li>
                                             <li class="d-flex align-items-center gap-1">
                                                 <i class="material-icons-outlined bg-white text-secondary">bathtub</i>
-                                                2 Bath
+                                                {{ $property->bathrooms }} Bath
                                             </li>
                                             <li class="d-flex align-items-center gap-1">
                                                 <i class="material-icons-outlined bg-white text-secondary">straighten</i>
-                                                550 Sq Ft
+                                                {{ $property->size_sqft }} Sq Ft
                                             </li>
                                         </ul>
+
                                         <div class="d-flex align-items-center justify-content-between flex-wrap border-top border-light-100 pt-3">
                                             <div class="d-flex align-items-center gap-2">
                                                 <div class="avatar avatar-lg user-avatar">
-                                                    <img src="{{ asset('assets/img/users/user-15.jpg') }}" alt="" class="rounded-circle">
+                                                    {{-- মালিকের ডাইনামিক ছবি ও নাম --}}
+                                                    <img src="{{ $property->user->avatar_url }}" alt="{{ $property->user->name }}" class="rounded-circle">
                                                 </div>
-                                                <h6 class="mb-0 fs-16 fw-medium text-dark">Maya Rivera<span class="d-block fs-14 text-body pt-1">Japan</span> </h6>
+                                                <h6 class="mb-0 fs-16 fw-medium text-dark">{{ $property->user->name }}
+                                                    <span class="d-block fs-14 text-body pt-1">United States</span>
+                                                </h6>
                                             </div>
                                             <a href="rental-booking.html" class="btn btn-dark">Book Now</a>
                                         </div>
                                     </div>
                                 </div>
                             </div> <!-- end card -->
-                        </div> <!-- end col -->
+                        </div>
+                        @empty
+                            <div class="col-12">
+                                <p class="text-center">No properties found matching your criteria.</p>
+                            </div>
+                        @endforelse
 
                     </div>
                     <!-- end row -->
 
-                    <div class="text-center">
-                        <a href="javascript:void(0)" class="btn btn-dark d-inline-flex align-items-center"><i class="material-icons-outlined me-1">autorenew</i>Load More </a>
-                    </div>
+                    <!-- Pagination এর পরিবর্তে Load More বাটন -->
+                    @if ($hasMoreProperties)
+                        <div class="text-center">
+                            <button class="btn btn-dark d-inline-flex align-items-center" wire:click="loadMore">
+                                {{-- লোডিং ইন্ডিকেটর --}}
+                                <span wire:loading.remove wire:target="loadMore">
+                                    <i class="material-icons-outlined me-1">autorenew</i>Load More
+                                </span>
+
+                                <span wire:loading wire:target="loadMore">
+                                    Loading...
+                                </span>
+                            </button>
+                        </div>
+                    @endif
+
                 </div>  <!-- end col -->
             </div>
             <!-- end row -->

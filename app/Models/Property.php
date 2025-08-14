@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +32,7 @@ class Property extends Model implements HasMedia
         'purpose',
         'property_type',
         'rent_price',
+        'rent_type',
         'service_charge',
         'security_deposit',
         'is_negotiable',
@@ -64,27 +66,23 @@ class Property extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'user_id' => 'integer',
-        'rent_price' => 'integer',
-        'service_charge' => 'integer',
-        'security_deposit' => 'integer',
-        'is_negotiable' => 'boolean',
-        'bedrooms' => 'integer',
-        'bathrooms' => 'integer',
-        'balconies' => 'integer',
-        'size_sqft' => 'integer',
-        'total_floors' => 'integer',
-        'year_built' => 'integer',
-        'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8',
-        'additional_features' => 'array',
+        // --- অপরিহার্য কাস্টগুলো ---
+
+        // ডেটাবেসের boolean (TINYINT(1)) কলামগুলোকে PHP-র true/false এ রূপান্তরের জন্য।
         'is_available' => 'boolean',
-        'available_from' => 'date',
         'is_featured' => 'boolean',
         'is_trending' => 'boolean',
         'is_verified' => 'boolean',
-        'views_count' => 'integer',
-        'reviews_count' => 'integer',
+
+        // ডেটাবেসের date/datetime স্ট্রিংকে শক্তিশালী Carbon অবজেক্টে রূপান্তরের জন্য।
+        'available_from' => 'date',
+
+        // ডেটাবেসের JSON স্ট্রিংকে PHP অ্যারেতে রূপান্তরের জন্য।
+        'additional_features' => 'array',
+
+        // ডেটাবেসের decimal স্ট্রিংকে PHP ফ্লোটিং-পয়েন্ট নম্বরে রূপান্তরের জন্য (গণনার জন্য জরুরি)।
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
         'average_rating' => 'decimal:1',
     ];
 
@@ -139,6 +137,20 @@ class Property extends Model implements HasMedia
             ->fit(Fit::Crop, 856, 500)
             ->nonQueued()
             ->performOnCollections('gallery');
+    }
+
+    protected function rentType(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $value) => Str::title($value)
+        );
+    }
+
+    protected function addressStreet(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $value) => Str::limit($value, 30)
+        );
     }
 
     // Belongs To User

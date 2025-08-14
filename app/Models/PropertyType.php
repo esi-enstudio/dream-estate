@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class PropertyType extends Model
 {
-    use HasCustomSlug, HasFactory;
+    use HasCustomSlug;
 
     protected $fillable = ['name_en', 'name_bn', 'slug', 'properties_count'];
 
@@ -25,6 +25,11 @@ class PropertyType extends Model
     public function getSluggableField(): string
     {
         return 'name_en';
+    }
+
+    public function getDisplayNameAttribute(): string
+    {
+        return "{$this->name_en} - {$this->name_bn}";
     }
 
     /**

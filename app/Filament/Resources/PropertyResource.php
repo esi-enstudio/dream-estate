@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\PropertyResource\RelationManagers\AmenitiesRelationManager;
 use App\Models\District;
+use App\Models\PropertyType;
 use App\Models\Union;
 use App\Models\Upazila;
 use Exception;
@@ -48,7 +50,10 @@ class PropertyResource extends Resource
                 Grid::make()
                     ->columns(3)
                     ->schema([
-                        Grid::make()->columnSpan(2)->schema([
+                        Grid::make()
+                        ->columnSpan(2)
+                        ->columns(3)
+                        ->schema([
                             // Edit Form Fields
                             TextInput::make('views_count')
                                 ->label('ভিউ সংখ্যা')
@@ -120,92 +125,103 @@ class PropertyResource extends Resource
 
                                 Section::make('বাসার স্পেসিফিকেশন (Property Specifications)')
                                     ->schema([
-                                        Grid::make(2)->schema([
-                                            // Property Type
-                                            Select::make('property_type_id')
-                                                ->relationship('propertyType', 'name')
-                                                ->helperText('এটি কি ফ্ল্যাট, ডুপ্লেক্স নাকি অন্য কোনো ধরনের প্রপার্টি? তা নির্বাচন করুন।')
-                                                ->label('Property Type')
-                                                ->searchable()
-                                                ->live()
-                                                ->preload()
-                                                ->required(),
+                                        Grid::make(2)
+                                            ->schema([
+                                                // Property Type
+                                                Select::make('property_type_id')
+                                                    ->relationship(
+                                                        'propertyType', // relationship name
+                                                        'name_en' // default title column (will be overridden by getOptionLabelFromRecordUsing)
+                                                    )
+                                                    ->getOptionLabelFromRecordUsing(function (PropertyType $record) {
+                                                        return "{$record->name_en} ({$record->name_bn})";
+                                                    })
+                                                    ->searchable(['name_en', 'name_bn'])
+                                                    ->helperText('এটি কি ফ্ল্যাট, ডুপ্লেক্স নাকি অন্য কোনো ধরনের প্রপার্টি? তা নির্বাচন করুন।')
+                                                    ->label('Property Type')
+                                                    ->live()
+                                                    ->preload()
+                                                    ->required(),
 
-//                                            Select::make('property_type')
-//                                                ->label('প্রপার্টির ধরন')
-//                                                ->live()
-//                                                ->options([
-//                                                    'apartment' => 'Apartment / Flat (এপার্টমেন্ট / ফ্ল্যাট)',
-//                                                    'duplex' => 'Duplex (ডুপ্লেক্স)',
-//                                                    'tin_shed' => 'Tin shed (টিন শেড)',
-//                                                    'semi_ripe' => 'Semi-ripe (আধা পাকা)',
-//                                                    'room' => 'Room (রুম)',
-//                                                    'commercial_space' => 'Commercial Space (কমার্শিয়াল স্পেস)',
-//                                                ])
-//                                                ->required()
-//                                                ->searchable(),
+                                                // Bedrooms - শুধু আবাসিক প্রপার্টির জন্য
+                                                Select::make('bedrooms')
+                                                    ->label('বেডরুম')
+                                                    ->options(array_combine(range(0, 10), range(0, 10)))
+                                                    ->required()
+                                                    ->visible(function ($get) {
+                                                        $propertyType = PropertyType::find($get('property_type_id'));
+                                                        return in_array($propertyType?->slug, ['apartment', 'duplex', 'tin-shed', 'semi-ripe', 'room', 'house', 'villa', 'penthouse']);
+                                                    }),
 
-                                            // Bedrooms - শুধু বাসাবাড়ির জন্য
-                                            Select::make('bedrooms')
-                                                ->label('বেডরুম')
-                                                ->options(array_combine(range(0, 10), range(0, 10)))
-                                                ->required()
-                                                ->visible(fn ($get) => in_array($get('property_type_id'), ['apartment', 'duplex', 'tin_shed', 'semi_ripe', 'room'])),
+                                                // Bathrooms - শুধু আবাসিক প্রপার্টির জন্য
+                                                Select::make('bathrooms')
+                                                    ->label('বাথরুম')
+                                                    ->options(array_combine(range(0, 10), range(0, 10)))
+                                                    ->required()
+                                                    ->visible(function ($get) {
+                                                        $propertyType = PropertyType::find($get('property_type_id'));
+                                                        return in_array($propertyType?->slug, ['apartment', 'duplex', 'tin-shed', 'semi-ripe', 'room', 'house', 'villa', 'penthouse']);
+                                                    }),
 
-                                            // Bathrooms - শুধু বাসাবাড়ির জন্য
-                                            Select::make('bathrooms')
-                                                ->label('বাথরুম')
-                                                ->options(array_combine(range(0, 10), range(0, 10)))
-                                                ->required()
-                                                ->visible(fn ($get) => in_array($get('property_type_id'), ['apartment', 'duplex', 'tin_shed', 'semi_ripe', 'room'])),
+                                                // Balconies - শুধু এপার্টমেন্ট/ডুপ্লেক্স/পেন্টহাউস এর জন্য
+                                                Select::make('balconies')
+                                                    ->label('বারান্দা')
+                                                    ->options(array_combine(range(0, 10), range(0, 10)))
+                                                    ->visible(function ($get) {
+                                                        $propertyType = PropertyType::find($get('property_type_id'));
+                                                        return in_array($propertyType?->slug, ['apartment', 'duplex', 'penthouse']);
+                                                    }),
 
-                                            // Balconies - শুধু এপার্টমেন্ট / ডুপ্লেক্স এর জন্য
-                                            Select::make('balconies')
-                                                ->label('বারান্দা')
-                                                ->options(array_combine(range(0, 10), range(0, 10)))
-                                                ->visible(fn ($get) => in_array($get('property_type_id'), ['apartment', 'duplex'])),
+                                                // Size - সব প্রপার্টির জন্য
+                                                TextInput::make('size_sqft')
+                                                    ->label('আকার (স্কয়ার ফিট)')
+                                                    ->required()
+                                                    ->numeric(),
 
-                                            // Size - সব কিছুর জন্য
-                                            TextInput::make('size_sqft')
-                                                ->label('আকার (স্কয়ার ফিট)')
-                                                ->required()
-                                                ->numeric(),
+                                                // Floor level - এপার্টমেন্ট, ডুপ্লেক্স, কমার্শিয়াল স্পেস, অফিসের জন্য
+                                                TextInput::make('floor_level')
+                                                    ->label('ফ্লোর লেভেল')
+                                                    ->numeric()
+                                                    ->maxLength(255)
+                                                    ->visible(function ($get) {
+                                                        $propertyType = PropertyType::find($get('property_type_id'));
+                                                        return in_array($propertyType?->slug, ['apartment', 'duplex', 'commercial-space', 'office', 'penthouse', 'shopping-mall']);
+                                                    }),
 
-                                            // Floor level - এপার্টমেন্ট, ডুপ্লেক্স, কমার্শিয়াল স্পেসের জন্য
-                                            TextInput::make('floor_level')
-                                                ->label('ফ্লোর লেভেল')
-                                                ->numeric()
-                                                ->maxLength(255)
-                                                ->visible(fn ($get) => in_array($get('property_type_id'), ['apartment', 'duplex', 'commercial_space'])),
+                                                // Total floors - মাল্টি-স্টোরি বিল্ডিং এর জন্য
+                                                TextInput::make('total_floors')
+                                                    ->label('মোট তলা')
+                                                    ->numeric()
+                                                    ->minValue(1)
+                                                    ->maxValue(100)
+                                                    ->nullable()
+                                                    ->visible(function ($get) {
+                                                        $propertyType = PropertyType::find($get('property_type_id'));
+                                                        return in_array($propertyType?->slug, ['apartment', 'duplex', 'commercial-space', 'office', 'shopping-mall', 'hospital', 'hotel']);
+                                                    }),
 
-                                            // Total floors - এপার্টমেন্ট, ডুপ্লেক্স, কমার্শিয়াল স্পেসের জন্য
-                                            TextInput::make('total_floors')
-                                                ->label('মোট তলা')
-                                                ->numeric()
-                                                ->minValue(1)
-                                                ->maxValue(100)
-                                                ->nullable()
-                                                ->visible(fn ($get) => in_array($get('property_type_id'), ['apartment', 'duplex', 'commercial_space'])),
+                                                // Facing direction - আবাসিক প্রপার্টির জন্য
+                                                Select::make('facing_direction')
+                                                    ->label('কোনমুখী ফ্ল্যাট')
+                                                    ->options([
+                                                        'south' => 'দক্ষিণ',
+                                                        'north' => 'উত্তর',
+                                                        'east' => 'পূর্ব',
+                                                        'west' => 'পশ্চিম',
+                                                        'south-east' => 'দক্ষিণ-পূর্ব',
+                                                        'north-east' => 'উত্তর-পূর্ব',
+                                                    ])
+                                                    ->visible(function ($get) {
+                                                        $propertyType = PropertyType::find($get('property_type_id'));
+                                                        return in_array($propertyType?->slug, ['apartment', 'duplex', 'room', 'house', 'villa', 'penthouse']);
+                                                    }),
 
-                                            // Facing direction - এপার্টমেন্ট, ডুপ্লেক্স, রুমের জন্য
-                                            Select::make('facing_direction')
-                                                ->label('কোনমুখী ফ্ল্যাট')
-                                                ->options([
-                                                    'south' => 'দক্ষিণ',
-                                                    'north' => 'উত্তর',
-                                                    'east' => 'পূর্ব',
-                                                    'west' => 'পশ্চিম',
-                                                    'south-east' => 'দক্ষিণ-পূর্ব',
-                                                    'north-east' => 'উত্তর-পূর্ব',
-                                                ])
-                                                ->visible(fn ($get) => in_array($get('property_type_id'), ['apartment', 'duplex', 'room'])),
-
-                                            // Year built - সব কিছুর জন্য
-                                            TextInput::make('year_built')
-                                                ->label('নির্মাণ সাল')
-                                                ->numeric()
-                                                ->maxValue(date('Y')),
-                                        ])
+                                                // Year built - সব প্রপার্টির জন্য
+                                                TextInput::make('year_built')
+                                                    ->label('নির্মাণ সাল')
+                                                    ->numeric()
+                                                    ->maxValue(date('Y')),
+                                            ])
                                     ]),
 
                                 Section::make('অবস্থান (Location)')
@@ -364,7 +380,6 @@ class PropertyResource extends Resource
                                             ->rules(['image', 'max:2048']) // সার্ভার-সাইড ভ্যালিডেশন
 
                                             // --- অন্যান্য ইউজফুল মেথড ---
-                                            ->imageCropAspectRatio('16:9') // এডিটরে ক্রপ করার জন্য ডিফল্ট অনুপাত
                                             ->imageResizeMode('cover') // ছবির আকার পরিবর্তনের মোড
                                             ->panelLayout('compact') // আপলোড UI-এর ডিজাইন
                                             ->helperText('এটি আপনার প্রপার্টির প্রধান ছবি হিসেবে ওয়েবসাইটে দেখানো হবে। সাইজ ৮৩২x৪৭২ পিক্সেল হলে সবচেয়ে ভালো দেখাবে।'),
@@ -436,6 +451,7 @@ class PropertyResource extends Resource
                         'active' => 'success',
                         'rented' => 'danger',
                         'inactive' => 'gray',
+                        'sold_out' => 'danger',
                     }),
 
                 TextColumn::make('created_at')
@@ -450,9 +466,9 @@ class PropertyResource extends Resource
                 Tables\Filters\SelectFilter::make('district')
                     ->relationship('district', 'bn_name'),
                 Tables\Filters\TernaryFilter::make('is_available')->label('Available'),
-                Tables\Filters\TernaryFilter::make('is_hero_featured')->label('Hero Property'),
-                Tables\Filters\TernaryFilter::make('is_spotlight')->label('Spotlight Property'),
-                Tables\Filters\TernaryFilter::make('is_featured_showcase')->label('Showcase Property'),
+                Tables\Filters\TernaryFilter::make('rent_type')->label('Rent Type'),
+                Tables\Filters\TernaryFilter::make('purpose')->label('Rent/Sell'),
+                Tables\Filters\TernaryFilter::make('status')->label('Status'),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -475,7 +491,7 @@ class PropertyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AmenitiesRelationManager::class,
         ];
     }
 
@@ -484,7 +500,7 @@ class PropertyResource extends Resource
         return [
             'index' => Pages\ListProperties::route('/'),
             'create' => Pages\CreateProperty::route('/create'),
-            'view' => Pages\ViewProperty::route('/{record}'),
+//            'view' => Pages\ViewProperty::route('/{record}'),
             'edit' => Pages\EditProperty::route('/{record}/edit'),
         ];
     }

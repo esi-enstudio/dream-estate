@@ -10,6 +10,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -36,6 +37,7 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
         'reviews_count',
         'average_rating',
         'status',
+        'avatar_url',
     ];
 
     /**
@@ -76,6 +78,11 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
     public function getSluggableField(): string
     {
         return 'name'; // Use slug instead of id in routes
+    }
+
+    public function properties(): HasMany
+    {
+        return $this->hasMany(Property::class);
     }
 
     /**

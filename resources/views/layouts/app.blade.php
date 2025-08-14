@@ -57,6 +57,8 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
+    @stack('meta_tags')
+
     @livewireStyles
 </head>
 

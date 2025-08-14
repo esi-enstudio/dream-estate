@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasCustomSlug;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Amenity extends Model
 {
@@ -19,5 +20,16 @@ class Amenity extends Model
     public function getRouteKeyName(): string
     {
         return 'slug'; // Use slug instead of id in routes
+    }
+
+    /**
+     * The properties that have this amenity.
+     */
+    public function properties(): BelongsToMany
+    {
+        // একটি সুবিধার অনেকগুলো প্রপার্টি থাকতে পারে
+        return $this->belongsToMany(Property::class)
+            ->withPivot('details','is_key_feature')
+            ->withTimestamps();
     }
 }

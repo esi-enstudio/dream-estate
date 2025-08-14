@@ -4,8 +4,8 @@ namespace App\Livewire;
 
 use App\Models\User;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Illuminate\Support\HtmlString;
@@ -47,6 +47,7 @@ class CustomUserProfile extends EditProfileForm
                             ->directory(filament('filament-edit-profile')->getAvatarDirectory())
                             ->rules(filament('filament-edit-profile')->getAvatarRules())
                             ->hidden(! filament('filament-edit-profile')->getShouldShowAvatarForm()),
+
                         TextInput::make('name')
                             ->label(__('filament-edit-profile::default.name'))
                             ->required(),

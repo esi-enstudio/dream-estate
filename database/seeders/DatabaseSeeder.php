@@ -14,20 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-//            UserSeeder::class,
-//            PropertyTypeSeeder::class,
-//            AmenitySeeder::class,
-//            TenantSeeder::class,
-//            DivisionSeeder::class,
-//            DistrictSeeder::class,
-//            UpazilaSeeder::class,
-//            UnionSeeder::class,
-            PropertySeeder::class,
-        ]);
-
-        // User::factory(10)->create();
-
         User::factory()->create([
             'slug' => 'emil-sadekin-islam',
             'name' => 'Emil Sadekin Islam',
@@ -35,5 +21,19 @@ class DatabaseSeeder extends Seeder
             'phone' => '01732547755',
             'password' => Hash::make(3213),
         ]);
+
+        $this->call([
+           UserSeeder::class,
+           PropertyTypeSeeder::class,
+           AmenitySeeder::class,
+           TenantSeeder::class,
+           DivisionSeeder::class,
+           DistrictSeeder::class,
+           UpazilaSeeder::class,
+           UnionSeeder::class,
+           PropertySeeder::class,
+        ]);
+
+        // User::factory(10)->create();
     }
 }

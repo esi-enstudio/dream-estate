@@ -90,7 +90,6 @@ class SuperadminPanelProvider extends PanelProvider
                 FilamentEditProfilePlugin::make()
                     ->setTitle(fn() => Auth::user()->name . ' Profile')
                     ->shouldShowDeleteAccountForm(false)
-                    ->shouldShowEditProfileForm(false)
                     ->shouldRegisterNavigation(false)
                     ->shouldShowAvatarForm(
                         directory: 'avatars', // image will be stored in 'storage/app/public/avatars

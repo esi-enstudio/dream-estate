@@ -1033,3 +1033,48 @@
     <!-- End Content -->
 
 </div>
+
+
+{{-- meta_tags স্ট্যাকে আমাদের কন্টেন্ট পুশ করছি --}}
+@push('meta_tags')
+    <meta name="description" content="{{ Str::limit(strip_tags($property->description), 160) }}">
+
+    {{-- Schema.org এর জন্য JSON-LD Structured Data --}}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "RealEstateListing",
+      "name": "{{ $property->title }}",
+      "description": "{{ Str::limit(strip_tags($property->description), 250) }}",
+      "image": "{{ $property->getFirstMediaUrl('featured_image') }}",
+      "url": "{{ route('property.details', $property->slug) }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ $property->address_street }}",
+        "addressLocality": "{{ $property->address_area }}",
+        "addressRegion": "{{ $property->address_city }}",
+        "postalCode": "{{ $property->address_zipcode }}",
+        "addressCountry": "BD"
+      },
+      "numberOfRooms": "{{ $property->bedrooms }}",
+      "floorSize": {
+        "@type": "QuantitativeValue",
+        "value": "{{ $property->size_sqft }}",
+        "unitText": "Square Feet"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "{{ $property->rent_price }}",
+        "priceCurrency": "BDT",
+        "availability": "https://schema.org/InStock"
+      },
+      @if($property->reviews_count > 0)
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "{{ round($property->average_rating, 1) }}",
+        "reviewCount": "{{ $property->reviews_count }}"
+      }
+      @endif
+        }
+</script>
+@endpush
