@@ -90,10 +90,11 @@ class SuperadminPanelProvider extends PanelProvider
                 FilamentEditProfilePlugin::make()
                     ->setTitle(fn() => Auth::user()->name . ' Profile')
                     ->shouldShowDeleteAccountForm(false)
+                    ->shouldShowEditProfileForm(false)
                     ->shouldRegisterNavigation(false)
                     ->shouldShowAvatarForm(
                         directory: 'avatars', // image will be stored in 'storage/app/public/avatars
-                        rules: 'mimes:jpeg,png|max:1024' //only accept jpeg and png files with a maximum size of 1MB
+//                        rules: 'mimes:jpeg,png|max:1024' //only accept jpeg and png files with a maximum size of 1MB
                     )
                     ->customProfileComponents([
                         CustomUserProfile::class,

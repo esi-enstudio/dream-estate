@@ -51,12 +51,12 @@ class Property extends Model implements HasMedia
         'google_maps_location_link',
         'latitude',
         'longitude',
-        'additional_features',
         'house_rules',
         'video_url',
         'status',
         'is_available',
         'available_from',
+        'additional_features',
         'is_featured',
         'is_trending',
         'is_verified',
@@ -79,6 +79,7 @@ class Property extends Model implements HasMedia
 
         // ডেটাবেসের JSON স্ট্রিংকে PHP অ্যারেতে রূপান্তরের জন্য।
         'additional_features' => 'array',
+        'faqs' => 'array',
 
         // ডেটাবেসের decimal স্ট্রিংকে PHP ফ্লোটিং-পয়েন্ট নম্বরে রূপান্তরের জন্য (গণনার জন্য জরুরি)।
         'latitude' => 'decimal:8',

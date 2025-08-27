@@ -38,7 +38,7 @@ class AmenitiesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('type')->badge()->formatStateUsing(fn($state): string => Str::title($state)),
                 // পিভট টেবিলের 'details' কলামটি দেখানোর জন্য
                 Tables\Columns\TextColumn::make('pivot.details')->label('Details'),
-                Tables\Columns\ToggleColumn::make('is_key_feature'),
+//                Tables\Columns\ToggleColumn::make('is_key_feature'),
             ])
             ->filters([
                 //

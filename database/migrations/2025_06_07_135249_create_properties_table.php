@@ -61,6 +61,8 @@ return new class extends Migration
             $table->decimal('longitude', 11, 8)->nullable();
 
             $table->text('house_rules')->nullable();
+            $table->json('faqs')->nullable();
+            $table->json('additional_features')->nullable();
 
             // --- Media ---
             // Filament Spatie Media Library ইন্টিগ্রেশনের জন্য আলাদা টেবিল ব্যবহার হবে।

@@ -462,7 +462,7 @@
                                             <div class="d-flex align-items-center gap-2">
                                                 <div class="avatar avatar-lg user-avatar">
                                                     {{-- মালিকের ডাইনামিক ছবি ও নাম --}}
-                                                    <img src="{{ $property->user->avatar_url }}" alt="{{ $property->user->name }}" class="rounded-circle">
+                                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($property->user->avatar_url) }}" alt="{{ $property->user->name }}" class="rounded-circle">
                                                 </div>
                                                 <h6 class="mb-0 fs-16 fw-medium text-dark">{{ $property->user->name }}
                                                     <span class="d-block fs-14 text-body pt-1">United States</span>

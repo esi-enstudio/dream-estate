@@ -8,6 +8,8 @@ use App\Models\PropertyType;
 use App\Models\Union;
 use App\Models\Upazila;
 use Exception;
+use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Tables;
@@ -224,6 +226,22 @@ class PropertyResource extends Resource
                                             ])
                                     ]),
 
+                                Section::make('অতিরিক্ত সুবিধা ও নিয়মাবলী (Additional Features & Rules)')
+                                    ->schema([
+                                        KeyValue::make('additional_features')
+                                            ->label('অন্যান্য সুবিধা')
+                                            ->keyLabel('ফিচারের নাম') // "Key" ইনপুট ফিল্ডের লেবেল
+                                            ->valueLabel('সংখ্যা বা বিবরণ') // "Value" ইনপুট ফিল্ডের লেবেল
+                                            ->addActionLabel('নতুন সুবিধা যোগ করুন') // নতুন আইটেম যোগ করার বাটনের লেখা
+                                            ->helperText('এখানে ফ্ল্যাটের ভেতরের অতিরিক্ত সুবিধাগুলো যোগ করুন, যেমন - AC, Fridge, Geyser ইত্যাদি।')
+                                            ->columnSpanFull(),
+
+                                        RichEditor::make('house_rules')
+                                            ->label('বাসার নিয়মাবলী')
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->collapsible(), // এই সেকশনটি খোলা বা বন্ধ করা যাবে
+
                                 Section::make('অবস্থান (Location)')
                                     ->schema([
                                         Grid::make(2)->schema([
@@ -293,12 +311,26 @@ class PropertyResource extends Resource
                                         ]),
                                     ]),
 
-                                Section::make('নিয়ম (Rules)')
+                                Section::make('সাধারণ জিজ্ঞাসা (FAQ)')
                                     ->schema([
-                                        RichEditor::make('house_rules')
-                                            ->label('বাসার নিয়মাবলী')
-                                            ->columnSpanFull(),
-                                    ]),
+                                        Repeater::make('faqs')
+                                            ->label('') // সেকশনের টাইটেলই যথেষ্ট, তাই লেবেল খালি রাখা হলো
+                                            ->schema([
+                                                TextInput::make('question')
+                                                    ->label('প্রশ্ন')
+                                                    ->required(),
+
+                                                RichEditor::make('answer')
+                                                    ->label('উত্তর')
+                                                    ->required()
+                                                    ->columnSpanFull(),
+                                            ])
+                                            ->columns(1)
+                                            ->addActionLabel('নতুন প্রশ্ন যোগ করুন')
+                                            ->collapsible() // প্রতিটি আইটেম খোলা/বন্ধ করা যাবে
+                                            ->itemLabel(fn (array $state): ?string => $state['question'] ?? null), // আইটেমের লেবেল হিসেবে প্রশ্নটি দেখাবে
+                                    ])
+                                    ->collapsible(),
                             ]),
 
                         // --- Sidebar Column ---
