@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TracksViews;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -21,16 +22,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Property extends Model implements HasMedia
 {
     /** @use HasFactory<PropertyFactory> */
-    use HasFactory, InteractsWithMedia, SoftDeletes, HasCustomSlug;
+    use HasFactory, InteractsWithMedia, SoftDeletes, HasCustomSlug, TracksViews;
 
     protected $fillable = [
         'user_id',
+        'property_type_id',
+        'tenant_id',
         'title',
         'slug',
         'description',
         'property_code',
         'purpose',
-        'property_type',
         'rent_price',
         'rent_type',
         'service_charge',
@@ -44,25 +46,30 @@ class Property extends Model implements HasMedia
         'total_floors',
         'facing_direction',
         'year_built',
+        'division_id',
+        'district_id',
+        'upazila_id',
+        'union_id',
         'address_street',
-        'address_city',
         'address_area',
         'address_zipcode',
         'google_maps_location_link',
         'latitude',
         'longitude',
         'house_rules',
+        'faqs',
+        'additional_features',
         'video_url',
         'status',
         'is_available',
         'available_from',
-        'additional_features',
         'is_featured',
         'is_trending',
         'is_verified',
         'views_count',
         'reviews_count',
         'average_rating',
+        'score',
     ];
 
     protected $casts = [

@@ -7,34 +7,51 @@
                 <div class="row align-items-center text-center position-relative z-1">
                     <div class="col-xl-8">
                         <div class="d-flex align-center gap-2 mb-2">
-                            <span class="badge bg-primary">Condo</span>
-                            <span class="badge bg-secondary">For Rent</span>
+                            <span class="badge bg-primary">{{ $property->propertyType->name_en }}</span>
+                            <span class="badge bg-secondary">For {{ ucfirst($property->purpose) }}</span>
                         </div>
-                        <h1 class="breadcrumb-title text-start ">Beautiful Condo Room</h1>
+
+                        {{-- SEO: h1 ট্যাগ সবচেয়ে গুরুত্বপূর্ণ --}}
+                        <h1 class="breadcrumb-title text-start ">{{ $property->title }}</h1>
                         <div class="d-flex align-items-center gap-2 flex-wrap gap-1">
+                            {{-- Avg star rating --}}
                             <div class="d-flex align-items-center justify-content-center">
-                                <i class="material-icons-outlined text-warning">star</i>
-                                <i class="material-icons-outlined text-warning">star</i>
-                                <i class="material-icons-outlined text-warning">star</i>
-                                <i class="material-icons-outlined text-warning">star</i>
-                                <i class="material-icons-outlined text-warning">star</i>
-                                <span class="text-white ms-1"> 5.0 </span>
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="material-icons-outlined {{ $i <= round($property->average_rating) ? 'text-warning' : 'text-gray-300' }}">star</i>
+                                @endfor
+                                <span class="text-white ms-1"> {{ number_format($property->average_rating, 1) }} </span>
                             </div>
+
                             <i class="fa-solid fa-circle text-body"></i>
-                            <div class="fs-14 mb-0 text-white d-flex align-items-center flex-wrap gap-1 custom-address-item"><i class="material-icons-outlined text-white me-1">location_on</i>318-330 S Oakley Blvd, Chicago, IL 60612, USA <a href="rent-grid-map.html" class="text-primary fs-14 text-decoration-underline ms-1"> View Location</a></div>
+
+                            {{-- Property address --}}
+                            <div class="fs-14 mb-0 text-white d-flex align-items-center flex-wrap gap-1 custom-address-item">
+                                <i class="material-icons-outlined text-white me-1">location_on</i>
+                                {{ $property->address_street }}, {{ $property->address_area }}, {{ $property->address_city }}
+
+                                @if($property->google_maps_location_link)
+                                    <a href="{{ $property->google_maps_location_link }}" target="_blank" class="text-primary fs-14 text-decoration-underline ms-1"> View Location</a>
+                                @endif
+                            </div>
+
                             <i class="fa-solid fa-circle text-body"></i>
-                            <p class="fs-14 mb-0 text-white">Last Updated on : 24 Feb 2025</p>
+                            <p class="fs-14 mb-0 text-white">Last Updated on : {{ $property->updated_at->format('d M Y') }}</p>
                         </div>
                     </div>
+
                     <div class="col-xl-4 d-flex d-xl-block flex-wrap gap-3">
                         <div class="breadcrumb-icons d-flex align-items-center justify-content-xl-end justify-content-start gap-2 mb-xl-4 mb-2 mt-xl-0 mt-4">
+                            {{-- Wishlist, Bookmark, Compare functionalities can be implemented later --}}
                             <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">favorite_border</i></a>
                             <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">bookmark_add</i></a>
                             <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">compare_arrows</i></a>
                         </div>
                         <div class="d-flex align-items-center gap-3 justify-content-xl-end justify-content-start">
-                            <h4 class="mb-0 text-primary text-xl-end text-start"> $400 <span class="fs-14 fw-normal text-white">/ Month</span> </h4>
-                            <a href="rental-booking.html" class="btn btn-primary btn-lg d-flex align-items-center"><i class="material-icons-outlined rounded me-1">calendar_today</i>Book Now</a>
+                            <h4 class="mb-0 text-primary text-xl-end text-start">
+                                ৳{{ number_format($property->rent_price) }}
+                                <span class="fs-14 fw-normal text-white">/ {{ ucfirst($property->rent_type) }}</span> </h4>
+                            <a href="#" class="btn btn-primary btn-lg d-flex align-items-center"><i class="material-icons-outlined rounded me-1">calendar_today</i>Book Now</a>
+{{--                            <a href="rental-booking.html" class="btn btn-primary btn-lg d-flex align-items-center"><i class="material-icons-outlined rounded me-1">calendar_today</i>Book Now</a>--}}
                         </div>
                     </div>
                 </div>
@@ -54,51 +71,55 @@
 
                     <div class="mb-4 d-inline-flex align-center justify-content-between w-100 flex-wrap gap-1">
                         <div class="d-inline-flex align-center gap-2">
-                            <span class="badge bg-danger d-flex align-items-center"> <i class="material-icons-outlined fs-14 me-1">generating_tokens</i> Trending </span>
-                            <span class="badge bg-orange d-flex align-items-center"> <i class="material-icons-outlined  fs-14 me-1">loyalty</i> Featured </span>
+                            @if($property->is_trending)
+                                <span class="badge bg-danger d-flex align-items-center"><i class="material-icons-outlined fs-14 me-1">generating_tokens</i> Trending </span>
+                            @endif
+
+                            @if($property->is_featured)
+                                <span class="badge bg-orange d-flex align-items-center"> <i class="material-icons-outlined fs-14 me-1">loyalty</i> Featured </span>
+                            @endif
                         </div>
                         <p class="mb-0 text-dark">
-                            Total No of Visits : 45
+                            Total No of Visits : {{ $property->views_count }}
                         </p>
                     </div>
 
                     <!-- start slider -->
-                    <div class="slider-card service-slider-card mb-4">
-                        <div class="slide-part mb-4">
-                            <div class="slider service-slider">
-                                <div class="service-img-wrap">
-                                    <img src="{{ asset('assets/img/buy/buy-slide-img-1.jpg') }}" class="img-fluid" alt="Slider Img">
-                                </div>
-                                <div class="service-img-wrap">
-                                    <img src="{{ asset('assets/img/buy/buy-slide-img-2.jpg') }}" class="img-fluid" alt="Slider Img">
-                                </div>
-                                <div class="service-img-wrap">
-                                    <img src="{{ asset('assets/img/buy/buy-slide-img-3.jpg') }}" class="img-fluid" alt="Slider Img">
-                                </div>
-                                <div class="service-img-wrap">
-                                    <img src="{{ asset('assets/img/buy/buy-slide-img-4.jpg') }}" class="img-fluid" alt="Slider Img">
-                                </div>
-                                <div class="service-img-wrap">
-                                    <img src="{{ asset('assets/img/buy/buy-slide-img-5.jpg') }}" class="img-fluid" alt="Slider Img">
-                                </div>
-                                <div class="service-img-wrap">
-                                    <img src="{{ asset('assets/img/buy/buy-slide-img-6.jpg') }}" class="img-fluid" alt="Slider Img">
-                                </div>
-                                <div class="service-img-wrap">
-                                    <img src="{{ asset('assets/img/buy/buy-slide-img-2.jpg') }}" class="img-fluid" alt="Slider Img">
+                    @php
+                        $featuredImage = $property->getFirstMedia('featured_image');
+                        $galleryImages = $property->getMedia('gallery');
+                    @endphp
+
+                    @if($featuredImage || $galleryImages->count() > 0)
+                        <div class="slider-card service-slider-card mb-4">
+                            <div class="slide-part mb-4">
+                                <div class="slider service-slider">
+                                    @if($featuredImage)
+                                        <div class="service-img-wrap">
+                                            {{-- SEO: Alt tag is critical --}}
+                                            <img src="{{ $featuredImage->getUrl() }}" class="img-fluid" alt="{{ $property->title }} - Featured Image">
+                                        </div>
+                                    @endif
+
+                                    @foreach($galleryImages as $image)
+                                        <div class="service-img-wrap">
+                                            <img src="{{ $image->getUrl() }}" class="img-fluid" alt="{{ $property->title }} - Gallery Image {{ $loop->iteration }}">
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
+
+                            <div class="slider slider-nav-thumbnails text-center">
+                                @if($featuredImage)
+                                    <div class="slide-img"><img src="{{ $featuredImage->getUrl() }}" class="img-fluid" alt="Thumbnail of {{ $property->title }}"></div>
+                                @endif
+
+                                @foreach($galleryImages as $image)
+                                    <div class="slide-img"><img src="{{ $image->getUrl() }}" class="img-fluid" alt="Gallery Thumbnail {{ $loop->iteration }}"></div>
+                                @endforeach
+                            </div>
                         </div>
-                        <div class="slider slider-nav-thumbnails text-center">
-                            <div class="slide-img"><img src="{{ asset('assets/img/buy/buy-details-img-1.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                            <div class="slide-img"><img src="{{ asset('assets/img/buy/buy-details-img-2.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                            <div class="slide-img"><img src="{{ asset('assets/img/buy/buy-details-img-3.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                            <div class="slide-img"><img src="{{ asset('assets/img/buy/buy-details-img-4.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                            <div class="slide-img"><img src="{{ asset('assets/img/buy/buy-details-img-5.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                            <div class="slide-img"><img src="{{ asset('assets/img/buy/buy-details-img-6.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                            <div class="slide-img"><img src="{{ asset('assets/img/buy/buy-details-img-2.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                        </div>
-                    </div>
+                    @endif
                     <!-- End slider -->
 
                     <!-- items-2-->
@@ -111,9 +132,12 @@
                                     Description
                                 </button>
                             </div>
+
                             <div id="accordion-1" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
-                                    <p>This property is mostly wooded and sits high on a hilltop overlooking the Mohawk River Valley.Located right in the heart of Upstate NYs Amish farm Country, this land is certified organic makingit extremely rare! Good road frontage on a paved county road with utilities make it an amazingsetting for your dream country getaway! If you like views, you must see this property!This propertyis mostly wooded and sits high on a hilltop overlooking the Mohawk River Valley.</p>
+                                    {{-- Using {!! !!} because data is from a rich text editor--}}
+                                    {!! $property->description !!}
+
                                     <div class="more-menu">
                                         <p> Located right inthe heart of Upstate NYs Amish farm Country, this land is certified organic making it extremelyrare! Good road frontage on a paved county road with utilities make it an amazing setting for yourdream country getaway! If you like views, you must see this property!</p>
                                     </div>
@@ -1033,49 +1057,3 @@
     <!-- End Content -->
 
 </div>
-
-
-{{-- meta_tags স্ট্যাকে আমাদের কন্টেন্ট পুশ করছি --}}
-{{--@push('meta_tags')--}}
-{{--    <meta name="description" content="{{ Str::limit(strip_tags($property->description), 160) }}">--}}
-
-{{--    --}}{{-- Schema.org এর জন্য JSON-LD Structured Data --}}
-{{--    <script type="application/ld+json">--}}
-{{--    {--}}
-{{--      "@context": "https://schema.org",--}}
-{{--      "@type": "RealEstateListing",--}}
-{{--      "name": "{{ $property->title }}",--}}
-{{--      "description": "{{ Str::limit(strip_tags($property->description), 250) }}",--}}
-{{--      "image": "{{ $property->getFirstMediaUrl('featured_image') }}",--}}
-{{--      "url": "{{ route('property.details', $property->slug) }}",--}}
-{{--      "address": {--}}
-{{--        "@type": "PostalAddress",--}}
-{{--        "streetAddress": "{{ $property->address_street }}",--}}
-{{--        "addressLocality": "{{ $property->address_area }}",--}}
-{{--        "addressRegion": "{{ $property->address_city }}",--}}
-{{--        "postalCode": "{{ $property->address_zipcode }}",--}}
-{{--        "addressCountry": "BD"--}}
-{{--      },--}}
-{{--      "numberOfRooms": "{{ $property->bedrooms }}",--}}
-{{--      "floorSize": {--}}
-{{--        "@type": "QuantitativeValue",--}}
-{{--        "value": "{{ $property->size_sqft }}",--}}
-{{--        "unitText": "Square Feet"--}}
-{{--      },--}}
-{{--      "offers": {--}}
-{{--        "@type": "Offer",--}}
-{{--        "price": "{{ $property->rent_price }}",--}}
-{{--        "priceCurrency": "BDT",--}}
-{{--        "availability": "https://schema.org/InStock"--}}
-{{--      },--}}
-{{--      @if($property->reviews_count > 0)--}}
-{{--            "aggregateRating": {--}}
-{{--              "@type": "AggregateRating",--}}
-{{--              "ratingValue": "{{ round($property->average_rating, 1) }}",--}}
-{{--        "reviewCount": "{{ $property->reviews_count }}"--}}
-{{--      }--}}
-{{--      @endif--}}
-{{--        }--}}
-{{--</script>--}}
-
-{{--@endpush--}}

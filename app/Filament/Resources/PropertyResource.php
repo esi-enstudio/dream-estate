@@ -361,6 +361,7 @@ class PropertyResource extends Resource
 
                                         Select::make('rent_type')
                                             ->label('ভাড়ার ধরন')
+                                            ->native(false) // <-- এই লাইনটি যোগ করুন
                                             ->options([
                                                 'day'   => 'প্রতিদিন (Per Day)',
                                                 'week'  => 'প্রতি সপ্তাহ (Per Week)',
