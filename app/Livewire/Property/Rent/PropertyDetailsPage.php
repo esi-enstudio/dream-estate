@@ -5,7 +5,10 @@ namespace App\Livewire\Property\Rent;
 use App\Models\Property;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -35,28 +38,29 @@ class PropertyDetailsPage extends Component
         ]);
     }
 
-    // SEO-এর জন্য পেজের টাইটেল ডাইনামিকভাবে সেট হবে
-    public function getTitle(): string
+    /**
+     * সম্পর্কিত প্রপার্টিগুলো দেখানোর জন্য (Computed Property)
+     */
+    #[Computed]
+    public function relatedProperties(): Builder
     {
-        return $this->property->title . ' - Basha Bhara';
+        return Property::with(['media', 'user'])
+            ->where('status', 'active')
+            ->where('id', '!=', $this->property->id) // বর্তমান প্রপার্টি বাদে
+            ->where('property_type_id', $this->property->property_type_id) // একই ক্যাটাগরির
+            ->orWhere('address_area', $this->property->address_area) // অথবা একই শহরের
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
     }
 
     public function render(): Application|View|Factory|\Illuminate\View\View
     {
-        // সম্পর্কিত প্রপার্টি খোঁজার লজিক
-        $relatedProperties = Property::where('status', 'active')
-            ->where('id', '!=', $this->property->id)
-            ->where(function ($query) {
-                $query->where('property_type_id', $this->property->property_type_id)
-                    ->orWhere('address_area', $this->property->address_area);
-            })
-            ->with(['media', 'user']) // পারফরম্যান্সের জন্য রিলেশনশিপ লোড করুন
-            ->inRandomOrder()
-            ->limit(4)
-            ->get();
+        // SEO: ডাইনামিকভাবে পেজের টাইটেল এবং মেটা ডেসক্রিপশন সেট করুন
+        $metaDescription = Str::limit(strip_tags($this->property->description), 160);
 
-        return view('livewire.property.rent.property-details-page', [
-            'relatedProperties' => $relatedProperties,
-        ]);
+        return view('livewire.property.rent.property-details-page')
+            ->title($this->property->title . ' - Your Website Name')
+            ->with('metaDescription', $metaDescription);
     }
 }

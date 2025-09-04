@@ -135,16 +135,8 @@
 
                             <div id="accordion-1" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
-                                    {{-- Using {!! !!} because data is from a rich text editor--}}
+                                    {{-- Rich text editor থেকে আসা HTML রেন্ডার করার জন্য {!! !!} ব্যবহার করুন --}}
                                     {!! $property->description !!}
-
-                                    <div class="more-menu">
-                                        <p> Located right inthe heart of Upstate NYs Amish farm Country, this land is certified organic making it extremelyrare! Good road frontage on a paved county road with utilities make it an amazing setting for yourdream country getaway! If you like views, you must see this property!</p>
-                                    </div>
-                                    <div class="view-all d-inline-flex align-items-center">
-                                        <a href="javascript:void(0);" class="viewall-button fs-14">Read More </a>
-                                        <i class="material-icons-outlined">keyboard_arrow_down</i>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -162,32 +154,22 @@
                                     <div class="row row-gap-4">
                                         <div class="col-lg-3 col-md-6">
                                             <div class="buy-property-items">
-                                                <p> <i class="material-icons-outlined">bed</i>  Bedrooms: 3</p>
-                                                <p> <i class="material-icons-outlined">door_sliding</i> Floor: 5th of 12 </p>
-                                                <p> <i class="material-icons-outlined">microwave</i>  Microwave : 2  </p>
+                                                <p> <i class="material-icons-outlined">bed</i>  Bedrooms: {{ $property->bedrooms }}</p>
+                                                <p> <i class="material-icons-outlined">bathtub</i>  Bathrooms: {{ $property->bathrooms }}</p>
+                                                <p> <i class="material-icons-outlined">corporate_fare</i>  Balconies: {{ $property->balconies  }}</p>
+                                                <p> <i class="material-icons-outlined">door_sliding</i> Floor: {{ $property->floor_level }} of {{ $property->total_floors }} </p>
                                             </div>
                                         </div> <!-- end col -->
-                                        <div class="col-lg-3 col-md-6">
-                                            <div class="buy-property-items">
-                                                <p> <i class="material-icons-outlined">bathtub</i>  Bedrooms: 2</p>
-                                                <p> <i class="material-icons-outlined">bento</i>  Wardrobe :1 </p>
-                                                <p class="mb-lg-0"> <i class="material-icons-outlined">ac_unit</i> AC : 4 </p>
-                                            </div>
-                                        </div> <!-- end col -->
-                                        <div class="col-lg-3 col-md-6">
-                                            <div class="buy-property-items">
-                                                <p> <i class="material-icons-outlined">directions_car_filled</i>  Parking: 1</p>
-                                                <p> <i class="material-icons-outlined">tv</i> TV : 4 </p>
-                                                <p class="mb-lg-0"> <i class="material-icons-outlined">kitchen</i>Fridge : 1  </p>
-                                            </div>
-                                        </div> <!-- end col -->
-                                        <div class="col-lg-3 col-md-6">
-                                            <div class="buy-property-items">
-                                                <p> <i class="material-icons-outlined">corporate_fare</i> Balcony: Yes</p>
-                                                <p> <i class="material-icons-outlined">water</i>  Water Purifier : 2</p>
-                                                <p class="mb-lg-0 mb-0"> <i class="material-icons-outlined">checkroom</i>  Curtains : yes </p>
-                                            </div>
-                                        </div> <!-- end col -->
+
+                                        @if($property->additional_features)
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="buy-property-items">
+                                                    @foreach($property->additional_features as $feature => $value)
+                                                        <p> <i class="material-icons-outlined">check</i> {{ ucfirst($feature) }}: {{ $value }} </p>
+                                                    @endforeach
+                                                </div>
+                                            </div> <!-- end col -->
+                                        @endif
                                     </div>
                                     <!-- end row -->
                                 </div>
@@ -350,89 +332,64 @@
                         </div>
 
                         <!-- video items -->
-                        <div class="accordion-item">
-                            <div class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-7" aria-expanded="true">
-                                    Video
-                                </button>
-                            </div>
-                            <div id="accordion-7" class="accordion-collapse collapse show">
-                                <div class="accordion-body">
-                                    <div class="video-items position-relative">
-                                        <img src="{{ asset('assets/img/buy/video-img.jpg') }}" alt="" class="img-fluid video-bg">
-                                        <a class="video-icon" data-fancybox="" href="https://www.youtube.com/embed/AWovHEZcpQU">
-                                            <i class="material-icons-outlined">play_circle_filled</i>
-                                        </a>
+                        @if($property->video_url)
+                            <div class="accordion-item">
+                                <div class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-7" aria-expanded="true">
+                                        Video
+                                    </button>
+                                </div>
+
+                                <div id="accordion-7" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <div class="video-items position-relative">
+                                            {{-- SEO: ছবির alt ট্যাগ ডাইনামিক করা হয়েছে, যা খুবই গুরুত্বপূর্ণ --}}
+                                            <img
+                                                class="img-fluid video-bg"
+                                                src="{{ $property->getFirstMediaUrl('featured_image', 'thumbnail') }}"
+                                                alt="{{ $property->title }}"
+                                                title="{{ $property->title }}"
+                                            >
+
+                                            <a class="video-icon" data-fancybox="" href="{{ $property->video_url }}">
+                                                <i class="material-icons-outlined">play_circle_filled</i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <!-- faq items -->
-                        <div class="accordion-item">
-                            <div class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-8" aria-expanded="true">
-                                    Frequently Asked Questions
-                                </button>
-                            </div>
-                            <div id="accordion-8" class="accordion-collapse collapse show">
-                                <div class="accordion-body">
-                                    <div class="faq-items">
-
-                                        <div class="faq-card mb">
-                                            <h4 class="faq-title">
-                                                <a class="collapsed" data-bs-toggle="collapse" href="#faqone" aria-expanded="false">Does offer free cancellation for a full refund?</a>
-                                            </h4>
-                                            <div id="faqone" class="card-collapse collapse">
-                                                <div class="faq-content">
-                                                    <p>Does have fully refundable room rates available to book on our site. If you’ve booked a fully refundable room rate, this can be cancelled up to a few days before check-in depending on the property's cancellation policy. Just make sure to check this property's cancellation policy for the exact terms and conditions.</p>
+                        @if($property->faqs)
+                            <div class="accordion-item">
+                                <div class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-8" aria-expanded="true">
+                                        Frequently Asked Questions
+                                    </button>
+                                </div>
+                                <div id="accordion-8" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <div class="faq-items">
+                                            @foreach($property->faqs as $faq)
+                                                <div class="faq-card mb">
+                                                    <h4 class="faq-title">
+                                                        <a class="collapsed" data-bs-toggle="collapse" href="#faq{{ $loop->index }}" aria-expanded="false">
+                                                            {{ $faq['question'] }}
+                                                        </a>
+                                                    </h4>
+                                                    <div id="faq{{ $loop->index }}" class="card-collapse collapse">
+                                                        <div class="faq-content">
+                                                            {!! $faq['answer'] !!}
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="faq-card">
-                                            <h4 class="faq-title">
-                                                <a class="collapsed" data-bs-toggle="collapse" href="#faqtwo" aria-expanded="false">Is there a pool?</a>
-                                            </h4>
-                                            <div id="faqtwo" class="card-collapse collapse">
-                                                <div class="faq-content">
-                                                    <p>Yes, there is a pool available for guests, providing a perfect place to relax, unwind, and enjoy some leisure time during their stay.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="faq-card">
-                                            <h4 class="faq-title">
-                                                <a class="collapsed" data-bs-toggle="collapse" href="#faqthree" aria-expanded="false">Are pets allowed?</a>
-                                            </h4>
-                                            <div id="faqthree" class="card-collapse collapse">
-                                                <div class="faq-content">
-                                                    <p>Yes, pets are allowed, and we welcome your furry friends to stay with you, ensuring a comfortable experience for both you and your pets.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="faq-card">
-                                            <h4 class="faq-title">
-                                                <a class="collapsed" data-bs-toggle="collapse" href="#faqfour" aria-expanded="false">Is airport shuttle service offered?</a>
-                                            </h4>
-                                            <div id="faqfour" class="card-collapse collapse">
-                                                <div class="faq-content">
-                                                    <p>Yes, airport shuttle service is offered to provide convenient and reliable transportation for our guests between the airport and their destination, ensuring a smooth and stress-free travel experience.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="faq-card mb-0">
-                                            <h4 class="faq-title">
-                                                <a class="collapsed" data-bs-toggle="collapse" href="#faqfive" aria-expanded="false">What are the check-in and check-out times? </a>
-                                            </h4>
-                                            <div id="faqfive" class="card-collapse collapse">
-                                                <div class="faq-content">
-                                                    <p>Check-in is typically from 12:00 PM, and check-out is usually by 11:00 AM to ensure a smooth transition for all guests.</p>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <!-- reviews items -->
                         <div class="accordion-item mb-xl-0">
