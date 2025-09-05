@@ -6,6 +6,7 @@ use App\Models\Property;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
@@ -32,6 +33,7 @@ class PropertyDetailsPage extends Component
         $this->property->load([
             'user',
             'propertyType',
+            'amenities',
 //            'floorPlans.media',
             'reviews.user',
             'media',
@@ -42,7 +44,7 @@ class PropertyDetailsPage extends Component
      * সম্পর্কিত প্রপার্টিগুলো দেখানোর জন্য (Computed Property)
      */
     #[Computed]
-    public function relatedProperties(): Builder
+    public function relatedProperties(): Collection
     {
         return Property::with(['media', 'user'])
             ->where('status', 'active')

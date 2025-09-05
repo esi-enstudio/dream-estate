@@ -167,6 +167,11 @@ class Property extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function enquiries(): HasMany
+    {
+        return $this->hasMany(Enquiry::class);
+    }
+
     // Belongs To Location Hierarchy
     public function division(): BelongsTo
     {
@@ -217,16 +222,11 @@ class Property extends Model implements HasMedia
      */
     public function reviews(): HasMany
     {
-        return $this->hasMany(Review::class);
+        return $this->hasMany(Review::class)->whereNull('parent_id'); // Only top-level reviews
     }
 
-    /**
-     * Get all of the messages for the Property.
-     * একটি প্রপার্টির জন্য অনেকগুলো মেসেজ থাকতে পারে।
-     */
-    public function messages(): HasMany
-    {
-        return $this->hasMany(Message::class);
+    public function approvedReviews() {
+        return $this->reviews()->where('status', 'approved');
     }
 
     public function wishlistedByUsers(): BelongsToMany

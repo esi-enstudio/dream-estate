@@ -85,6 +85,11 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
         return $this->hasMany(Property::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
     /**
      * @throws Exception
      */

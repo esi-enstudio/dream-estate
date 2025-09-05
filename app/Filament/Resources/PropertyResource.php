@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PropertyResource\RelationManagers\AmenitiesRelationManager;
+use App\Filament\Resources\PropertyResource\RelationManagers\EnquiriesRelationManager;
 use App\Models\District;
 use App\Models\PropertyType;
 use App\Models\Union;
@@ -10,6 +11,7 @@ use App\Models\Upazila;
 use Exception;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Tables;
@@ -236,9 +238,10 @@ class PropertyResource extends Resource
                                             ->helperText('এখানে ফ্ল্যাটের ভেতরের অতিরিক্ত সুবিধাগুলো যোগ করুন, যেমন - AC, Fridge, Geyser ইত্যাদি।')
                                             ->columnSpanFull(),
 
-                                        RichEditor::make('house_rules')
+                                        Textarea::make('house_rules')
                                             ->label('বাসার নিয়মাবলী')
-                                            ->columnSpanFull(),
+                                            ->rows(5)
+                                            ->helperText('প্রতিটি নিয়ম একটি নতুন লাইনে লিখুন।'),
                                     ])
                                     ->collapsible(), // এই সেকশনটি খোলা বা বন্ধ করা যাবে
 
@@ -525,6 +528,7 @@ class PropertyResource extends Resource
     {
         return [
             AmenitiesRelationManager::class,
+            EnquiriesRelationManager::class,
         ];
     }
 

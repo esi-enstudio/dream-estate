@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <!-- End Breadscrumb -->
+        <!-- End Breadcrumb -->
 
     </div>
 
@@ -177,159 +177,160 @@
                         </div>
 
                         <!-- about property items -->
-                        <div class="accordion-item">
-                            <div class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-3" aria-expanded="true">
-                                    About Property
-                                </button>
-                            </div>
-                            <div id="accordion-3" class="accordion-collapse collapse show">
-                                <div class="accordion-body">
-                                    <p class="mb-2">This property is mostly wooded and sits high on a hilltop overlooking the Mohawk River Valley.</p>
-                                    <p class="mb-2"> <i class="fa-solid fa-circle-check text-success me-2 fs-18"></i> 100 meters from school. 3km away from bypass.  </p>
-                                    <p class="mb-2"> <i class="fa-solid fa-circle-check text-success me-2 fs-18"></i> First floor - 2 large bedrooms with attached bathrooms.  </p>
-                                    <p class="mb-2"> <i class="fa-solid fa-circle-check text-success me-2 fs-18"></i> Spacious and well-Equipped kitchen.  </p>
-                                    <p class="mb-2"> <i class="fa-solid fa-circle-check text-success me-2 fs-18"></i> Inviting living room with balcony.  </p>
-                                    <p class="mb-2"> <i class="fa-solid fa-circle-check text-success me-2 fs-18"></i> Terrace with breathtaking views.  </p>
-                                    <p class="mb-0"> <i class="fa-solid fa-circle-check text-success me-2 fs-18"></i> Independent electric and water connections.  </p>
+                        @if($property->house_rules)
+                            <div class="accordion-item">
+                                <div class="accordion-header">
+                                    {{-- SEO: h2, h3 ট্যাগ ব্যবহার করা ভালো --}}
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-3" aria-expanded="true">
+                                            House Rules & Guidelines
+                                        </button>
+                                    </h2>
                                 </div>
-                            </div>
-                        </div>
+                                <div id="accordion-3" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        @php
+                                            // house_rules-এর টেক্সটকে প্রতিটি লাইন অনুযায়ী একটি অ্যারেতে বিভক্ত করা হচ্ছে
+                                            // PREG_SPLIT_NO_EMPTY নিশ্চিত করে যে কোনো খালি লাইন অ্যারেতে আসবে না
+                                            $rules = preg_split('/\\r\\n|\\r|\\n/', $property->house_rules, -1, PREG_SPLIT_NO_EMPTY);
+                                        @endphp
 
-                        <!-- amenities items -->
-                        <div class="accordion-item">
-                            <div class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-4" aria-expanded="true">
-                                    Amenities
-                                </button>
-                            </div>
-                            <div id="accordion-4" class="accordion-collapse collapse show">
-                                <div class="accordion-body">
-
-                                    <!-- start row -->
-                                    <div class="row row-gap-4">
-                                        <div class="col-lg-3 col-md-6">
-                                            <div class="buy-property-items">
-                                                <p> <i class="material-icons-outlined">fitness_center</i>  Gym</p>
-                                                <p class="mb-lg-0"> <i class="material-icons-outlined">supervised_user_circle</i>Visitor Parking</p>
-                                            </div>
-                                        </div> <!-- end col -->
-                                        <div class="col-lg-3 col-md-6">
-                                            <div class="buy-property-items">
-                                                <p> <i class="material-icons-outlined">pool</i> Swimming Pool</p>
-                                                <p class="mb-lg-0"> <i class="material-icons-outlined">wb_sunny</i>Natural Light</p>
-                                            </div>
-                                        </div> <!-- end col -->
-                                        <div class="col-lg-3 col-md-6">
-                                            <div class="buy-property-items">
-                                                <p> <i class="material-icons-outlined">snippet_folder</i>Power Backup</p>
-                                                <p class="mb-lg-0"> <i class="material-icons-outlined">meeting_room</i>Airy Rooms</p>
-                                            </div>
-                                        </div> <!-- end col -->
-                                        <div class="col-lg-3 col-md-6">
-                                            <div class="buy-property-items">
-                                                <p> <i class="material-icons-outlined">local_bar</i> Clubhouse</p>
-                                                <p class="mb-lg-0"> <i class="material-icons-outlined">interests</i>Spacious Interior</p>
-                                            </div>
-                                        </div> <!-- end col -->
+                                        @foreach($rules as $rule)
+                                            {{-- প্রতিটি নিয়মের জন্য ডিজাইনের ফরম্যাট অনুযায়ী HTML তৈরি হচ্ছে --}}
+                                            <p class="mb-2">
+                                                <i class="fa-solid fa-circle-check text-success me-2 fs-18"></i>
+                                                {{-- SEO: htmlspecialchars ব্যবহার করে টেক্সটকে নিরাপদ রাখা হচ্ছে --}}
+                                                {{ htmlspecialchars($rule) }}
+                                            </p>
+                                        @endforeach
                                     </div>
-                                    <!-- end row -->
-
                                 </div>
                             </div>
-                        </div>
+                        @endif
+
+                        <!-- Amenities Section (Database Driven) -->
+                        @if($property->amenities->isNotEmpty())
+                            <div class="accordion-item">
+                                <div class="accordion-header">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-4" aria-expanded="true">
+                                            Amenities
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="accordion-4" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            {{-- প্রপার্টির সাথে সংযুক্ত প্রতিটি Amenity-এর উপর লুপ চালানো হচ্ছে --}}
+                                            <div class="col-md-12">
+                                                <div class="buy-property-items">
+                                                    @foreach($property->amenities as $amenity)
+                                                        <p class="mb-0 d-flex align-items-center">
+                                                            {{-- amenities টেবিল থেকে আইকন ক্লাস ব্যবহার করা হচ্ছে --}}
+                                                            {{-- আপনার আইকন লাইব্রেরি অনুযায়ী ট্যাগ পরিবর্তন করতে হতে পারে (e.g., <i class="{{ $amenity->icon_class }}"></i>) --}}
+                                                            <i class="material-icons-outlined me-2">{{ $amenity->icon_class ?? 'check_circle_outline' }}</i>
+                                                            <span>{{ $amenity->name }}
+                                                                {{-- পিভট টেবিল থেকে অতিরিক্ত তথ্য (details) দেখানো হচ্ছে --}}
+                                                                @if($amenity->pivot->details)
+                                                                    <span class="text-muted">({{ $amenity->pivot->details }})</span>
+                                                                @endif
+                                                            </span>
+                                                        </p>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         <!-- floor plan items -->
-                        <div class="accordion-item">
-                            <div class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-5" aria-expanded="true">
-                                    Floor Plan
-                                </button>
-                            </div>
-                            <div id="accordion-5" class="accordion-collapse collapse show">
-                                <div class="accordion-body">
+{{--                        <div class="accordion-item">--}}
+{{--                            <div class="accordion-header">--}}
+{{--                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-5" aria-expanded="true">--}}
+{{--                                    Floor Plan--}}
+{{--                                </button>--}}
+{{--                            </div>--}}
+{{--                            <div id="accordion-5" class="accordion-collapse collapse show">--}}
+{{--                                <div class="accordion-body">--}}
 
-                                    <div class="card border-0 shadow-none bg-light rounded mb-3">
-                                        <div class="card-body d-flex align-center justify-content-between gap-2 flex-wrap">
-                                            <h6 class="fs-16 fw-semibold mb-0">Balcony Plan</h6>
-                                            <div class="d-flex align-items-center floor-items">
-                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">file_download</i> </a>
-                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">remove_red_eye</i> </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card border-0 shadow-none bg-light rounded mb-3">
-                                        <div class="card-body d-flex align-center justify-content-between gap-2 flex-wrap">
-                                            <h6 class="fs-16 fw-semibold mb-0">Front Hall</h6>
-                                            <div class="d-flex align-items-center floor-items">
-                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">file_download</i> </a>
-                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">remove_red_eye</i> </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card border-0 shadow-none bg-light rounded mb-0">
-                                        <div class="card-body d-flex align-center justify-content-between gap-2 flex-wrap">
-                                            <h6 class="fs-16 fw-semibold mb-0">Kitchen</h6>
-                                            <div class="d-flex align-items-center floor-items">
-                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">file_download</i> </a>
-                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">remove_red_eye</i> </a>
-                                            </div>
-                                        </div>
-                                    </div>
+{{--                                    <div class="card border-0 shadow-none bg-light rounded mb-3">--}}
+{{--                                        <div class="card-body d-flex align-center justify-content-between gap-2 flex-wrap">--}}
+{{--                                            <h6 class="fs-16 fw-semibold mb-0">Balcony Plan</h6>--}}
+{{--                                            <div class="d-flex align-items-center floor-items">--}}
+{{--                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">file_download</i> </a>--}}
+{{--                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">remove_red_eye</i> </a>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="card border-0 shadow-none bg-light rounded mb-3">--}}
+{{--                                        <div class="card-body d-flex align-center justify-content-between gap-2 flex-wrap">--}}
+{{--                                            <h6 class="fs-16 fw-semibold mb-0">Front Hall</h6>--}}
+{{--                                            <div class="d-flex align-items-center floor-items">--}}
+{{--                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">file_download</i> </a>--}}
+{{--                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">remove_red_eye</i> </a>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="card border-0 shadow-none bg-light rounded mb-0">--}}
+{{--                                        <div class="card-body d-flex align-center justify-content-between gap-2 flex-wrap">--}}
+{{--                                            <h6 class="fs-16 fw-semibold mb-0">Kitchen</h6>--}}
+{{--                                            <div class="d-flex align-items-center floor-items">--}}
+{{--                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">file_download</i> </a>--}}
+{{--                                                <a href="javascript:void(0);" class="fs-16 text-dark"> <i class="material-icons-outlined">remove_red_eye</i> </a>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
 
 
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+
+                        <!-- Gallery Section (Database Driven & SEO Optimized) -->
+                        @php
+                            // 'gallery' কালেকশন থেকে সমস্ত মিডিয়া আইটেম আনা হচ্ছে
+                            $galleryImages = $property->getMedia('gallery');
+                        @endphp
+
+                        @if($galleryImages->isNotEmpty())
+                            <div class="accordion-item">
+                                <div class="accordion-header">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-6" aria-expanded="true">
+                                            Gallery ({{ $galleryImages->count() }} Photos)
+                                        </button>
+                                    </h2>
                                 </div>
-                            </div>
-                        </div>
+                                <div id="accordion-6" class="accordion-collapse collapse show">
+                                    <div class="accordion-body gallery-body">
+                                        <div class="gallery-slider">
 
-                        <!-- gallery items -->
-                        <div class="accordion-item">
-                            <div class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-6" aria-expanded="true">
-                                    Gallery
-                                </button>
-                            </div>
-                            <div id="accordion-6" class="accordion-collapse collapse show">
-                                <div class="accordion-body gallery-body">
-                                    <div class="gallery-slider">
-                                        <div class="gallery-card">
-                                            <a href="{{ asset('assets/img/buy/buy-details-img-1.jpg') }}" data-fancybox="gallery" class="gallery-item rounded">
-                                                <img src="{{ asset('assets/img/buy/buy-details-img-1.jpg') }}" alt="" class="rounded img-fluid"> </a>
-                                        </div>
+                                            {{-- প্রতিটি গ্যালারি ছবির জন্য লুপ চালানো হচ্ছে --}}
+                                            @foreach($galleryImages as $image)
+                                                <div class="gallery-card">
+                                                    {{-- FancyBox লাইটবক্সের জন্য মূল ছবির URL ব্যবহার করা হচ্ছে --}}
+                                                    <a href="{{ $image->getUrl() }}"
+                                                       data-fancybox="gallery"
+                                                       class="gallery-item rounded"
+                                                       data-caption="{{ $property->title }} - Photo {{ $loop->iteration }}"
+                                                       title="View full size image">
 
-                                        <div class="gallery-card">
-                                            <a href="{{ asset('assets/img/buy/buy-details-img-2.jpg') }}" data-fancybox="gallery" class="gallery-item rounded">
-                                                <img src="{{ asset('assets/img/buy/buy-details-img-2.jpg') }}" alt="" class="rounded img-fluid"> </a>
-                                        </div>
+                                                        {{-- স্লাইডারে দেখানোর জন্য ছোট আকারের 'preview' কনভার্সন ব্যবহার করা হচ্ছে --}}
+                                                        {{-- SEO: alt ট্যাগটি ডাইনামিক এবং বর্ণনামূলক, যা সার্চ ইঞ্জিনের জন্য খুবই গুরুত্বপূর্ণ --}}
+                                                        <img src="{{ $image->getUrl('preview') }}"
+                                                             alt="{{ $property->title }} - Gallery Image {{ $loop->iteration }}"
+                                                             class="rounded img-fluid">
+                                                    </a>
+                                                </div>
+                                            @endforeach
 
-                                        <div class="gallery-card">
-                                            <a href="{{ asset('assets/img/buy/buy-details-img-3.jpg') }}" data-fancybox="gallery" class="gallery-item rounded">
-                                                <img src="{{ asset('assets/img/buy/buy-details-img-3.jpg') }}" alt="" class="rounded img-fluid"> </a>
-                                        </div>
-
-                                        <div class="gallery-card">
-                                            <a href="{{ asset('assets/img/buy/buy-details-img-4.jpg') }}" data-fancybox="gallery" class="gallery-item rounded">
-                                                <img src="{{ asset('assets/img/buy/buy-details-img-4.jpg') }}" alt="" class="rounded img-fluid"> </a>
-                                        </div>
-
-                                        <div class="gallery-card">
-                                            <a href="{{ asset('assets/img/buy/buy-details-img-5.jpg') }}" data-fancybox="gallery" class="gallery-item rounded">
-                                                <img src="{{ asset('assets/img/buy/buy-details-img-5.jpg') }}" alt="" class="rounded img-fluid"> </a>
-                                        </div>
-
-                                        <div class="gallery-card">
-                                            <a href="{{ asset('assets/img/buy/buy-details-img-6.jpg') }}" data-fancybox="gallery" class="gallery-item rounded">
-                                                <img src="{{ asset('assets/img/buy/buy-details-img-6.jpg') }}" alt="" class="rounded img-fluid"> </a>
-                                        </div>
-
-                                        <div class="gallery-card">
-                                            <a href="{{ asset('assets/img/buy/buy-details-img-2.jpg') }}" data-fancybox="gallery" class="gallery-item rounded">
-                                                <img src="{{ asset('assets/img/buy/buy-details-img-2.jpg') }}" alt="" class="rounded img-fluid"> </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <!-- video items -->
                         @if($property->video_url)
@@ -633,15 +634,21 @@
                         <div class="card-header">
                             <h5 class="mb-0">Provider Details</h5>
                         </div>
+
                         <div class="card-body">
                             <div class="card bg-light border-0 rounded shadow-none custom-btn">
                                 <div class="card-body">
                                     <div  class="d-flex align-items-center gap-2">
                                         <div class="avatar avatar-lg">
-                                            <img src="{{ asset('assets/img/users/user-06.jpg') }}" alt="" class="rounded-circle">
+                                            <img src="{{ $property->user->avatar_url ?? asset('assets/img/users/default-avatar.png') }}" alt="{{ $property->user->name }}" class="rounded-circle">
                                         </div>
+
                                         <div>
-                                            <h6 class="mb-1 fs-16 fw-semibold"><a class="d-block w-100" href="javascript:void(0);">Adrian Hendriques</a> </h6>
+                                            <h6 class="mb-1 fs-16 fw-semibold">
+                                                <a class="d-block w-100" href="javascript:void(0);">
+                                                    {{ $property->user->name }}
+                                                </a>
+                                            </h6>
                                             <p class="mb-0 fs-14 text-body"> Company Agent </p>
                                         </div>
                                     </div>
@@ -649,8 +656,8 @@
                             </div> <!-- end card -->
 
                             <div class="border p-2 rounded mb-4">
-                                <a href="#" class="d-block mb-3 pb-3 border-bottom text-body d-flex align-items-center"><i class="material-icons-outlined text-body me-2 fs-16 p-1 bg-light rounded text-dark">phone</i>  Call Us : +1 12545 45548 </a>
-                                <a href="#" class="d-block text-body d-flex align-items-center"><i class="material-icons-outlined text-body me-2 fs-16 p-1 bg-light rounded text-dark">email</i>Email : <span class="__cf_email__" data-cfemail="1c75727a735c79647d716c7079327f7371">[email&#160;protected]</span> </a>
+                                <a href="tel:{{ $property->user->phone }}" class="d-block mb-3 pb-3 border-bottom text-body d-flex align-items-center"><i class="material-icons-outlined text-body me-2 fs-16 p-1 bg-light rounded text-dark">phone</i>  Call Us : {{ $property->user->phone }} </a>
+                                <a href="mailto:{{ $property->user->email }}" class="d-block text-body d-flex align-items-center"><i class="material-icons-outlined text-body me-2 fs-16 p-1 bg-light rounded text-dark">email</i>Email : {{ $property->user->email }} </a>
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between gap-2 custom-btn flex-wrap mb-0">
@@ -660,35 +667,10 @@
                         </div> <!-- end card body-->
                     </div> <!-- end card -->
 
-                    <!-- Items-2 -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Enquire Us</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold"> Name </label>
-                                <input type="text" class="form-control" placeholder="Your Name">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold"> Email </label>
-                                <input type="text" class="form-control" placeholder="Your Email">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold"> Phone </label>
-                                <input type="text" class="form-control" placeholder="Your Phone Number">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold"> Description </label>
-                                <textarea class="form-control" rows="3"></textarea>
-                            </div>
-                            <div>
-                                <a href="#" class="btn btn-dark w-100 py-2 fs-14">Submit</a>
-                            </div>
-                        </div> <!-- end card body-->
-                    </div> <!-- end card -->
+                    <!-- Enquire -->
+                    <livewire:enquiry-form :property="$property" :key="$property->id" />
 
-                    <!-- Items-3 -->
+                    <!-- Why Book With Us -->
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0">Why Book With Us</h5>
@@ -704,313 +686,92 @@
                         </div> <!-- end card body-->
                     </div> <!-- end card -->
 
-                    <!-- Items-4 -->
-                    <div class="card mb-0">
-                        <div class="custom-map position-relative">
-                            <a href="buy-grid-map.html" class="btn btn-dark fw-medium"> View Location </a>
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9582106.12236644!2d-15.012343587457918!3d54.10244278649341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x25a3b1142c791a9%3A0xc4f8a0433288257a!2sUnited%20Kingdom!5e0!3m2!1sen!2sin!4v1747587865989!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="mb-3"> Nearby Landmarks & Visits </h6>
-                            <p class="mb-2 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i>  Near By Statue of Liberty </p>
-                            <p class="mb-2 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i> The Metropolitan Museum of Art </p>
-                            <p class="mb-0 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i> Yellowstone National Park </p>
-                        </div> <!-- end card body-->
-                    </div> <!-- end card -->
+                    <!-- map -->
+                    @if($property->google_maps_location_link)
+                        <div class="card mb-0">
+                            <div class="custom-map position-relative">
+                                <a href="{{ $property->google_maps_location_link }}" class="btn btn-dark fw-medium"> View Location </a>
+                                <iframe src="{{ Str::replace('/maps/', '/maps/embed/', $property->google_maps_location_link) }}" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="mb-3"> Nearby Landmarks & Visits </h6>
+                                <p class="mb-2 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i>  Near By Statue of Liberty </p>
+                                <p class="mb-2 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i> The Metropolitan Museum of Art </p>
+                                <p class="mb-0 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i> Yellowstone National Park </p>
+                            </div> <!-- end card body-->
+                        </div> <!-- end card -->
+                    @endif
 
                 </div> <!-- col end -->
             </div>
             <!-- end row -->
 
 
-            <!-- start row plan Items -->
-            <div class="row row-gap-4 custom-properties-items">
-
-                <!-- Items-1 -->
-                <div class="col-xl-3 col-lg-6 col-md-6 d-flex">
-                    <div class="property-card mb-0 flex-fill">
-                        <div class="property-listing-item p-0 mb-0 shadow-none">
-                            <div class="buy-grid-img mb-0 rounded-0">
-                                <a href="rent-details.html">
-                                    <img class="img-fluid" src="{{ asset('assets/img/buy/buy-grid-img-10.jpg') }}" alt="">
-                                </a>
-                                <div class="d-flex align-items-center justify-content-between position-absolute top-0 start-0 end-0 px-3 py-2 z-1">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="badge badge-sm bg-danger d-flex align-items-center custom-badge">
-                                            <i class="material-icons-outlined">generating_tokens</i>
-                                        </div>
-                                        <div class="badge badge-sm bg-orange d-flex align-items-center custom-badge">
-                                            <i class="material-icons-outlined">loyalty</i>
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0)" class="favourite">
-                                        <i class="material-icons-outlined">favorite_border</i>
-                                    </a>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-start position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                    <div class="user-avatar avatar avatar-md border rounded-circle">
-                                        <img src="{{ asset('assets/img/users/user-02.jpg') }}" alt="User" class="rounded-circle">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="buy-grid-content">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="badge bg-secondary"> Condo</span>
-                                    <span class="ms-1 fs-14">Listed on : 25 May 2025</span>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div>
-                                        <h6 class="title mb-1">
-                                            <a href="rent-details.html">Beautiful Condo Room</a>
-                                        </h6>
-                                        <div class="d-flex align-items-center fs-14 mb-0 flex-wrap gap-1"><i class="material-icons-outlined me-1 ms-0">location_on</i>25, Crest Apartment, USA </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">
-                                    <h6 class="text-primary mb-0 ms-1">$400 <span class="fw-normal fs-14"> / Month</span> </h6>
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <span class="ms-1 fs-14">5.0</span>
-                                    </div>
-                                </div>
-                                <ul class="d-flex buy-grid-details justify-content-between align-items-center flex-wrap gap-1 border-top border-light-100 pt-3 mt-3">
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">bed</i>
-                                        2 Bedroom
-                                    </li>
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">bathtub</i>
-                                        2 Bath
-                                    </li>
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">straighten</i>
-                                        350 Sq Ft
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> <!-- end card -->
-                </div> <!-- end col -->
-
-                <!-- Items-2 -->
-                <div class="col-xl-3 col-lg-6 col-md-6 d-flex">
-                    <div class="property-card mb-0 flex-fill">
-                        <div class="property-listing-item p-0 mb-0 shadow-none">
-                            <div class="buy-grid-img mb-0 rounded-0">
-                                <a href="rent-details.html">
-                                    <img class="img-fluid" src="{{ asset('assets/img/buy/buy-grid-img-11.jpg') }}" alt="">
-                                </a>
-                                <div class="d-flex align-items-center justify-content-between position-absolute top-0 start-0 end-0 px-3 py-2 z-1">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="badge badge-sm bg-danger d-flex align-items-center custom-badge">
-                                            <i class="material-icons-outlined">generating_tokens</i>
-                                        </div>
-                                        <div class="badge badge-sm bg-orange d-flex align-items-center custom-badge">
-                                            <i class="material-icons-outlined">loyalty</i>
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0)" class="favourite">
-                                        <i class="material-icons-outlined">favorite_border</i>
-                                    </a>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-start position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                    <div class="user-avatar avatar avatar-md border rounded-circle">
-                                        <img src="{{ asset('assets/img/users/user-04.jpg') }}" alt="User" class="rounded-circle">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="buy-grid-content">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="badge bg-primary"> Suite</span>
-                                    <span class="ms-1 fs-14">Listed on : 18 Apr 2025</span>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div>
-                                        <h6 class="title mb-1">
-                                            <a href="rent-details.html">Serenity Condo Suite</a>
-                                        </h6>
-                                        <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>17, Grov Tower, New York, USA</p>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">
-                                    <h6 class="text-primary mb-0 ms-1">$500 <span class="fw-normal fs-14"> / Month</span> </h6>
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <span class="ms-1 fs-14">5.0</span>
-                                    </div>
-                                </div>
-                                <ul class="d-flex buy-grid-details justify-content-between align-items-center flex-wrap gap-1 border-top border-light-100 pt-3 mt-3">
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">bed</i>
-                                        2 Bedroom
-                                    </li>
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">bathtub</i>
-                                        1 Bath
-                                    </li>
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">straighten</i>
-                                        400 Sq Ft
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> <!-- end card -->
-                </div> <!-- end col -->
-
-                <!-- Items-3 -->
-                <div class="col-xl-3 col-lg-6 col-md-6 d-flex">
-                    <div class="property-card mb-0 flex-fill">
-                        <div class="property-listing-item p-0 mb-0 shadow-none">
-                            <div class="buy-grid-img mb-0 rounded-0">
-                                <a href="rent-details.html">
-                                    <img class="img-fluid" src="{{ asset('assets/img/buy/buy-grid-img-12.jpg') }}" alt="">
-                                </a>
-                                <div class="d-flex align-items-center justify-content-between position-absolute top-0 start-0 end-0 px-3 py-2 z-1">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="badge badge-sm bg-danger d-flex align-items-center custom-badge">
-                                            <i class="material-icons-outlined">generating_tokens</i>
-                                        </div>
-                                        <div class="badge badge-sm bg-orange d-flex align-items-center custom-badge">
-                                            <i class="material-icons-outlined">loyalty</i>
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0)" class="favourite">
-                                        <i class="material-icons-outlined">favorite_border</i>
-                                    </a>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-start position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                    <div class="user-avatar avatar avatar-md border rounded-circle">
-                                        <img src="{{ asset('assets/img/users/user-05.jpg') }}" alt="User" class="rounded-circle">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="buy-grid-content">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="badge bg-secondary"> Luxue</span>
-                                    <span class="ms-1 fs-14">Listed on : 12 Apr 2025</span>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div>
-                                        <h6 class="title mb-1">
-                                            <a href="rent-details.html">Downtown Luxe Room</a>
-                                        </h6>
-                                        <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>88, Springs Lane, Austin, USA</p>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">
-                                    <h6 class="text-primary mb-0 ms-1">$450 <span class="fw-normal fs-14"> / Month</span> </h6>
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <span class="ms-1 fs-14">5.0</span>
-                                    </div>
-                                </div>
-                                <ul class="d-flex buy-grid-details justify-content-between align-items-center flex-wrap gap-1 border-top border-light-100 pt-3 mt-3">
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">bed</i>
-                                        2 Bedroom
-                                    </li>
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">bathtub</i>
-                                        1 Bath
-                                    </li>
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">straighten</i>
-                                        460 Sq Ft
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> <!-- end card -->
-                </div> <!-- end col -->
-
-                <!-- Items-4 -->
-                <div class="col-xl-3 col-lg-6 col-md-6 d-flex">
-                    <div class="property-card mb-0 flex-fill">
-                        <div class="property-listing-item p-0 mb-0 shadow-none">
-                            <div class="buy-grid-img mb-0 rounded-0">
-                                <a href="rent-details.html">
-                                    <img class="img-fluid" src="{{ asset('assets/img/buy/buy-grid-img-13.jpg') }}" alt="">
-                                </a>
-                                <div class="d-flex align-items-center justify-content-between position-absolute top-0 start-0 end-0 px-3 py-2 z-1">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="badge badge-sm bg-danger d-flex align-items-center custom-badge">
-                                            <i class="material-icons-outlined">generating_tokens</i>
-                                        </div>
-                                        <div class="badge badge-sm bg-orange d-flex align-items-center custom-badge">
-                                            <i class="material-icons-outlined">loyalty</i>
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0)" class="favourite">
-                                        <i class="material-icons-outlined">favorite_border</i>
-                                    </a>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-start position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                    <div class="user-avatar avatar avatar-md border rounded-circle">
-                                        <img src="{{ asset('assets/img/users/user-07.jpg') }}" alt="User" class="rounded-circle">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="buy-grid-content">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="badge bg-secondary"> Condo</span>
-                                    <span class="ms-1 fs-14">Listed on : 25 May 2025</span>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div>
-                                        <h6 class="title mb-1">
-                                            <a href="rent-details.html">Modern Haven Suite</a>
-                                        </h6>
-                                        <p class="d-flex align-items-center fs-14 mb-0"><i class="material-icons-outlined me-1 ms-0">location_on</i>42, Hill Residence, Austin, USA</p>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">
-                                    <h6 class="text-primary mb-0 ms-1">$600 <span class="fw-normal fs-14"> / Month</span> </h6>
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <i class="material-icons-outlined text-warning">star</i>
-                                        <span class="ms-1 fs-14">5.0</span>
-                                    </div>
-                                </div>
-                                <ul class="d-flex buy-grid-details justify-content-between align-items-center flex-wrap gap-1 border-top border-light-100 pt-3 mt-3">
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">bed</i>
-                                        4 Bedroom
-                                    </li>
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">bathtub</i>
-                                        2 Bath
-                                    </li>
-                                    <li class="d-flex align-items-center gap-1">
-                                        <i class="material-icons-outlined bg-light text-dark">straighten</i>
-                                        520 Sq Ft
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> <!-- end card -->
-                </div> <!-- end col -->
-
-            </div>
+            <!-- related property list -->
+            @if($this->relatedProperties->isNotEmpty())
+                <div class="row row-gap-4 custom-properties-items">
+                    @foreach($this->relatedProperties as $relatedProperty)
+                        @include('livewire.property.rent.partials.related-property', ['property' => $relatedProperty])
+                    @endforeach
+                </div>
+            @endif
             <!-- end row plan Items -->
 
         </div>
     </div>
     <!-- End Content -->
 
+
+    <!-- Start Add Modal -->
+    <div id="add_review" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="https://dreamsestate.dreamstechnologies.com/html/rent-details.html">
+                    <div class="modal-header">
+                        <h4 class="text-dark modal-title fw-bold">Write a Review</h4>
+                        <button type="button" class="btn-close btn-close-modal custom-btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="material-icons-outlined">close</i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Ratings</label>
+                            <div class="selection-wrap">
+                                <div class="d-inline-block">
+                                    <div class="rating-selction">
+                                        <input type="radio" name="rating" value="5" id="rating5">
+                                        <label for="rating5"><i class="fa-solid fa-star"></i></label>
+                                        <input type="radio" name="rating" value="4" id="rating4">
+                                        <label for="rating4"><i class="fa-solid fa-star"></i></label>
+                                        <input type="radio" name="rating" value="3" id="rating3">
+                                        <label for="rating3"><i class="fa-solid fa-star"></i></label>
+                                        <input type="radio" name="rating" value="2" id="rating2">
+                                        <label for="rating2"><i class="fa-solid fa-star"></i></label>
+                                        <input type="radio" name="rating" value="1" id="rating1">
+                                        <label for="rating1"><i class="fa-solid fa-star"></i></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ratings</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control">
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label">Write your review</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button type="submit" class="btn btn-lg btn-primary">Submit Review</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Add Modal -->
 </div>

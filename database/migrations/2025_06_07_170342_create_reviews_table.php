@@ -16,20 +16,15 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Property::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
-            $table->string('name')->nullable(); // গেস্ট ইউজারের নাম
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->unsignedTinyInteger('rating'); // 1-5
-            $table->text('comment');
-            $table->boolean('is_approved')->default(true);
+            $table->string('title');
+            $table->text('body');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
 
             // একজন ইউজার একটি বাসার জন্য মাত্র একবারই রিভিউ দিতে পারবে
             $table->unique(['property_id', 'user_id']);
-
-            // একজন গেস্ট একই phone number দিয়ে একবারই রিভিউ দিতে পারবে
-            $table->unique(['property_id', 'phone']);
         });
     }
 
