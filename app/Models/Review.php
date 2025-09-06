@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Review extends Model
 {
-    protected $fillable = ['property_id','user_id','title','body','rating','status'];
+    protected $fillable = ['property_id','user_id','title','body','rating','status','likes_count','dislikes_count','favorites_count'];
 
     public function user(): BelongsTo
     { return $this->belongsTo(User::class); }
@@ -20,4 +20,7 @@ class Review extends Model
     { return $this->belongsTo(Property::class); }
     public function replies(): HasMany
     { return $this->hasMany(Review::class, 'parent_id'); }
+
+    public function interactions(): HasMany
+    { return $this->hasMany(ReviewInteraction::class); }
 }

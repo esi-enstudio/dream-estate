@@ -20,7 +20,14 @@ return new class extends Migration
             $table->unsignedTinyInteger('rating'); // 1-5
             $table->string('title');
             $table->text('body');
+            $table->foreignId('parent_id')
+                ->nullable()
+                ->constrained('reviews') // এটি নিজের টেবিলের id কলামকে নির্দেশ করবে
+                ->cascadeOnDelete();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->unsignedInteger('likes_count')->default(0);
+            $table->unsignedInteger('dislikes_count')->default(0);
+            $table->unsignedInteger('favorites_count')->default(0);
             $table->timestamps();
 
             // একজন ইউজার একটি বাসার জন্য মাত্র একবারই রিভিউ দিতে পারবে
