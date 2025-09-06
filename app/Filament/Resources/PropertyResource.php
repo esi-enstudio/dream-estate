@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PropertyResource\RelationManagers\AmenitiesRelationManager;
 use App\Filament\Resources\PropertyResource\RelationManagers\EnquiriesRelationManager;
 use App\Filament\Resources\PropertyResource\RelationManagers\ReviewsRelationManager;
+use App\Filament\Resources\PropertyResource\RelationManagers\WishlistedByRelationManager;
 use App\Models\District;
 use App\Models\PropertyType;
 use App\Models\Union;
@@ -15,6 +16,10 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Tables;
 use App\Models\Property;
 use Filament\Forms\Form;
@@ -525,12 +530,71 @@ class PropertyResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                \Filament\Infolists\Components\Grid::make(3)->schema([
+                    \Filament\Infolists\Components\Grid::make()->columnSpan(2)->schema([
+                        \Filament\Infolists\Components\Section::make('Property Information')
+                            ->columns(2)
+                            ->schema([
+                                TextEntry::make('title'),
+                                TextEntry::make('property_code'),
+                                TextEntry::make('propertyType.name')->label('Type'),
+                                TextEntry::make('purpose')->badge(),
+                                TextEntry::make('description')
+                                    ->columnSpanFull()
+                                    ->html(),
+                            ]),
+                        \Filament\Infolists\Components\Section::make('Specifications')
+                            ->columns(3)
+                            ->schema([
+                                TextEntry::make('bedrooms')->icon('heroicon-o-building-office'),
+                                TextEntry::make('bathrooms')->icon('heroicon-o-building-office-2'),
+                                TextEntry::make('size_sqft')->label('Size (sqft)'),
+                                TextEntry::make('floor_level'),
+                                TextEntry::make('facing_direction'),
+                                TextEntry::make('year_built'),
+                            ]),
+                        \Filament\Infolists\Components\Section::make('Media')
+                            ->schema([
+                                SpatieMediaLibraryImageEntry::make('featured_image')
+                                    ->collection('featured_image')
+                                    ->label('Featured Image'),
+                                SpatieMediaLibraryImageEntry::make('gallery_images')
+                                    ->collection('gallery')
+                                    ->label('Gallery'),
+                            ]),
+                    ]),
+
+                    \Filament\Infolists\Components\Grid::make()->columnSpan(1)->schema([
+                        \Filament\Infolists\Components\Section::make('Status & Pricing')
+                            ->schema([
+                                TextEntry::make('status')->badge(),
+                                TextEntry::make('rent_price')->money('BDT'),
+                                IconEntry::make('is_negotiable')->boolean(),
+                                IconEntry::make('is_featured')->boolean(),
+                                IconEntry::make('is_verified')->boolean(),
+                            ]),
+                        \Filament\Infolists\Components\Section::make('Location')
+                            ->schema([
+                                TextEntry::make('address_street'),
+                                TextEntry::make('address_area'),
+                                TextEntry::make('address_city'),
+                            ]),
+                    ]),
+                ])
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
             AmenitiesRelationManager::class,
             EnquiriesRelationManager::class,
             ReviewsRelationManager::class,
+            WishlistedByRelationManager::class,
         ];
     }
 
@@ -539,7 +603,7 @@ class PropertyResource extends Resource
         return [
             'index' => Pages\ListProperties::route('/'),
             'create' => Pages\CreateProperty::route('/create'),
-//            'view' => Pages\ViewProperty::route('/{record}'),
+            'view' => Pages\ViewProperty::route('/{record}'),
             'edit' => Pages\EditProperty::route('/{record}/edit'),
         ];
     }

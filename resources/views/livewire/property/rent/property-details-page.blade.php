@@ -42,9 +42,9 @@
                     <div class="col-xl-4 d-flex d-xl-block flex-wrap gap-3">
                         <div class="breadcrumb-icons d-flex align-items-center justify-content-xl-end justify-content-start gap-2 mb-xl-4 mb-2 mt-xl-0 mt-4">
                             {{-- Wishlist, Bookmark, Compare functionalities can be implemented later --}}
-                            <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">favorite_border</i></a>
-                            <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">bookmark_add</i></a>
-                            <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">compare_arrows</i></a>
+                            <livewire:wishlist-button :property="$property" :key="'wishlist-list-'.$property->id" />
+{{--                            <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">bookmark_add</i></a>--}}
+{{--                            <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">compare_arrows</i></a>--}}
                         </div>
                         <div class="d-flex align-items-center gap-3 justify-content-xl-end justify-content-start">
                             <h4 class="mb-0 text-primary text-xl-end text-start">
@@ -399,6 +399,7 @@
                 </div> <!-- col end -->
 
                 <div class="col-xl-4 theiaStickySidebar buy-details-item">
+
                     <!-- Provider Details -->
                     <div class="card">
                         <div class="card-header">
@@ -410,7 +411,7 @@
                                 <div class="card-body">
                                     <div  class="d-flex align-items-center gap-2">
                                         <div class="avatar avatar-lg">
-                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($property->user->avatar_url) ?? asset('assets/img/users/default-avatar.png') }}" alt="{{ $property->user->name }}" class="rounded-circle">
+                                            <img src="{{ asset('assets/img/users/default-avatar.png') }}" alt="{{ $property->user->name }}" class="rounded-circle">
                                         </div>
 
                                         <div>
@@ -426,8 +427,32 @@
                             </div> <!-- end card -->
 
                             <div class="border p-2 rounded mb-4">
-                                <a href="tel:{{ $property->user->phone }}" class="d-block mb-3 pb-3 border-bottom text-body d-flex align-items-center"><i class="material-icons-outlined text-body me-2 fs-16 p-1 bg-light rounded text-dark">phone</i>  Call Us : {{ $property->user->phone }} </a>
+                                @auth()
+                                    <a href="tel:{{ $property->user->phone }}" class="d-block mb-3 pb-3 border-bottom text-body d-flex align-items-center">
+                                        <i class="material-icons-outlined text-body me-2 fs-16 p-1 bg-light rounded text-dark">phone</i>
+                                        Call Us :  {{ $property->user->phone }}
+                                    </a>
+                                @else
+                                    <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                                        <i class="material-icons-outlined text-muted me-2 fs-16 p-1 bg-light rounded">lock</i>
+                                        <a href="{{ route('filament.superadmin.auth.login') }}"
+                                           class="btn btn-outline-primary btn-sm">
+                                            Login to view contact
+                                        </a>
+                                    </div>
+                                @endauth
+
+                                @auth()
                                 <a href="mailto:{{ $property->user->email }}" class="d-block text-body d-flex align-items-center"><i class="material-icons-outlined text-body me-2 fs-16 p-1 bg-light rounded text-dark">email</i>Email : {{ $property->user->email }} </a>
+                                @else
+                                    <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                                        <i class="material-icons-outlined text-muted me-2 fs-16 p-1 bg-light rounded">lock</i>
+                                        <a href="{{ route('filament.superadmin.auth.login') }}"
+                                           class="btn btn-outline-primary btn-sm">
+                                            Login to view email
+                                        </a>
+                                    </div>
+                                @endauth
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between gap-2 custom-btn flex-wrap mb-0">
@@ -457,20 +482,20 @@
                     </div> <!-- end card -->
 
                     <!-- map -->
-                    @if($property->google_maps_location_link)
-                        <div class="card mb-0">
-                            <div class="custom-map position-relative">
-                                <a href="{{ $property->google_maps_location_link }}" class="btn btn-dark fw-medium"> View Location </a>
-                                <iframe src="{{ Str::replace('/maps/', '/maps/embed/', $property->google_maps_location_link) }}" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                            </div>
-                            <div class="card-body">
-                                <h6 class="mb-3"> Nearby Landmarks & Visits </h6>
-                                <p class="mb-2 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i>  Near By Statue of Liberty </p>
-                                <p class="mb-2 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i> The Metropolitan Museum of Art </p>
-                                <p class="mb-0 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i> Yellowstone National Park </p>
-                            </div> <!-- end card body-->
-                        </div> <!-- end card -->
-                    @endif
+{{--                    @if($property->google_maps_location_link)--}}
+{{--                        <div class="card mb-0">--}}
+{{--                            <div class="custom-map position-relative">--}}
+{{--                                <a href="{{ $property->google_maps_location_link }}" class="btn btn-dark fw-medium"> View Location </a>--}}
+{{--                                <iframe src="{{ Str::replace('/maps/', '/maps/embed/', $property->google_maps_location_link) }}" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>--}}
+{{--                            </div>--}}
+{{--                            <div class="card-body">--}}
+{{--                                <h6 class="mb-3"> Nearby Landmarks & Visits </h6>--}}
+{{--                                <p class="mb-2 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i>  Near By Statue of Liberty </p>--}}
+{{--                                <p class="mb-2 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i> The Metropolitan Museum of Art </p>--}}
+{{--                                <p class="mb-0 text-body"><i class="fa-regular fa-circle-check fs-16 me-2 text-body"></i> Yellowstone National Park </p>--}}
+{{--                            </div> <!-- end card body-->--}}
+{{--                        </div> <!-- end card -->--}}
+{{--                    @endif--}}
 
                 </div> <!-- col end -->
             </div>

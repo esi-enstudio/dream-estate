@@ -88,7 +88,7 @@
     <div class="footer-bottom">
         <div class="container">
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                <p class="copy-right">Copyright &copy; <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="657067e64cbcda5ddf303ae6-text/javascript">document.write(new Date().getFullYear())</script>. All Rights Reserved, Dreams Estate</p>
+                <p class="copy-right">Copyright &copy; <script>document.write(new Date().getFullYear())</script>. All Rights Reserved, ENN Creation</p>
                 <div class="policy-link">
                     <a href="privacy-policy.html">Privacy Policy</a>
                     <a href="javascript:void(0);">Legal Notice</a>

@@ -77,7 +77,7 @@
         <div class="modal-dialog  modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-body search-wrap">
-                    <form class="search-form" id="search-form" action="https://dreamsestate.dreamstechnologies.com/html/rent-property-grid.html">
+                    <form class="search-form" id="search-form" action="rent-property-grid.html">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <h5>What Are You Looking for?</h5>
                             <a href="javascript:void(0);" class="close" data-bs-dismiss="modal"><i class="material-icons-outlined">close</i></a>

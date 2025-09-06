@@ -3,7 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Resources\UserResource\RelationManagers\WishlistRelationManager;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
@@ -164,10 +167,32 @@ class UserResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Components\Section::make('Personal Information')
+                    ->columns(2)
+                    ->schema([
+                        Components\TextEntry::make('name'),
+                        Components\TextEntry::make('email'),
+                        Components\TextEntry::make('phone'), // যদি 'phone' কলাম থাকে
+                        Components\TextEntry::make('role')->badge(),
+                    ]),
+
+                Components\Section::make('System Information')
+                    ->columns(2)
+                    ->schema([
+                        Components\TextEntry::make('created_at')->dateTime(),
+                        Components\TextEntry::make('updated_at')->dateTime(),
+                    ]),
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
-            //
+            WishlistRelationManager::class,
         ];
     }
 
@@ -176,7 +201,8 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
 //            'create' => Pages\CreateUser::route('/create'),
-//            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'view' => Pages\ViewUser::route('/{record}'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }

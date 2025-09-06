@@ -167,6 +167,11 @@ class Property extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
     public function enquiries(): HasMany
     {
         return $this->hasMany(Enquiry::class);

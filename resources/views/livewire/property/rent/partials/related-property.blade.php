@@ -26,10 +26,8 @@
                         @endif
                     </div>
 
-                    {{-- ভবিষ্যতের Wishlist কার্যকারিতার জন্য --}}
-                    <a href="javascript:void(0)" class="favourite">
-                        <i class="material-icons-outlined">favorite_border</i>
-                    </a>
+                    {{-- Wishlist --}}
+                    <livewire:wishlist-button class="favourite" :property="$property" :key="'wishlist-list-'.$property->id" />
                 </div>
                 <div class="d-flex align-items-center justify-content-start position-absolute bottom-0 end-0 start-0 p-3 z-1">
                     <div class="user-avatar avatar avatar-md border rounded-circle">

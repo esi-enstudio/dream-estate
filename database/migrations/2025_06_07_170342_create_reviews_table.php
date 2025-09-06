@@ -31,7 +31,7 @@ return new class extends Migration
             $table->timestamps();
 
             // একজন ইউজার একটি বাসার জন্য মাত্র একবারই রিভিউ দিতে পারবে
-            $table->unique(['property_id', 'user_id']);
+            $table->unique(['property_id', 'user_id', 'parent_id']);
         });
     }
 
