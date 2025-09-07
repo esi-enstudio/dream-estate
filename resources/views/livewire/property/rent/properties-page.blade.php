@@ -68,7 +68,7 @@
 
             <div class="row">
                 <!-- Sidebar filter area -->
-                <livewire:property-filter-sidebar/>
+                @include('livewire.property.rent.partials.sidebar-filter', ['limit' => 4])
 
                 <!-- Content area -->
                 <div class="col-lg-9">
@@ -215,3 +215,29 @@
     <!-- End Content -->
 
 </div>
+
+
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            let priceSlider = $("#price_range_slider").ionRangeSlider({
+                type: "double",
+                grid: true,
+                min: 0,
+                max: 100000,
+                from: @json($min_price ?? 0),
+                to: @json($max_price ?? 100000),
+                prefix: "৳",
+                onFinish: function (data) {
+                    @this.set('min_price', data.from);
+                    @this.set('max_price', data.to);
+                }
+            }).data("ionRangeSlider");
+
+            // Livewire থেকে রিসেট ইভেন্ট শোনার জন্য
+            Livewire.on('reset-price-slider', () => {
+                priceSlider.reset();
+            });
+        });
+    </script>
+@endpush
