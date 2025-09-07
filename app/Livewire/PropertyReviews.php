@@ -49,7 +49,7 @@ class PropertyReviews extends Component
     public function toggleInteraction(int $reviewId, string $type)
     {
         if (!auth()->check()) {
-            return $this->redirect(route('filament.superadmin.auth.login'));
+            return $this->redirect(route('filament.app.auth.login'));
         }
 
         $existingInteraction = ReviewInteraction::where('user_id', auth()->id())
@@ -151,7 +151,7 @@ class PropertyReviews extends Component
     public function submitReview()
     {
         if (!auth()->check()) {
-            return $this->redirect(route('filament.superadmin.auth.login'));
+            return $this->redirect(route('filament.app.auth.login'));
         }
 
         // সার্ভার-সাইড সুরক্ষা: রিভিউ জমা দেওয়ার আগে আবার চেক করুন

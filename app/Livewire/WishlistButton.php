@@ -24,7 +24,7 @@ class WishlistButton extends Component
     public function toggleWishlist()
     {
         if (!auth()->check()) {
-            return $this->redirect(route('filament.superadmin.auth.login')); // Livewire v3 তে navigate ব্যবহার করুন
+            return $this->redirect(route('filament.app.auth.login')); // Livewire v3 তে navigate ব্যবহার করুন
         }
 
         // toggle() মেথডটি স্বয়ংক্রিয়ভাবে পিভট টেবিল থেকে আইডি যোগ বা মুছে ফেলে

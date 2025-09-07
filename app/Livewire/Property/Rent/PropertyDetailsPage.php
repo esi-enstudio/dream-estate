@@ -33,7 +33,6 @@ class PropertyDetailsPage extends Component
             'user',
             'propertyType',
             'amenities',
-//            'floorPlans.media',
             'reviews.user',
             'media',
         ]);
