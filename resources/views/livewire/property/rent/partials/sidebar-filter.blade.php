@@ -29,7 +29,8 @@
                          wire:ignore
                          x-data="select2Alpine({
                              model: @entangle('purpose'),
-                             livewireModel: 'purpose'
+                             livewireModel: 'purpose',
+                             showSearch: false
                          })"
                          x-init="init()"
                     >
@@ -46,7 +47,8 @@
                          wire:ignore
                          x-data="select2Alpine({
                              model: @entangle('rent_type'),
-                             livewireModel: 'rent_type'
+                             livewireModel: 'rent_type',
+                             showSearch: false
                          })"
                          x-init="init()"
                     >
@@ -65,7 +67,8 @@
                          wire:ignore
                          x-data="select2Alpine({
                              model: @entangle('is_negotiable'),
-                             livewireModel: 'is_negotiable'
+                             livewireModel: 'is_negotiable',
+                             showSearch: false
                          })"
                          x-init="init()"
                     >
@@ -82,7 +85,8 @@
                          wire:ignore
                          x-data="select2Alpine({
                              model: @entangle('bedrooms'),
-                             livewireModel: 'bedrooms'
+                             livewireModel: 'bedrooms',
+                             showSearch: false
                          })"
                          x-init="init()"
                     >
@@ -98,7 +102,8 @@
                          wire:ignore
                          x-data="select2Alpine({
                              model: @entangle('bathrooms'),
-                             livewireModel: 'bathrooms'
+                             livewireModel: 'bathrooms',
+                             showSearch: false
                          })"
                          x-init="init()"
                     >
@@ -114,7 +119,8 @@
                          wire:ignore
                          x-data="select2Alpine({
                              model: @entangle('balconies'),
-                             livewireModel: 'balconies'
+                             livewireModel: 'balconies',
+                             showSearch: false
                          })"
                          x-init="init()"
                     >
@@ -130,7 +136,8 @@
                          wire:ignore
                          x-data="select2Alpine({
                              model: @entangle('floor_level'),
-                             livewireModel: 'floor_level'
+                             livewireModel: 'floor_level',
+                             showSearch: false
                          })"
                          x-init="init()"
                     >
@@ -146,7 +153,8 @@
                          wire:ignore
                          x-data="select2Alpine({
                              model: @entangle('total_floors'),
-                             livewireModel: 'total_floors'
+                             livewireModel: 'total_floors',
+                             showSearch: false
                          })"
                          x-init="init()"
                     >
@@ -201,8 +209,9 @@
             </div>
 
             <!-- Property Type -->
-            @if($this->allPropertyTypes->isNotEmpty())
-                <div class="filter-set" x-data="{ open: false, limit: 4 }">
+            @if($this->allPropertyTypes && $this->allPropertyTypes->isNotEmpty())
+                {{-- Alpine.js শুধুমাত্র open/close অবস্থা নিয়ন্ত্রণ করবে --}}
+                <div class="filter-set" x-data="{ open: false }">
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-between w-100 filter-search-head" data-bs-toggle="collapse" data-bs-target="#propertyTypeCollapse">
                             <h6 class="mb-0 d-flex align-items-center"><i class="material-icons-outlined me-2 text-secondary">category</i>Property Type</h6>
@@ -212,6 +221,7 @@
                     <div id="propertyTypeCollapse" class="card-collapse collapse show mt-3">
                         <div>
                             @foreach($this->allPropertyTypes as $type)
+                                {{-- Blade কন্ডিশনটি এখন সার্ভার থেকে আসা PHP ভ্যারিয়েবল $limit ব্যবহার করবে --}}
                                 <div class="form-check d-flex align-items-center ps-0 mb-2"
                                      @if($loop->iteration > $limit) x-show="open" x-transition @endif>
                                     <input class="form-check-input ms-0 mt-0" type="checkbox" value="{{ $type->id }}" id="type_{{ $type->id }}" wire:model.live="propertyTypes">
@@ -221,6 +231,7 @@
                                 </div>
                             @endforeach
 
+                            {{-- Blade কন্ডিশনটি এখন সার্ভার থেকে আসা PHP ভ্যারিয়েবল $limit ব্যবহার করবে --}}
                             @if($this->allPropertyTypes->count() > $limit)
                                 <div class="view-all d-inline-flex align-items-center">
                                     <a href="javascript:void(0);" @click="open = !open" class="viewall-button text-secondary">
@@ -263,8 +274,9 @@
 {{--            </div>--}}
 
             <!-- Tenant Type -->
-            @if($this->allTenantTypes->isNotEmpty())
-                <div class="filter-set" x-data="{ open: false, limit: 4 }">
+            @if($this->allTenantTypes && $this->allTenantTypes->isNotEmpty())
+                {{-- Alpine.js শুধুমাত্র open/close অবস্থা নিয়ন্ত্রণ করবে --}}
+                <div class="filter-set" x-data="{ open: false }">
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-between w-100 filter-search-head" data-bs-toggle="collapse" data-bs-target="#tenantTypeCollapse">
                             <h6 class="mb-0 d-flex align-items-center"><i class="material-icons-outlined me-2 text-secondary">person</i>Tenant Type</h6>
@@ -274,6 +286,7 @@
                     <div id="tenantTypeCollapse" class="card-collapse collapse show mt-3">
                         <div>
                             @foreach($this->allTenantTypes as $tenant)
+                                {{-- Blade কন্ডিশনটি এখন সার্ভার থেকে আসা PHP ভ্যারিয়েবল $limit ব্যবহার করবে --}}
                                 <div class="form-check d-flex align-items-center ps-0 mb-2"
                                      @if($loop->iteration > $limit) x-show="open" x-transition @endif>
                                     <input class="form-check-input ms-0 mt-0" type="checkbox" value="{{ $tenant->id }}" id="tenant_{{ $tenant->id }}" wire:model.live="tenantTypes">
@@ -283,6 +296,7 @@
                                 </div>
                             @endforeach
 
+                            {{-- Blade কন্ডিশনটি এখন সার্ভার থেকে আসা PHP ভ্যারিয়েবল $limit ব্যবহার করবে --}}
                             @if($this->allTenantTypes->count() > $limit)
                                 <div class="view-all d-inline-flex align-items-center">
                                     <a href="javascript:void(0);" @click="open = !open" class="viewall-button text-secondary">
@@ -331,8 +345,9 @@
 {{--            </div>--}}
 
             <!-- Amenities -->
-            @if($this->allAmenities->isNotEmpty())
-                <div class="filter-set" x-data="{ open: false, limit: 4 }">
+            @if($this->allAmenities && $this->allAmenities->isNotEmpty())
+                {{-- Alpine.js শুধুমাত্র open/close অবস্থা নিয়ন্ত্রণ করবে --}}
+                <div class="filter-set" x-data="{ open: false }">
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-between w-100 filter-search-head" data-bs-toggle="collapse" data-bs-target="#amenitiesCollapse">
                             <h6 class="mb-0 d-flex align-items-center"><i class="material-icons-outlined me-2 text-secondary">cake</i>Amenities</h6>
@@ -342,6 +357,7 @@
                     <div id="amenitiesCollapse" class="card-collapse collapse show mt-3">
                         <div>
                             @foreach($this->allAmenities as $amenity)
+                                {{-- Blade কন্ডিশনটি এখন সার্ভার থেকে আসা PHP ভ্যারিয়েবল $limit ব্যবহার করছে --}}
                                 <div class="form-check d-flex align-items-center ps-0 mb-2"
                                      @if($loop->iteration > $limit) x-show="open" x-transition @endif>
                                     <input class="form-check-input ms-0 mt-0" type="checkbox" value="{{ $amenity->id }}" id="amenity_{{ $amenity->id }}" wire:model.live="amenities">
@@ -351,6 +367,7 @@
                                 </div>
                             @endforeach
 
+                            {{-- Blade কন্ডিশনটি এখন সার্ভার থেকে আসা PHP ভ্যারিয়েবল $limit ব্যবহার করছে --}}
                             @if($this->allAmenities->count() > $limit)
                                 <div class="view-all d-inline-flex align-items-center">
                                     <a href="javascript:void(0);" @click="open = !open" class="viewall-button text-secondary">
@@ -362,6 +379,7 @@
                     </div>
                 </div>
             @endif
+
 {{--            <div class="filter-set">--}}
 {{--                <div class="d-flex align-items-center">--}}
 {{--                    <div class="d-flex justify-content-between w-100 filter-search-head" data-bs-toggle="collapse" data-bs-target="#amenities" aria-expanded="false" role="button">--}}
@@ -424,33 +442,35 @@
             </div>
 
             <!-- Reviews -->
+            <!-- Reviews -->
             <div class="filter-set">
                 <div class="d-flex align-items-center">
                     <div class="d-flex justify-content-between w-100 filter-search-head" data-bs-toggle="collapse" data-bs-target="#reviewsCollapse">
-                        <h6 class="mb-0 d-flex align-items-center"><i class="material-icons-outlined me-2 text-secondary">auto_awesome</i>Rating (and up)</h6>
+                        <h6 class="mb-0 d-flex align-items-center"><i class="material-icons-outlined me-2 text-secondary">auto_awesome</i>Reviews</h6>
                         <i class="material-icons-outlined expand-arrow">expand_less</i>
                     </div>
                 </div>
                 <div id="reviewsCollapse" class="card-collapse collapse show mt-3">
                     <div>
-                        {{-- "X Stars & up" ফিল্টারের জন্য রেডিও বাটন ব্যবহার করা ভালো UX --}}
                         @for ($i = 5; $i >= 1; $i--)
-                            <div class="form-check d-flex align-items-center ps-0 mb-2">
-                                <input class="form-check-input ms-0 mt-0" type="radio" name="rating_filter" value="{{ $i }}" id="rating_{{ $i }}" wire:model.live="rating">
+                            {{-- ★★★★★ মূল সমাধান: $loop->last এর পরিবর্তে $i === 1 ব্যবহার করুন ★★★★★ --}}
+                            <div class="form-check d-flex align-items-center ps-0 {{ $i === 1 ? 'mb-0' : 'mb-2' }}">
+                                <input class="form-check-input ms-0 mt-0"
+                                       type="checkbox"
+                                       value="{{ $i }}"
+                                       id="rating_{{ $i }}"
+                                       wire:model.live="ratings">
+
                                 <label class="form-check-label ms-2 d-flex align-items-center" for="rating_{{ $i }}">
                         <span class="review-star mb-0 d-flex align-items-center">
-                            @for ($s = 1; $s <= 5; $s++)
-                                <i class="material-icons text-warning {{ $s > $i ? 'opacity-25' : '' }}">star</i>
+                            @for ($s = 1; $s <= $i; $s++)
+                                <i class="material-icons text-warning">star</i>
                             @endfor
                         </span>
                                     <span class="ms-2 mb-0">{{ $i }} Star{{ $i > 1 ? 's' : '' }}</span>
                                 </label>
                             </div>
                         @endfor
-                        {{-- ফিল্টার রিসেট করার জন্য একটি ক্লিয়ার বাটন --}}
-                        @if($rating)
-                            <a href="#" wire:click.prevent="$set('rating', null)" class="text-danger fs-14 mt-2 d-inline-block">Clear Rating</a>
-                        @endif
                     </div>
                 </div>
             </div>

@@ -23,7 +23,6 @@
     <div class="content">
         <div class="container">
             <!-- Top filter area -->
-            <!-- Top filter area -->
             <div class="card border-0 search-item mb-4">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -44,7 +43,11 @@
                                     <div class="result-select"
                                          style="min-width: 200px;" {{-- Select2-এর জন্য একটি নির্দিষ্ট প্রস্থ দেওয়া ভালো --}}
                                          wire:ignore
-                                         x-data="select2Alpine({ model: @entangle('sort_by') })"
+                                         x-data="select2Alpine({
+                                             model: @entangle('sort_by'),
+                                             livewireModel: 'sort_by',
+                                             showSearch: false
+                                         })"
                                          x-init="init()">
 
                                         <select class="select" x-ref="select">
@@ -221,15 +224,26 @@
                 model: config.model,
                 // Livewire প্রপার্টির নাম
                 livewireModel: config.livewireModel,
+                // নতুন: সার্চ ফিল্ড দেখানো হবে কিনা তা নিয়ন্ত্রণ করার জন্য
+                showSearch: config.showSearch === undefined ? true : config.showSearch,
 
                 // Select2 ইনিশিয়ালাইজেশন
                 init() {
-                    // Select2 শুরু করা হচ্ছে
-                    const select2 = $(this.$refs.select).select2({
+                    // Select2 অপশনগুলো একটি অবজেক্টে রাখা হলো
+                    let select2Options = {
                         width: '100%'
-                    });
+                    };
+                    // const select2 = $(this.$refs.select).select2({
+                    //     width: '100%'
+                    // });
 
-                    // ★★★★★ মূল সমাধান: ইনিশিয়ালাইজেশনের সময় Livewire-এর মান সেট করা ★★★★★
+                    // যদি showSearch false হয়, তাহলে সার্চ ফিল্ড 숨ানোর অপশন যোগ করুন
+                    if (!this.showSearch) {
+                        select2Options.minimumResultsForSearch = Infinity;
+                    }
+
+                    const select2 = $(this.$refs.select).select2(select2Options);
+
                     // Alpine.nextTick নিশ্চিত করে যে DOM সম্পূর্ণভাবে প্রস্তুত হওয়ার পর এই কোডটি রান হবে
                     Alpine.nextTick(() => {
                         // Livewire থেকে আসা প্রাথমিক মান দিয়ে Select2-কে আপডেট করুন
@@ -251,9 +265,9 @@
                     });
 
                     // Livewire-এর রিসেট ফিল্টার ইভেন্ট শোনার জন্য
-                    Livewire.on('reset-filters-select2', () => {
-                        $(this.$refs.select).val('').trigger('change');
-                    });
+                    // Livewire.on('reset-filters-select2', () => {
+                    //     $(this.$refs.select).val('').trigger('change');
+                    // });
                 },
             }));
         });

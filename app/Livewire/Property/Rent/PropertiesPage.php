@@ -7,6 +7,7 @@ use App\Models\Property;
 use App\Models\PropertyType;
 use App\Models\Tenant;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -23,7 +24,7 @@ class PropertiesPage extends Component
     public string $bathrooms = '';
     public string $balconies = '';
     public string $size_sqft = '';
-    public string $rating = '';
+    public array $ratings = [];
     public ?int $floor_level = null;
     public ?int $total_floors = null;
 
@@ -43,12 +44,12 @@ class PropertiesPage extends Component
 
     // --- সর্টিং এবং লোডিং ---
     public string $sort_by = 'score_desc';
-    public int $perPage = 10;
+    public int $perPage = 8;
 
     public string $viewMode = 'list'; // ডিফল্ট ভিউ 'list'
 
     // URL-এ ফিল্টারগুলো দেখানোর জন্য
-    protected $queryString = [
+    protected array $queryString = [
         'search' => ['except' => ''],
         'purpose' => ['except' => ''],
         'rent_type' => ['except' => ''],
@@ -57,7 +58,7 @@ class PropertiesPage extends Component
         'bathrooms' => ['except' => ''],
         'balconies' => ['except' => ''],
         'size_sqft' => ['except' => ''],
-        'rating' => ['except' => ''],
+        'ratings' => ['except' => []],
         'floor_level' => ['except' => null],
         'total_floors' => ['except' => null],
         'propertyTypes' => ['except' => []],
@@ -79,10 +80,19 @@ class PropertiesPage extends Component
 
     public function resetFilters(): void
     {
+        // ১. রিসেট করার আগে বর্তমান সর্টিং মানটি সংরক্ষণ করুন
+        $currentSortBy = $this->sort_by;
+        $currentViewMode = $this->viewMode; // ViewMode-কেও সংরক্ষণ করা ভালো অভ্যাস
+
+        // ২. সমস্ত public প্রপার্টিকে তাদের ডিফল্ট মানে রিসেট করুন
         $this->reset();
-        // JS ইভেন্ট পাঠিয়ে স্লাইডার রিসেট করার জন্য
+
+        // ৩. সংরক্ষিত মানগুলো পুনরুদ্ধার করুন
+        $this->sort_by = $currentSortBy;
+        $this->viewMode = $currentViewMode;
+
+        // ৪. শুধুমাত্র JS-ভিত্তিক উইজেটগুলোর জন্য রিসেট ইভেন্ট পাঠান
         $this->dispatch('reset-price-slider');
-        $this->dispatch('reset-filters-select2');
     }
 
     // --- ফিল্টারের অপশনগুলো ডেটাবেস থেকে আনার জন্য ---
@@ -120,7 +130,6 @@ class PropertiesPage extends Component
         $query->when($this->floor_level, fn($q) => $q->where('floor_level', $this->floor_level));
         $query->when($this->total_floors, fn($q) => $q->where('total_floors', $this->total_floors));
         $query->when($this->size_sqft, fn($q) => $q->where('size_sqft', '>=', $this->size_sqft));
-        $query->when($this->rating, fn($q) => $q->where('average_rating', '>=', $this->rating));
 
         // বুলিয়ান চেকবক্স
         $query->when($this->is_featured, fn($q) => $q->where('is_featured', true));
@@ -139,9 +148,14 @@ class PropertiesPage extends Component
         });
 
         // প্রাইস রেঞ্জ
-        $query->when($this->rating, fn($q) => $q->where('average_rating', '>=', $this->rating));
         $query->when($this->min_price, fn($q) => $q->where('rent_price', '>=', $this->min_price));
         $query->when($this->max_price, fn($q) => $q->where('rent_price', '<=', $this->max_price));
+
+        // --- ★★★★★ রেটিং ফিল্টারিং লজিক আপডেট ★★★★★ ---
+        $query->when($this->ratings, function ($q) {
+            // whereIn ব্যবহার করে রাউন্ড করা অ্যাভারেজ রেটিংয়ের সাথে মেলানো হচ্ছে
+            $q->whereIn(DB::raw('ROUND(average_rating)'), $this->ratings);
+        });
 
         // --- সর্টিং ---
         match ($this->sort_by) {
