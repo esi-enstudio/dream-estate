@@ -90,7 +90,7 @@
                          })"
                          x-init="init()"
                     >
-                        <label class="form-label mb-1">No of Bedrooms</label>
+                        <label class="form-label mb-1">Bedrooms</label>
                         <select class="form-select" x-ref="select">
                             <option value="">Any</option>
                             @for($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option> @endfor
@@ -107,7 +107,7 @@
                          })"
                          x-init="init()"
                     >
-                        <label class="form-label mb-1">No of Bathrooms</label>
+                        <label class="form-label mb-1">Bathrooms</label>
                         <select class="form-select" x-ref="select">
                             <option value="">Any</option>
                             @for($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option> @endfor
@@ -124,7 +124,7 @@
                          })"
                          x-init="init()"
                     >
-                        <label class="form-label mb-1">No of Balconies</label>
+                        <label class="form-label mb-1">Balconies</label>
                         <select class="form-select" x-ref="select">
                             <option value="">Any</option>
                             @for($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option> @endfor
