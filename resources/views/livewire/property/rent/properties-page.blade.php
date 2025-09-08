@@ -23,48 +23,62 @@
     <div class="content">
         <div class="container">
             <!-- Top filter area -->
+            <!-- Top filter area -->
             <div class="card border-0 search-item mb-4">
                 <div class="card-body">
-
-                    <!-- start row -->
                     <div class="row align-items-center">
-                        <div class="col-lg-3">
-                            <p class="mb-4 mb-lg-0 mb-md-3 text-lg-start text-md-start  text-center">Showing result <span class="result-value"> 06</span> of<span class="result-value"> 125</span></p>
-                        </div> <!-- end col -->
+                        <div class="col-lg-4">
+                            {{-- ডাইনামিক রেজাল্ট কাউন্ট --}}
+                            <p class="mb-4 mb-lg-0 mb-md-3 text-lg-start text-md-start text-center">
+                                Showing <span class="result-value">{{ $properties->count() }}</span> of
+                                <span class="result-value">{{ $totalPropertiesCount }}</span> results
+                            </p>
+                        </div>
 
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                             <div class="d-flex align-items-center gap-3 flex-wrap justify-content-lg-end flex-lg-row flex-md-row flex-column">
-{{--                                <div class="result-list d-flex d-block flex-lg-row flex-md-row flex-column align-items-center gap-2">--}}
-{{--                                    <h5>Sort By</h5>--}}
-{{--                                    <div class="result-select">--}}
-{{--                                        <select class="select">--}}
-{{--                                            <option value="0">Default</option>--}}
-{{--                                            <option value="1" >A-Z</option>--}}
-{{--                                        </select>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-                                <div class="result-list d-flex flex-lg-row flex-md-row flex-column align-items-center gap-2">
-                                    <h5>Price Range</h5>
-                                    <div class="result-select">
-                                        <select class="select">
-                                            <option>Low to High</option>
-                                            <option>High to Low</option>
+
+                                {{-- শক্তিশালী এবং একক সর্টিং ড্রপডাউন --}}
+                                <div class="result-list d-flex d-block flex-lg-row flex-md-row flex-column align-items-center gap-2">
+                                    <h5>Sort By</h5>
+                                    <div class="result-select"
+                                         style="min-width: 200px;" {{-- Select2-এর জন্য একটি নির্দিষ্ট প্রস্থ দেওয়া ভালো --}}
+                                         wire:ignore
+                                         x-data="select2Alpine({ model: @entangle('sort_by') })"
+                                         x-init="init()">
+
+                                        <select class="select" x-ref="select">
+                                            <option value="score_desc">Best Match</option>
+                                            <option value="date_desc">Newest First</option>
+                                            <option value="price_asc">Price: Low to High</option>
+                                            <option value="price_desc">Price: High to Low</option>
                                         </select>
                                     </div>
                                 </div>
+
+                                {{-- ডাইনামিক ভিউ সুইচার --}}
                                 <ul class="grid-list-view d-flex align-items-center justify-content-center">
-                                    <li><a href="#"  class="list-icon active"><i class="material-icons">list</i></a></li>
-{{--                                    <li><a href="rent-property-grid-sidebar.html" class="list-icon"><i class="material-icons">grid_view</i></a></li>--}}
-{{--                                    <li><a href="rent-list-map.html" class="list-icon"><i class="material-icons-outlined">location_on</i></a></li>--}}
+                                    <li>
+                                        <a href="#"
+                                           wire:click.prevent="$set('viewMode', 'list')"
+                                           class="list-icon {{ $viewMode === 'list' ? 'active' : '' }}">
+                                            <i class="material-icons">list</i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                           wire:click.prevent="$set('viewMode', 'grid')"
+                                           class="list-icon {{ $viewMode === 'grid' ? 'active' : '' }}">
+                                            <i class="material-icons">grid_view</i>
+                                        </a>
+                                    </li>
                                 </ul>
+
                             </div>
-                        </div> <!-- end col -->
+                        </div>
                     </div>
-                    <!-- end row -->
-
                 </div>
-            </div> <!-- end card -->
-
+            </div>
 
             <div class="row">
                 <!-- Sidebar filter area -->
@@ -76,112 +90,11 @@
 
                         <!-- property card -->
                         @forelse($properties as $property)
-                        <div class="col-lg-12 col-md-6">
-                            <div class="property-card">
-                                <div class="property-listing-item p-0 mb-0 shadow-none d-flex flex-lg-nowrap flex-wrap">
-                                    <div class="buy-grid-img buy-list-img rent-list-img  mb-0 rounded-0">
-
-                                        {{-- SEO: লিঙ্কে টাইটেল যোগ করা হয়েছে এবং slug ব্যবহার করা হয়েছে --}}
-                                        <a href="{{ route('listing.details', $property->slug) }}" title="View details for {{ $property->title }}">
-
-                                            {{-- SEO: ছবির alt ট্যাগ ডাইনামিক করা হয়েছে, যা খুবই গুরুত্বপূর্ণ --}}
-                                            <img
-                                                class="img-fluid"
-                                                src="{{ $property->getFirstMediaUrl('featured_image', 'thumbnail') }}"
-                                                alt="{{ $property->title }}"
-                                                title="{{ $property->title }}"
-                                            >
-                                        </a>
-
-                                        <div class="d-flex align-items-center justify-content-between position-absolute top-0 start-0 end-0 p-3 z-1">
-                                            <div class="d-flex align-items-center gap-2">
-                                                {{-- শর্তসাপেক্ষ ব্যাজ: যদি প্রপার্টিটি নতুন হয় --}}
-                                                @if($property->created_at->gt(now()->subDays(7)))
-                                                    <div class="badge badge-sm bg-danger d-flex align-items-center">
-                                                        <i class="material-icons-outlined">offline_bolt</i>New
-                                                    </div>
-                                                @endif
-
-                                                {{-- শর্তসাপেক্ষ ব্যাজ: যদি প্রপার্টিটি ফিচার্ড হয় --}}
-                                                @if($property->is_featured)
-                                                    <div class="badge badge-sm bg-orange d-flex align-items-center">
-                                                        <i class="material-icons-outlined">loyalty</i>Featured
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 start-0 p-3 z-1">
-                                            {{-- ডাইনামিক মূল্য: ডাটাবেস থেকে আসছে --}}
-                                            <h6 class="text-white mb-0">৳{{ number_format($property->rent_price) }} <span class="fs-14 fw-normal">/ {{ $property->rent_type }}</span></h6>
-
-                                            {{-- ভবিষ্যতের জন্য: Wishlist কার্যকারিতা যোগ করার জন্য --}}
-                                            <a href="javascript:void(0)" wire:click.prevent="toggleWishlist({{ $property->id }})" class="favourite">
-                                                <i class="material-icons-outlined">favorite_border</i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="buy-grid-content w-100">
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                {{-- ডাইনামিক স্টার রেটিং --}}
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <i class="material-icons-outlined {{ $i <= round($property->average_rating) ? 'text-warning' : 'text-gray-300' }}">star</i>
-                                                @endfor
-
-                                                <span class="ms-1 fs-14"> ({{ $property->reviews_count }} Reviews)</span>
-                                            </div>
-
-                                            {{-- ডাইনামিক ক্যাটাগরি --}}
-                                            <span class="badge bg-secondary">{{ $property->property_type }}</span>
-                                        </div>
-
-                                        <div class="d-flex align-items-center justify-content-between mb-3">
-                                            <div>
-                                                <h6 class="title mb-1">
-                                                    <a href="{{ route('listing.details', $property->slug) }}">{{ $property->title }}</a>
-                                                </h6>
-
-                                                <p class="d-flex align-items-center fs-14 mb-0">
-                                                    <i class="material-icons-outlined me-1 ms-0">location_on</i>
-                                                    {{ $property->address_street }}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <ul class="d-flex buy-grid-details d-flex mb-3 bg-light rounded p-3 justify-content-between align-items-center flex-wrap gap-1">
-                                            {{-- ডাইনামিক স্পেসিফিকেশন --}}
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bed</i>
-                                                {{ $property->bedrooms }} Bed
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">bathtub</i>
-                                                {{ $property->bathrooms }} Bath
-                                            </li>
-                                            <li class="d-flex align-items-center gap-1">
-                                                <i class="material-icons-outlined bg-white text-secondary">straighten</i>
-                                                {{ $property->size_sqft }} Sq Ft
-                                            </li>
-                                        </ul>
-
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap border-top border-light-100 pt-3">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="avatar avatar-lg user-avatar">
-                                                    {{-- মালিকের ডাইনামিক ছবি ও নাম --}}
-                                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($property->user->avatar_url) }}" alt="{{ $property->user->name }}" class="rounded-circle">
-                                                </div>
-                                                <h6 class="mb-0 fs-16 fw-medium text-dark">{{ $property->user->name }}
-                                                    <span class="d-block fs-14 text-body pt-1">United States</span>
-                                                </h6>
-                                            </div>
-                                            <a href="rental-booking.html" class="btn btn-dark">Book Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end card -->
-                        </div>
+                            @if ($viewMode === 'list')
+                                @include('livewire.property.rent.partials.property-card-list', ['property' => $property])
+                            @else
+                                @include('livewire.property.rent.partials.property-card-grid', ['property' => $property])
+                            @endif
                         @empty
                             <div class="col-12">
                                 <p class="text-center">No properties found matching your criteria.</p>
@@ -238,6 +151,111 @@
             Livewire.on('reset-price-slider', () => {
                 priceSlider.reset();
             });
+        });
+
+
+        document.addEventListener('alpine:init', () => {
+            // priceRangeSlider কম্পোনেন্ট
+            Alpine.data('priceRangeSlider', (config) => ({
+                // Livewire থেকে আসা entangled প্রপার্টি
+                from: config.from,
+                to: config.to,
+
+                // স্ট্যাটিক কনফিগারেশন
+                min: config.min || 0,
+                max: config.max || 1000000,
+                prefix: config.prefix || '$',
+
+                // অভ্যন্তরীণ state
+                sliderInstance: null,
+
+                // ডিসপ্লে টেক্সট তৈরি করার জন্য একটি "getter"
+                get displayRange() {
+                    // Intl.NumberFormat ব্যবহার করে সংখ্যাকে কমা সহ সুন্দরভাবে ফরম্যাট করা হচ্ছে
+                    const formattedFrom = new Intl.NumberFormat().format(this.from || this.min);
+                    const formattedTo = new Intl.NumberFormat().format(this.to || this.max);
+                    return `${this.prefix}${formattedFrom} - ${this.prefix}${formattedTo}`;
+                },
+
+                // ইনিশিয়ালাইজেশন ফাংশন
+                init() {
+                    this.sliderInstance = $(this.$refs.slider).ionRangeSlider({
+                        skin: "flat",
+                        type: 'double',
+                        min: this.min,
+                        max: this.max,
+                        from: this.from,
+                        to: this.to,
+                        onFinish: (data) => {
+                            // স্লাইডার পরিবর্তন শেষ হলে Livewire-কে আপডেট করুন
+                            this.from = data.from;
+                            this.to = data.to;
+                        }
+                    }).data("ionRangeSlider");
+
+                    // Livewire বা URL থেকে আসা পরিবর্তনে স্লাইডারকে দৃশ্যত আপডেট করার জন্য
+                    this.$watch('from', (newValue) => {
+                        if (this.sliderInstance && newValue !== this.sliderInstance.result.from) {
+                            this.sliderInstance.update({ from: newValue });
+                        }
+                    });
+
+                    this.$watch('to', (newValue) => {
+                        if (this.sliderInstance && newValue !== this.sliderInstance.result.to) {
+                            this.sliderInstance.update({ to: newValue });
+                        }
+                    });
+
+                    // Livewire-এর রিসেট ফিল্টার ইভেন্ট শোনার জন্য
+                    Livewire.on('reset-price-slider', () => {
+                        if (this.sliderInstance) {
+                            this.sliderInstance.reset();
+                        }
+                    });
+                },
+            }));
+
+            //Select2 Bridge কম্পোনেন্ট
+            Alpine.data('select2Alpine', (config) => ({
+                // Livewire থেকে entangled মডেল
+                model: config.model,
+                // Livewire প্রপার্টির নাম
+                livewireModel: config.livewireModel,
+
+                // Select2 ইনিশিয়ালাইজেশন
+                init() {
+                    // Select2 শুরু করা হচ্ছে
+                    const select2 = $(this.$refs.select).select2({
+                        width: '100%'
+                    });
+
+                    // ★★★★★ মূল সমাধান: ইনিশিয়ালাইজেশনের সময় Livewire-এর মান সেট করা ★★★★★
+                    // Alpine.nextTick নিশ্চিত করে যে DOM সম্পূর্ণভাবে প্রস্তুত হওয়ার পর এই কোডটি রান হবে
+                    Alpine.nextTick(() => {
+                        // Livewire থেকে আসা প্রাথমিক মান দিয়ে Select2-কে আপডেট করুন
+                        select2.val(this.model).trigger('change');
+                    });
+
+                    // Select2 থেকে একটি অপশন সিলেক্ট করা হলে
+                    select2.on('select2:select', (e) => {
+                        const selectedValue = e.params.data.id;
+                        // Livewire কম্পোনেন্টকে ম্যানুয়ালি আপডেট করার জন্য বলা হচ্ছে
+                        @this.set(this.livewireModel, selectedValue);
+                    });
+
+                    // Livewire থেকে আসা পরবর্তী পরিবর্তনে Select2-কে দৃশ্যত আপডেট করার জন্য
+                    this.$watch('model', (newValue) => {
+                        if (newValue !== $(this.$refs.select).val()) {
+                            $(this.$refs.select).val(newValue).trigger('change');
+                        }
+                    });
+
+                    // Livewire-এর রিসেট ফিল্টার ইভেন্ট শোনার জন্য
+                    Livewire.on('reset-filters-select2', () => {
+                        $(this.$refs.select).val('').trigger('change');
+                    });
+                },
+            }));
         });
     </script>
 @endpush

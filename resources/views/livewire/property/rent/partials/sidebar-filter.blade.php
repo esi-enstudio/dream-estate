@@ -21,13 +21,20 @@
                             <span class="input-group-text border-0">
                                 <i class="material-icons-outlined">search</i>
                             </span>
-                        <input wire:model.live.debounce.300ms="search" type="text" class="form-control" placeholder="Search here...">
+                        <input wire:model.live.debounce.500ms="search" type="text" class="form-control" placeholder="Search here...">
                     </div>
 
                     <!-- Purpose -->
-                    <div class="mb-2" wire:ignore.self>
+                    <div class="mb-2"
+                         wire:ignore
+                         x-data="select2Alpine({
+                             model: @entangle('purpose'),
+                             livewireModel: 'purpose'
+                         })"
+                         x-init="init()"
+                    >
                         <label class="form-label mb-1">Purpose</label>
-                        <select class="form-select" wire:model.live="purpose">
+                        <select class="select" x-ref="select">
                             <option value="">Any</option>
                             <option value="rent">Rent</option>
                             <option value="sell">Sell</option>
@@ -35,21 +42,35 @@
                     </div>
 
                     <!-- Rent Type -->
-                    <div class="mb-2">
+                    <div class="mb-2"
+                         wire:ignore
+                         x-data="select2Alpine({
+                             model: @entangle('rent_type'),
+                             livewireModel: 'rent_type'
+                         })"
+                         x-init="init()"
+                    >
                         <label class="form-label mb-1">Rent Type</label>
-                        <select class="form-select" wire:model.live="rent_type">
+                        <select class="select" x-ref="select">
                             <option value="">Any</option>
                             <option value="day">Day</option>
                             <option value="week">Week</option>
                             <option value="month">Month</option>
-                            <option value="year">ear</option>
+                            <option value="year">Year</option>
                         </select>
                     </div>
 
                     <!-- Negotiable -->
-                    <div class="mb-2">
+                    <div class="mb-2"
+                         wire:ignore
+                         x-data="select2Alpine({
+                             model: @entangle('is_negotiable'),
+                             livewireModel: 'is_negotiable'
+                         })"
+                         x-init="init()"
+                    >
                         <label class="form-label mb-1">Negotiable</label>
-                        <select class="form-select" wire:model.live="is_negotiable">
+                        <select class="form-select" x-ref="select">
                             <option value="">Any</option>
                             <option value="negotiable">Negotiable</option>
                             <option value="fixed">Fixed</option>
@@ -57,50 +78,82 @@
                     </div>
 
                     <!-- Bedrooms -->
-                    <div class="mb-2">
+                    <div class="mb-2"
+                         wire:ignore
+                         x-data="select2Alpine({
+                             model: @entangle('bedrooms'),
+                             livewireModel: 'bedrooms'
+                         })"
+                         x-init="init()"
+                    >
                         <label class="form-label mb-1">No of Bedrooms</label>
-                        <select class="form-select" wire:model.live="bedrooms">
+                        <select class="form-select" x-ref="select">
                             <option value="">Any</option>
                             @for($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option> @endfor
                         </select>
                     </div>
 
                     <!-- Bathrooms -->
-                    <div class="mb-2">
+                    <div class="mb-2"
+                         wire:ignore
+                         x-data="select2Alpine({
+                             model: @entangle('bathrooms'),
+                             livewireModel: 'bathrooms'
+                         })"
+                         x-init="init()"
+                    >
                         <label class="form-label mb-1">No of Bathrooms</label>
-                        <select class="form-select" wire:model.live="bathrooms">
+                        <select class="form-select" x-ref="select">
                             <option value="">Any</option>
                             @for($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option> @endfor
                         </select>
                     </div>
 
                     <!-- Balconies -->
-                    <div class="mb-2">
+                    <div class="mb-2"
+                         wire:ignore
+                         x-data="select2Alpine({
+                             model: @entangle('balconies'),
+                             livewireModel: 'balconies'
+                         })"
+                         x-init="init()"
+                    >
                         <label class="form-label mb-1">No of Balconies</label>
-                        <select class="form-select" wire:model.live="balconies">
+                        <select class="form-select" x-ref="select">
                             <option value="">Any</option>
                             @for($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option> @endfor
                         </select>
                     </div>
 
                     <!-- Floor Level -->
-                    <div class="mb-2">
+                    <div class="mb-2"
+                         wire:ignore
+                         x-data="select2Alpine({
+                             model: @entangle('floor_level'),
+                             livewireModel: 'floor_level'
+                         })"
+                         x-init="init()"
+                    >
                         <label class="form-label mb-1">Floor Level</label>
-                        <select class="form-select" wire:model.live="floor_level">
+                        <select class="form-select" x-ref="select">
                             <option value="">Any</option>
                             @for($i = 1; $i <= 10; $i++) <option value="{{ $i }}">{{ $i }}</option> @endfor
                         </select>
                     </div>
 
                     <!-- Total Floor -->
-                    <div class="mb-2">
+                    <div class="mb-2"
+                         wire:ignore
+                         x-data="select2Alpine({
+                             model: @entangle('total_floors'),
+                             livewireModel: 'total_floors'
+                         })"
+                         x-init="init()"
+                    >
                         <label class="form-label mb-1">Total Floor</label>
-                        <select class="form-select" name="total_floors">
-                            <option>Select</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
+                        <select class="form-select" x-ref="select">
+                            <option value="">Any</option>
+                            @for($i = 1; $i <= 20; $i++) <option value="{{ $i }}">{{ $i }}</option> @endfor
                         </select>
                     </div>
 
@@ -341,9 +394,15 @@
 
             <!-- Price -->
             <div class="filter-set"
-                 wire:ignore
-                 x-data
-                 x-on:reset-price-slider.window="$dispatch('reset-ion-slider')">
+                 x-data="priceRangeSlider({
+                 from: @entangle('min_price').live,
+                 to: @entangle('max_price').live,
+                 min: 0,
+                 max: 50000,
+                 prefix: '৳'
+             })"
+                 x-init="init()"
+            >
                 <div class="d-flex align-items-center">
                     <div class="d-flex justify-content-between w-100 filter-search-head" data-bs-toggle="collapse" data-bs-target="#priceCollapse">
                         <h6 class="mb-0 d-flex align-items-center"><i class="material-icons-outlined me-2 text-secondary">monetization_on</i>Price</h6>
@@ -352,29 +411,17 @@
                 </div>
                 <div id="priceCollapse" class="card-collapse collapse show mt-3">
                     <div>
-                        <div class="filter-range">
-                            <input type="text" id="price_range_slider">
+                        {{-- wire:ignore খুবই গুরুত্বপূর্ণ, কারণ ion.rangeSlider এই div-টিকে নিয়ন্ত্রণ করবে --}}
+                        <div class="filter-range" wire:ignore>
+                            <input type="text" x-ref="slider">
+                            <p class="mb-0">Range :
+                                {{-- এই span-এর টেক্সট এখন Alpine.js দ্বারা ডাইনামিকভাবে আপডেট হবে --}}
+                                <span class="text-dark" x-text="displayRange"></span>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-
-{{--            <div class="filter-set" wire:ignore>--}}
-{{--                <div class="d-flex align-items-center">--}}
-{{--                    <div class="d-flex justify-content-between w-100 filter-search-head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="false" role="button">--}}
-{{--                        <h6 class="mb-0 d-flex align-items-center"><i class="material-icons-outlined me-2 text-secondary">monetization_on</i>Price</h6>--}}
-{{--                        <i class="material-icons-outlined expand-arrow">expand_less</i>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div id="price" class="card-collapse collapse show mt-3">--}}
-{{--                    <div>--}}
-{{--                        <div class="filter-range">--}}
-{{--                            <input type="text" id="price_range_slider">--}}
-{{--                            <p class="mb-0">Range : <span class="text-dark">$200 - $5695</span></p>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
 
             <!-- Reviews -->
             <div class="filter-set">
@@ -478,8 +525,8 @@
 
         </div>
 
-        <div class="filter-footer">
-            <a href="#" class="btn btn-dark w-100"> Apply Filter </a>
-        </div>
+{{--        <div class="filter-footer">--}}
+{{--            <a href="#" class="btn btn-dark w-100"> Apply Filter </a>--}}
+{{--        </div>--}}
     </div>
 </div>

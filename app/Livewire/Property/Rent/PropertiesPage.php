@@ -19,11 +19,13 @@ class PropertiesPage extends Component
     public string $purpose = '';
     public string $rent_type = '';
     public string $is_negotiable = '';
-    public ?int $bedrooms = null;
-    public ?int $bathrooms = null;
-    public ?int $balconies = null;
-    public ?int $size_sqft = null;
-    public ?int $rating = null;
+    public string $bedrooms = '';
+    public string $bathrooms = '';
+    public string $balconies = '';
+    public string $size_sqft = '';
+    public string $rating = '';
+    public ?int $floor_level = null;
+    public ?int $total_floors = null;
 
     // --- চেকবক্স ফিল্টার (অ্যারে) ---
     public array $propertyTypes = [];
@@ -43,18 +45,31 @@ class PropertiesPage extends Component
     public string $sort_by = 'score_desc';
     public int $perPage = 10;
 
+    public string $viewMode = 'list'; // ডিফল্ট ভিউ 'list'
+
     // URL-এ ফিল্টারগুলো দেখানোর জন্য
     protected $queryString = [
         'search' => ['except' => ''],
         'purpose' => ['except' => ''],
         'rent_type' => ['except' => ''],
-        'bedrooms' => ['except' => null],
+        'is_negotiable' => ['except' => ''],
+        'bedrooms' => ['except' => ''],
+        'bathrooms' => ['except' => ''],
+        'balconies' => ['except' => ''],
+        'size_sqft' => ['except' => ''],
+        'rating' => ['except' => ''],
+        'floor_level' => ['except' => null],
+        'total_floors' => ['except' => null],
         'propertyTypes' => ['except' => []],
+        'tenantTypes' => ['except' => []],
         'amenities' => ['except' => []],
-        'rating' => ['except' => null],
+        'is_featured' => ['except' => false],
+        'is_trending' => ['except' => false],
+        'is_verified' => ['except' => false],
         'min_price' => ['except' => null],
         'max_price' => ['except' => null],
         'sort_by' => ['except' => 'score_desc'],
+        'viewMode' => ['except' => 'list'],
     ];
 
     public function loadMore(): void
@@ -67,6 +82,7 @@ class PropertiesPage extends Component
         $this->reset();
         // JS ইভেন্ট পাঠিয়ে স্লাইডার রিসেট করার জন্য
         $this->dispatch('reset-price-slider');
+        $this->dispatch('reset-filters-select2');
     }
 
     // --- ফিল্টারের অপশনগুলো ডেটাবেস থেকে আনার জন্য ---
@@ -101,6 +117,8 @@ class PropertiesPage extends Component
         $query->when($this->bedrooms, fn($q) => $q->where('bedrooms', $this->bedrooms));
         $query->when($this->bathrooms, fn($q) => $q->where('bathrooms', $this->bathrooms));
         $query->when($this->balconies, fn($q) => $q->where('balconies', $this->balconies));
+        $query->when($this->floor_level, fn($q) => $q->where('floor_level', $this->floor_level));
+        $query->when($this->total_floors, fn($q) => $q->where('total_floors', $this->total_floors));
         $query->when($this->size_sqft, fn($q) => $q->where('size_sqft', '>=', $this->size_sqft));
         $query->when($this->rating, fn($q) => $q->where('average_rating', '>=', $this->rating));
 
