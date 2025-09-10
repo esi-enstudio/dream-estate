@@ -8,7 +8,7 @@
             <!-- End Hero title section -->
 
             <!-- Find property form Start -->
-            @include('livewire.partials.homepage.find-property')
+            <livewire:homepage.property-search-form/>
             <!-- Find property form End -->
         </div>
     </section>
