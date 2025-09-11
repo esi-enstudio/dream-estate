@@ -17,7 +17,7 @@ class PropertyType extends Model
 {
     use HasCustomSlug;
 
-    protected $fillable = ['name_en', 'name_bn', 'slug', 'properties_count'];
+    protected $fillable = ['name_en', 'name_bn', 'slug', 'properties_count','icon_path'];
 
     /**
      * Define which field to use for slug generation.

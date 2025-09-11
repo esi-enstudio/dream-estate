@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Property;
+use App\Models\PropertyType;
 use Carbon\Carbon;
 
 class PropertyObserver
@@ -12,7 +13,7 @@ class PropertyObserver
      */
     public function created(Property $property): void
     {
-        //
+        $this->updateCount($property->propertyType);
     }
 
     /**
@@ -20,7 +21,13 @@ class PropertyObserver
      */
     public function updated(Property $property): void
     {
-        //
+        if ($property->isDirty('property_type_id')) {
+            $oldTypeId = $property->getOriginal('property_type_id');
+            if ($oldType = PropertyType::find($oldTypeId)) {
+                $this->updateCount($oldType); // পুরনো টাইপের কাউন্ট আপডেট করুন
+            }
+            $this->updateCount($property->propertyType); // নতুন টাইপের কাউন্ট আপডেট করুন
+        }
     }
 
     /**
@@ -28,7 +35,7 @@ class PropertyObserver
      */
     public function deleted(Property $property): void
     {
-        //
+        $this->updateCount($property->propertyType);
     }
 
     /**
@@ -84,5 +91,13 @@ class PropertyObserver
             $property->score = $score;
             $property->save();
         });
+    }
+
+    protected function updateCount(?PropertyType $type): void
+    {
+        if ($type) {
+            $type->properties_count = $type->properties()->count();
+            $type->save();
+        }
     }
 }

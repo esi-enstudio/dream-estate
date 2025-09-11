@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PropertyTypeResource\Pages;
 use App\Filament\Resources\PropertyTypeResource\RelationManagers;
 use App\Models\PropertyType;
+use Exception;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,79 +13,86 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class PropertyTypeResource extends Resource
 {
     protected static ?string $model = PropertyType::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+
+    protected static ?string $navigationGroup = 'Property Management';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name_en')
-                    ->label('Name (English)')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255),
+                Forms\Components\Section::make('Main Details')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('name_en')
+                            ->label('Name (English)')
+                            ->required()
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
 
-                Forms\Components\TextInput::make('name_bn')
-                    ->label('Name (Bangla)')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255),
+                        Forms\Components\TextInput::make('name_bn')
+                            ->label('Name (Bengali)')
+                            ->required()
+                            ->maxLength(255),
 
-                Forms\Components\FileUpload::make('icon_path')
-                    ->label('Icon')
-                    ->directory('property-types/icons')
-                    ->image()
-                    ->imageEditor()
-                    ->columnSpanFull()
-                    ->nullable(),
+                        Forms\Components\TextInput::make('slug')
+                            ->required()
+                            ->maxLength(255)
+                            ->disabled()
+                            ->dehydrated() // নিশ্চিত করে যে এটি disabled থাকা সত্ত্বেও সেভ হবে
+                            ->unique(PropertyType::class, 'slug', ignoreRecord: true),
+                    ]),
 
-                Forms\Components\TextInput::make('properties_count')
-                    ->label('Properties Count')
-                    ->numeric()
-                    ->default(0)
-                    ->disabled(), // Auto managed
+                Forms\Components\Section::make('Icon & Status')
+                    ->schema([
+                        Forms\Components\FileUpload::make('icon_path')
+                            ->label('Icon (SVG recommended)')
+                            ->image()
+                            ->imageEditor()
+                            ->directory('property-type-icons')
+                            ->required(),
+
+                        Forms\Components\TextInput::make('properties_count')
+                            ->label('Total Properties')
+                            ->disabled()
+                            ->helperText('This count is updated automatically.'),
+                    ])
             ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('icon_path')
                     ->label('Icon')
-                    ->circular()
-                    ->size(40),
-
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable()
-                    ->sortable(),
-
+                    ->circular(),
                 Tables\Columns\TextColumn::make('name_en')
                     ->label('Name (EN)')
                     ->searchable()
                     ->sortable(),
-
                 Tables\Columns\TextColumn::make('name_bn')
                     ->label('Name (BN)')
                     ->searchable()
                     ->sortable(),
-
                 Tables\Columns\TextColumn::make('properties_count')
                     ->label('Properties')
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('d M Y, h:i A')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime('d M Y, h:i A')
+                    ->alignCenter(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -108,7 +116,7 @@ class PropertyTypeResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');;
+            ->defaultSort('properties_count', 'desc');
     }
 
     public static function getRelations(): array

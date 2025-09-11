@@ -19,6 +19,7 @@
             <div class="col-lg-8">
                 <div class="property-slider">
                     @foreach($this->propertyTypes as $type)
+{{--                        {{ dump($type) }}--}}
                     <div class="property-item aos" data-aos="fade-up" data-aos-duration="1000">
                         <div class="property-card-item">
                             <div class="mb-3 text-center">

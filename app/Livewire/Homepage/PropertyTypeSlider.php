@@ -5,26 +5,25 @@ namespace App\Livewire\Homepage;
 use App\Models\PropertyType;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use LaravelIdea\Helper\App\Models\_IH_PropertyType_QB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class PropertyTypeSlider extends Component
 {
     /**
-     * ডেটাবেস থেকে Property Type গুলো নিয়ে আসুন
-     * শুধুমাত্র সেইগুলোই আনা হবে যেগুলোর সাথে কমপক্ষে একটি প্রপার্টি যুক্ত আছে
+     * ডেটাবেস থেকে সমস্ত Property Type নিয়ে আসুন, সংরক্ষিত কাউন্টার ব্যবহার করে
      */
-    #[Computed(cache: true, key: 'property-types-for-slider')]
-    public function propertyTypes(): Collection|Builder|_IH_PropertyType_QB
+    #[Computed(cache: true, key: 'all-property-types-for-slider-optimized')]
+    public function propertyTypes(): Collection
     {
         return PropertyType::query()
-            ->whereHas('properties') // নিশ্চিত করে যে শুধুমাত্র ব্যবহৃত টাইপগুলোই আসবে
-            ->withCount('properties') // 'properties_count' নামে একটি কলাম যোগ করে
-            ->orderBy('properties_count', 'desc') // সবচেয়ে বেশি প্রপার্টি থাকা টাইপগুলো আগে দেখাবে
-            ->take(8) // স্লাইডারে দেখানোর জন্য সর্বোচ্চ ৮টি আইটেম নিন
+            // ★★★★★ মূল পরিবর্তন: সরাসরি সংরক্ষিত কলাম দিয়ে সর্ট করা হচ্ছে ★★★★★
+            ->orderBy('properties_count', 'desc')
+
+            // স্লাইডারে দেখানোর জন্য সর্বোচ্চ ৮টি আইটেম নিন
+            ->take(8)
+
             ->get();
     }
 
