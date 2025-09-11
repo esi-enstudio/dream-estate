@@ -23,7 +23,31 @@ class PropertyTypeResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name_en')
+                    ->label('Name (English)')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('name_bn')
+                    ->label('Name (Bangla)')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->maxLength(255),
+
+                Forms\Components\FileUpload::make('icon_path')
+                    ->label('Icon')
+                    ->directory('property-types/icons')
+                    ->image()
+                    ->imageEditor()
+                    ->columnSpanFull()
+                    ->nullable(),
+
+                Forms\Components\TextInput::make('properties_count')
+                    ->label('Properties Count')
+                    ->numeric()
+                    ->default(0)
+                    ->disabled(), // Auto managed
             ]);
     }
 
@@ -31,10 +55,50 @@ class PropertyTypeResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\ImageColumn::make('icon_path')
+                    ->label('Icon')
+                    ->circular()
+                    ->size(40),
+
+                Tables\Columns\TextColumn::make('slug')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('name_en')
+                    ->label('Name (EN)')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('name_bn')
+                    ->label('Name (BN)')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('properties_count')
+                    ->label('Properties')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime('d M Y, h:i A')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime('d M Y, h:i A')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('from'),
+                        Forms\Components\DatePicker::make('until'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['from'], fn($q) => $q->whereDate('created_at', '>=', $data['from']))
+                            ->when($data['until'], fn($q) => $q->whereDate('created_at', '<=', $data['until']));
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -43,7 +107,8 @@ class PropertyTypeResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');;
     }
 
     public static function getRelations(): array
