@@ -18,6 +18,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @method static where(string $string, $areaName)
+ * @method static count()
+ * @method static whereIn(string $string, string[] $array)
+ */
 class Property extends Model implements HasMedia
 {
     /** @use HasFactory<PropertyFactory> */

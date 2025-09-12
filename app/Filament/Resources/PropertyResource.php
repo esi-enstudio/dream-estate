@@ -89,6 +89,7 @@ class PropertyResource extends Resource
                             ->columnSpan(2)
                             ->schema([
                                 Section::make('মূল তথ্য (Core Information)')
+                                    ->collapsible()
                                     ->schema([
                                         TextInput::make('property_code')
                                             ->label('প্রপার্টি কোড')
@@ -107,6 +108,7 @@ class PropertyResource extends Resource
                                     ]),
 
                                 Section::make('মূল্য এবং প্রাপ্যতা (Pricing & Availability)')
+                                    ->collapsible()
                                     ->schema([
                                         Grid::make(2)->schema([
                                             TextInput::make('rent_price')
@@ -134,6 +136,7 @@ class PropertyResource extends Resource
                                     ]),
 
                                 Section::make('বাসার স্পেসিফিকেশন (Property Specifications)')
+                                    ->collapsible()
                                     ->schema([
                                         Grid::make(2)
                                             ->schema([
@@ -252,6 +255,7 @@ class PropertyResource extends Resource
                                     ->collapsible(), // এই সেকশনটি খোলা বা বন্ধ করা যাবে
 
                                 Section::make('অবস্থান (Location)')
+                                    ->collapsible()
                                     ->schema([
                                         Grid::make(2)->schema([
                                             Select::make('division_id')
@@ -299,7 +303,7 @@ class PropertyResource extends Resource
                                                 ->nullable(),
                                             TextInput::make('address_street')->label('রাস্তার ঠিকানা')->required(),
                                             TextInput::make('address_area')->label('এলাকা')->helperText('(যেমন: চন্ডিবেড় মধ্যপাড়া, ভৈরবপুর উত্তরপাড়া)')->required(),
-                                            TextInput::make('address_zipcode')->label('জিপ কোড')->numeric(),
+                                            TextInput::make('address_zipcode')->label('জিপ কোড')->numeric()->nullable(),
                                             TextInput::make('google_maps_location_link')->label('গুগল ম্যাপস লিংক')->url(),
 
                                             TextInput::make('latitude')
@@ -347,6 +351,7 @@ class PropertyResource extends Resource
                             ->columnSpan(1)
                             ->schema([
                                 Section::make('স্ট্যাটাস ও ভিজিবিলিটি')
+                                    ->collapsible()
                                     ->schema([
                                         Select::make('status')
                                             ->label('স্ট্যাটাস')
@@ -408,6 +413,7 @@ class PropertyResource extends Resource
                                     ]),
 
                                 Section::make('ছবি ও ভিডিও (Media)')
+                                    ->collapsible()
                                     ->schema([
                                         // --- ফিচার্ড বা প্রধান ছবির জন্য ---
                                         SpatieMediaLibraryFileUpload::make('featured_image')
@@ -478,13 +484,11 @@ class PropertyResource extends Resource
                     ->money('bdt') // BDT কারেন্সি ফরম্যাট
                     ->sortable(),
 
-                IconColumn::make('is_featured')
-                    ->label('ফিচার্ড')
-                    ->boolean(),
+                Tables\Columns\ToggleColumn::make('is_featured')
+                    ->label('ফিচার্ড'),
 
-                IconColumn::make('is_verified')
-                    ->label('ভেরিফাইড')
-                    ->boolean(),
+                Tables\Columns\ToggleColumn::make('is_verified')
+                    ->label('ভেরিফাইড'),
 
                 TextColumn::make('status')
                     ->badge() // স্ট্যাটাসকে সুন্দর ব্যাজ হিসেবে দেখাবে

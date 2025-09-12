@@ -17,6 +17,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @method static where(string $string, string $string1)
+ * @method static count()
+ * @method static role(string $string)
+ */
 class User extends Authenticatable implements HasAvatar, FilamentUser
 {
     /** @use HasFactory<UserFactory> */
