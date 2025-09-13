@@ -39,7 +39,7 @@ class IndexPage extends Component
         $this->reset('perPage'); // নতুন ফিল্টার করলে পেজিনেশন রিসেট করুন
     }
 
-    #[Computed(cache: true)]
+    #[Computed(cache: true, key: 'blog-index-categories')]
     public function categories()
     {
         // শুধুমাত্র সেই ক্যাটাগরিগুলো আনবে যেগুলোতে কমপক্ষে একটি 'published' পোস্ট আছে

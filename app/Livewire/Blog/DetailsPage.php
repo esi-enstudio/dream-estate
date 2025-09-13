@@ -57,7 +57,7 @@ class DetailsPage extends Component
         $this->post->refresh(); // Observer থেকে আসা নতুন কাউন্ট লোড করার জন্য
     }
 
-    #[Computed(cache: true)]
+    #[Computed(cache: true, key: 'related-blog-post')]
     public function relatedPosts()
     {
         return Post::where('status', 'published')
