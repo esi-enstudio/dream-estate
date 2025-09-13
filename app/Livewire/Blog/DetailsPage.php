@@ -14,13 +14,9 @@ class DetailsPage extends Component
 {
     public Post $post;
 
-    public function mount(string $slug): void
+    public function mount(Post $post): void
     {
-        $this->post = Post::where('slug', $slug)
-            ->where('status', 'published')
-            ->where('published_at', '<=', now())
-            ->with(['user', 'category'])
-            ->firstOrFail();
+        $this->post = $post;
 
         // ভিউ কাউন্ট বৃদ্ধি
         $this->post->increment('views_count');

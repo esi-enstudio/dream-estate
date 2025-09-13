@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Faq;
+use App\Models\Post;
 use App\Models\Property;
 use App\Models\Review;
 use App\Models\ReviewInteraction;
 use App\Models\Testimonial;
 use App\Observers\FaqObserver;
+use App\Observers\PostObserver;
 use App\Observers\PropertyObserver;
 use App\Observers\ReviewInteractionObserver;
 use App\Observers\ReviewObserver;
@@ -34,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
         ReviewInteraction::observe(ReviewInteractionObserver::class);
         Testimonial::observe(TestimonialObserver::class);
         Faq::observe(FaqObserver::class);
+        Post::observe(PostObserver::class);
     }
 }

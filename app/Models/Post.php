@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Post extends Model implements HasMedia {
+/**
+ * @method static where(string $string, string $string1)
+ */
+class Post extends Model implements HasMedia
+{
+
     use HasCustomSlug, InteractsWithMedia;
     protected $guarded = [];
     protected $casts = ['published_at' => 'datetime'];

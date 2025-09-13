@@ -1,8 +1,30 @@
-<div class="content">
+<div class="page-wrapper">
+
+    <!-- Start Breadscrumb -->
+    <div class="breadcrumb-bar">
+        <img src="{{ asset('assets/img/bg/breadcrumb-bg-01.png') }}" alt="" class="breadcrumb-bg-01 d-none d-lg-block">
+        <img src="{{ asset('assets/img/bg/breadcrumb-bg-02.png') }}" alt="" class="breadcrumb-bg-02 d-none d-lg-block">
+        <img src="{{ asset('assets/img/bg/breadcrumb-bg-03.png') }}" alt="" class="breadcrumb-bg-03">
+        <div class="row align-items-center text-center position-relative z-1">
+            <div class="col-md-12 col-12 breadcrumb-arrow">
+                <h1 class="breadcrumb-title">Blog Details</h1>
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}"><span><i class="mdi mdi-home-outline me-1"></i></span>Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Blog Details</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadscrumb -->
+
+
+    <div class="content">
     <div class="container">
         <div class="row blog-details-cover">
             <div class="col-lg-10 mx-auto">
-                <a href="{{-- route('blog.index') --}}" class="d-flex align-items-center mb-4"><i class="material-icons-outlined me-1">arrow_back</i>Back to Blog</a>
+                <a href="{{ route('blog.index') }}" class="d-flex align-items-center mb-4"><i class="material-icons-outlined me-1">arrow_back</i>Back to Blogs</a>
                 <div class="card mb-0">
                     <div class="card-body">
                         <div class="blog-details-item-01">
@@ -68,4 +90,5 @@
             </div>
         @endif
     </div>
+</div>
 </div>

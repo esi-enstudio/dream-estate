@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('slug')->unique();
+            $table->unsignedInteger('posts_count')->default(0);
             $table->timestamps();
         });
     }

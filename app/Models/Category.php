@@ -6,6 +6,10 @@ use App\Traits\HasCustomSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @method static find(mixed $oldCategoryId)
+ * @method static whereHas(string $string, \Closure $param)
+ */
 class Category extends Model
 {
     use HasCustomSlug;

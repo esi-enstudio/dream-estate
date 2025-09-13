@@ -44,8 +44,7 @@ class CategoryResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('posts_count')
                     ->label('Posts Count')
-                    ->counts('posts') // 'posts' রিলেশনশিপ থেকে গণনা করবে
-                    ->sortable(),
+                    ->sortable(), // এখন এটি সরাসরি সর্ট করা যাবে
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

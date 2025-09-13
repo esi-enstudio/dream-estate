@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\PropertyViewController;
+use App\Livewire\Blog\DetailsPage;
+use App\Livewire\Blog\IndexPage;
 use App\Livewire\HomePage;
 use App\Livewire\PricingPage;
 use App\Livewire\Property\Rent\PropertiesPage;
@@ -20,6 +22,13 @@ Route::prefix('/rent')
             ->name('property.track-view')
             ->middleware('throttle:5,1');
 });
+
+Route::prefix('/blog')
+    ->name('blog.')
+    ->group(function (){
+        Route::get('/list', IndexPage::class)->name('index');
+        Route::get('/details/{post:slug}', DetailsPage::class)->name('details');
+    });
 
 
 

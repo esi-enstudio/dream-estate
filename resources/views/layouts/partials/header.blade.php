@@ -57,6 +57,10 @@
                         </li>
 
 
+                        <li class="{{ request()->routeIs('blog.*') ? 'active' : '' }}">
+                            <a href="{{ route('blog.index') }}">Blog</a>
+                        </li>
+
                         <li class="{{ request()->routeIs('pricing') ? 'active' : '' }}">
                             <a href="{{ route('pricing') }}">Pricing</a>
                         </li>
