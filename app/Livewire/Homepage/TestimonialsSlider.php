@@ -17,7 +17,17 @@ class TestimonialsSlider extends Component
     {
         return Testimonial::query()
             ->where('is_active', true)
+
+            // ★★★★★ মূল সর্টিং লজিকটি এখানে ★★★★★
+            // ধাপ ১: যেগুলোর sort_order > 0 আছে, সেগুলোকে সবার উপরে নিয়ে আসুন
+            ->orderByRaw('sort_order = 0 ASC')
+
+            // ধাপ ২: সেই ম্যানুয়ালি অর্ডার করা আইটেমগুলোকে তাদের নিজেদের মধ্যে সাজান
             ->orderBy('sort_order', 'asc')
+
+            // ধাপ ৩: বাকি সব আইটেমকে (যাদের sort_order = 0) রেটিং অনুযায়ী সাজান
+            ->orderBy('rating', 'desc')
+
             ->get();
     }
     public function render(): Factory|View|Application

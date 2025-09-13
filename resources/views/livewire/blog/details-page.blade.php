@@ -1,0 +1,71 @@
+<div class="content">
+    <div class="container">
+        <div class="row blog-details-cover">
+            <div class="col-lg-10 mx-auto">
+                <a href="{{-- route('blog.index') --}}" class="d-flex align-items-center mb-4"><i class="material-icons-outlined me-1">arrow_back</i>Back to Blog</a>
+                <div class="card mb-0">
+                    <div class="card-body">
+                        <div class="blog-details-item-01">
+                            <div class="blog-details-img-01">
+                                <img src="{{ $post->getFirstMediaUrl('posts') }}" alt="{{ $post->title }}" class="img-fluid">
+                            </div>
+                            <div class="blog-details-content-01">
+                                <span class="badge badge-sm bg-secondary fw-semibold">{{ $post->category->name }}</span>
+                                <h5>{{ $post->title }}</h5>
+                                <div class="d-flex align-items-center justify-content-center flex-wrap gap-2 author-details">
+                                    <div class="d-flex align-items-center me-3">
+                                        <a href="#"><img src="{{ $post->user->avatar_url ?? '' }}" alt="{{ $post->user->name }}" class="avatar avatar-sm rounded-circle me-2"></a>
+                                        <a href="#">{{ $post->user->name }}</a>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="d-inline-flex align-items-center"><i class="material-icons-outlined me-1">event</i>{{ $post->published_at->format('d M Y') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- মূল ব্লগ কন্টেন্ট --}}
+                        <div class="mt-4">
+                            {!! $post->body !!}
+                        </div>
+
+                        {{-- অথর বক্স --}}
+                        <div class="card border-0 border-start border-3 border-primary bg-light my-4">
+                            <div class="card-body">
+                                <div class="row align-items-center row-gap-2">
+                                    <div class="col-lg-2">
+                                        <img src="{{ $post->user->avatar_url ?? '' }}" alt="{{ $post->user->name }}" class="img-fluid avatar avatar-xxxl rounded-circle">
+                                    </div>
+                                    <div class="col-lg-10">
+                                        <p class="fw-medium mb-1 text-primary">Author</p>
+                                        <h5>{{ $post->user->name }}</h5>
+                                        <p class="mb-0">{{ $post->user->bio ?? '' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- ... Was this article helpful? (ভবিষ্যতের জন্য) ... --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Related Posts --}}
+        @if($this->relatedPosts->isNotEmpty())
+            <div class="blog-details-item-02 mt-5">
+                <h5>Related Posts</h5>
+                <div class="blog-carousel-wrapper">
+                    {{-- Carousel JS ইনিশিয়ালাইজ করার জন্য --}}
+                    <div class="blog-carousel">
+                        @foreach($this->relatedPosts as $relatedPost)
+                            <div>
+                                @include('partials.blog-card', ['post' => $relatedPost])
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
+    </div>
+</div>

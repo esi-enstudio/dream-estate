@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TestimonialResource\Pages;
-use App\Filament\Resources\TestimonialResource\RelationManagers;
-use App\Models\Testimonial;
+use App\Filament\Resources\FaqResource\Pages;
+use App\Filament\Resources\FaqResource\RelationManagers;
+use App\Models\Faq;
+use Exception;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,13 +14,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TestimonialResource extends Resource
+class FaqResource extends Resource
 {
-    protected static ?string $model = Testimonial::class;
+    protected static ?string $model = Faq::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+    protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
     protected static ?string $navigationGroup = 'Site Management';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -27,23 +28,20 @@ class TestimonialResource extends Resource
             ->schema([
                 Forms\Components\Section::make()
                     ->schema([
-                        Forms\Components\SpatieMediaLibraryFileUpload::make('avatar')
-                            ->collection('avatars')
-                            ->image()->imageEditor()->avatar()
-                            ->required()->columnSpanFull(),
-
-                        Forms\Components\TextInput::make('client_name')
+                        Forms\Components\TextInput::make('question')
                             ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('designation')
-                            ->maxLength(255),
-                        Forms\Components\Textarea::make('quote')
-                            ->required()
-                            ->rows(4)
+                            ->maxLength(255)
                             ->columnSpanFull(),
-
-                        Forms\Components\Select::make('rating')
-                            ->options(array_combine(range(1, 5), range(1, 5)))
+                        Forms\Components\RichEditor::make('answer')
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make('category')
+                            ->options([
+                                'general' => 'General',
+                                'renting' => 'Renting',
+                                'selling' => 'Selling',
+                                'other' => 'Other',
+                            ])
                             ->required()
                             ->native(false),
                         Forms\Components\TextInput::make('sort_order')
@@ -51,32 +49,40 @@ class TestimonialResource extends Resource
                             ->default(0),
                         Forms\Components\Toggle::make('is_active')
                             ->default(true)
+                            ->columnSpanFull()
                             ->required(),
                     ])->columns(2),
             ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\SpatieMediaLibraryImageColumn::make('avatar')
-                    ->collection('avatars')
-                    ->circular(),
-                Tables\Columns\TextColumn::make('client_name')
+                Tables\Columns\TextColumn::make('question')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('rating')
-                    ->formatStateUsing(fn (int $state) => str_repeat('⭐', $state))
-                    ->sortable(),
+                    ->limit(50),
+                Tables\Columns\TextColumn::make('category')
+                    ->badge()
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('sort_order')
                     ->sortable(),
             ])
-            ->defaultSort('sort_order', 'asc') // টেবিলটি ডিফল্টভাবে ক্রম অনুযায়ী দেখাবে
+            ->defaultSort('sort_order', 'asc')
+            ->defaultPaginationPageOption(5)
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('category')
+                    ->options([
+                        'general' => 'General',
+                        'renting' => 'Renting',
+                        'selling' => 'Selling',
+                        'other' => 'Other',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -98,9 +104,9 @@ class TestimonialResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTestimonials::route('/'),
-            'create' => Pages\CreateTestimonial::route('/create'),
-            'edit' => Pages\EditTestimonial::route('/{record}/edit'),
+            'index' => Pages\ListFaqs::route('/'),
+            'create' => Pages\CreateFaq::route('/create'),
+            'edit' => Pages\EditFaq::route('/{record}/edit'),
         ];
     }
 }

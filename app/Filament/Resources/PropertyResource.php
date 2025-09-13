@@ -509,12 +509,84 @@ class PropertyResource extends Resource
             ->defaultPaginationPageOption(5)
             ->deferLoading()
             ->filters([
-                Tables\Filters\SelectFilter::make('district')
-                    ->relationship('district', 'bn_name'),
-                Tables\Filters\TernaryFilter::make('is_available')->label('Available'),
-                Tables\Filters\TernaryFilter::make('rent_type')->label('Rent Type'),
-                Tables\Filters\TernaryFilter::make('purpose')->label('Rent/Sell'),
-                Tables\Filters\TernaryFilter::make('status')->label('Status'),
+
+                // 🔹 উদ্দেশ্য (ভাড়া বা বিক্রয়)
+                Tables\Filters\SelectFilter::make('purpose')
+                    ->label('উদ্দেশ্য')
+                    ->options([
+                        'rent' => 'ভাড়া',
+                        'sell' => 'বিক্রয়',
+                    ]),
+
+                // 🔹 স্ট্যাটাস
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('স্ট্যাটাস')
+                    ->options([
+                        'pending'  => 'বিচারাধীন',
+                        'active'   => 'সক্রিয়',
+                        'rented'   => 'ভাড়া হয়েছে',
+                        'inactive' => 'নিষ্ক্রিয়',
+                    ]),
+
+                // 🔹 প্রপার্টি টাইপ
+                Tables\Filters\SelectFilter::make('property_type_id')
+                    ->label('ধরণ')
+                    ->relationship('propertyType', 'name_bn')
+                    ->searchable()
+                    ->preload(),
+
+                // 🔹 লোকেশন (বিভাগ অনুযায়ী)
+                Tables\Filters\SelectFilter::make('division_id')
+                    ->label('বিভাগ')
+                    ->relationship('division', 'bn_name')
+                    ->searchable()
+                    ->preload(),
+
+                // 🔹 ভাড়া Range Filter
+                Tables\Filters\Filter::make('rent_range')
+                    ->form([
+                        TextInput::make('min')
+                            ->label('ন্যূনতম ভাড়া')
+                            ->numeric()
+                            ->prefix('৳'),
+
+                        TextInput::make('max')
+                            ->label('সর্বোচ্চ ভাড়া')
+                            ->numeric()
+                            ->prefix('৳'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['min'], fn ($q, $min) => $q->where('rent_price', '>=', $min))
+                            ->when($data['max'], fn ($q, $max) => $q->where('rent_price', '<=', $max));
+                    }),
+
+                // 🔹 ফিচার্ড
+                Tables\Filters\TernaryFilter::make('is_featured')
+                    ->label('ফিচার্ড'),
+
+                // 🔹 ট্রেন্ডিং
+                Tables\Filters\TernaryFilter::make('is_trending')
+                    ->label('ট্রেন্ডিং'),
+
+                // 🔹 ভেরিফাইড
+                Tables\Filters\TernaryFilter::make('is_verified')
+                    ->label('ভেরিফাইড'),
+
+                // 🔹 তারিখ অনুযায়ী (available_from)
+                Tables\Filters\Filter::make('available_from')
+                    ->form([
+                        DatePicker::make('from')
+                            ->label('শুরু'),
+
+                        DatePicker::make('until')
+                            ->label('শেষ'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['from'], fn ($q, $date) => $q->whereDate('available_from', '>=', $date))
+                            ->when($data['until'], fn ($q, $date) => $q->whereDate('available_from', '<=', $date));
+                    }),
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->actions([
                 Tables\Actions\ViewAction::make(),

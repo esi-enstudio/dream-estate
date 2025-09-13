@@ -100,135 +100,7 @@
     <!-- end partners section -->
 
     <!-- start faq section -->
-    <section class="faq-section section-padding bg-light ">
-        <div class="container">
-
-            <!-- start title -->
-            <div class="section-heading aos" data-aos="fade-down" data-aos-duration="1000">
-                <h2 class="mb-2 text-center">Frequently Asked Questions</h2>
-                <div class="sec-line">
-                    <span class="sec-line1"></span>
-                    <span class="sec-line2"></span>
-                </div>
-                <p class="mb-0 text-center"> Ready to buy your dream home? find it here.</p>
-            </div>
-            <!-- end title -->
-
-            <!-- start row -->
-            <div class="row">
-                <div class="col-lg-6 aos" data-aos="fade-up" data-aos-duration="1500">
-                    <img src="{{ asset('assets/img/home/bg/faq-img.jpg') }}" alt="" class="img-fluid custom-faq-img rounded">
-                </div>
-                <div class="col-lg-6">
-
-                    <div class="card mb-0">
-                        <div class="card-body">
-                            <div>
-                                <h5 class="mb-4"> General FAQ’s </h5>
-                                <div class="accordion accordions-items-seperate faq-accordion m-0" id="faq-accordion">
-
-                                    <!-- item-->
-                                    <div class="accordion-item">
-                                        <div class="accordion-header aos" data-aos="fade-down" data-aos-duration="1000">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-1" aria-expanded="true">
-                                                What is real estate?
-                                            </button>
-                                        </div>
-                                        <div id="accordion-1" class="accordion-collapse collapse show" data-bs-parent="#faq-accordion">
-                                            <div class="accordion-body">
-                                                <p class="mb-0">Real estate refers to land and any permanent structures on it, such as homes or buildings.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- item-->
-                                    <div class="accordion-item aos" data-aos="fade-down" data-aos-duration="1000">
-                                        <div class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-2" aria-expanded="false">
-                                                What types of properties are included in real estate?
-                                            </button>
-                                        </div>
-                                        <div id="accordion-2" class="accordion-collapse collapse" data-bs-parent="#faq-accordion">
-                                            <div class="accordion-body">
-                                                <p class="mb-0">Real estate includes residential, commercial, industrial, land, and special-purpose properties.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- item-->
-                                    <div class="accordion-item aos" data-aos="fade-down" data-aos-duration="1000">
-                                        <div class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-3" aria-expanded="false">
-                                                What is the role of a real estate agent?
-                                            </button>
-                                        </div>
-                                        <div id="accordion-3" class="accordion-collapse collapse" data-bs-parent="#faq-accordion">
-                                            <div class="accordion-body">
-                                                <p class="mb-0">A real estate agent assists clients in buying, selling, or renting properties by guiding them through the process.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div>
-                                <h5 class="mb-4 mt-4"> Buying FAQ’s </h5>
-                                <div class="accordion accordions-items-seperate faq-accordion m-0" id="faq-accordion1">
-
-                                    <!-- item-->
-                                    <div class="accordion-item aos" data-aos="fade-down" data-aos-duration="1000">
-                                        <div class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-4" aria-expanded="true">
-                                                How do I start the home-buying process?
-                                            </button>
-                                        </div>
-                                        <div id="accordion-4" class="accordion-collapse collapse" data-bs-parent="#faq-accordion1">
-                                            <div class="accordion-body">
-                                                <p class="mb-0">Start the home-buying process by checking your budget, getting pre approved for a mortgage, and consulting a real estate agent.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- item-->
-                                    <div class="accordion-item aos" data-aos="fade-down" data-aos-duration="1000">
-                                        <div class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-5" aria-expanded="false">
-                                                How much down payment do I need?
-                                            </button>
-                                        </div>
-                                        <div id="accordion-5" class="accordion-collapse collapse" data-bs-parent="#faq-accordion1">
-                                            <div class="accordion-body">
-                                                <p class="mb-0">The down payment typically ranges from 3% to 20% of the home's price, depending on the loan type and lender requirements.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- item-->
-                                    <div class="accordion-item aos" data-aos="fade-down" data-aos-duration="1000">
-                                        <div class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-6" aria-expanded="false">
-                                                What is a home inspection?
-                                            </button>
-                                        </div>
-                                        <div id="accordion-6" class="accordion-collapse collapse" data-bs-parent="#faq-accordion1">
-                                            <div class="accordion-body">
-                                                <p class="mb-0">A home inspection is a professional evaluation of a property's condition to identify any issues before finalizing the purchase.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-            <!-- end row -->
-
-        </div>
-    </section>
+    <livewire:homepage.faqs />
     <!-- end faq section -->
 
     <!-- start agent section -->
@@ -240,14 +112,20 @@
                 <div class="col-lg-7 aos" data-aos="zoom-in" data-aos-duration="1000">
                     <!-- start title -->
                     <div class="section-heading mb-3 mb-lg-0">
-                        <h2 class="mb-2 text-center text-lg-start  text-white ">Become a Real Estate Agent</h2>
-                        <p class="mb-0 text-center text-lg-start text-light">At Dream Estate, we provide the tools, training, and support you need to succeed in the competitive real estate market.</p>
+                        <h2 class="mb-2 text-center text-lg-start  text-white ">“আপনার প্রোপার্টি বিজ্ঞাপন দিন সহজেই”</h2>
+                        <p class="mb-0 text-center text-lg-start text-light">মাত্র কয়েক মিনিটেই আপনার ফ্ল্যাট বা বাড়ির বিজ্ঞাপন প্রকাশ করুন এবং পৌঁছে যান হাজারো সম্ভাব্য ক্রেতা ও ভাড়াটিয়ার কাছে।”</p>
                     </div>
                     <!-- end title -->
                 </div>
                 <div class="col-lg-5 position-relative z-1 aos" data-aos="zoom-in" data-aos-duration="1500">
                     <div class="text-lg-end text-center ">
-                        <a href="#" class="btn btn-xl btn-primary"> Register Now </a>
+                        @auth
+                            <a href="{{ route('filament.app.resources.properties.create') }}" class="btn btn-xl btn-primary"> Add Listing </a>
+                        @endauth
+
+                        @guest
+                                <a href="{{ route('filament.app.auth.login') }}" class="btn btn-xl btn-primary"> Log In </a>
+                        @endguest
                     </div>
                 </div>
             </div>
