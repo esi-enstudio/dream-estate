@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasCustomSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -32,4 +33,9 @@ class Post extends Model implements HasMedia
 
     public function category(): BelongsTo
     { return $this->belongsTo(Category::class); }
+
+    public function feedback(): HasMany
+    {
+        return $this->hasMany(PostFeedback::class);
+    }
 }

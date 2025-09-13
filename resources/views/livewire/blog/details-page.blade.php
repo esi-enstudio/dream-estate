@@ -67,7 +67,53 @@
                             </div>
                         </div>
 
-                        {{-- ... Was this article helpful? (ভবিষ্যতের জন্য) ... --}}
+                        {{-- Was this article helpful? --}}
+                        <div class="card shadow-none mb-0">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                    <h6 class="mb-0">Was this article helpful?</h6>
+
+                                    {{-- ডাইনামিক কাউন্টার --}}
+                                    @if(($post->helpful_yes_count + $post->helpful_no_count) > 0)
+                                        <p class="mb-0">
+                                            {{ $post->helpful_yes_count }} out of {{ $post->helpful_yes_count + $post->helpful_no_count }} found this helpful
+                                        </p>
+                                    @endif
+
+                                    {{-- ★★★ মূল ডাইনামিক অংশ ★★★ --}}
+                                    <div>
+                                        @auth
+                                            {{-- যদি ব্যবহারকারী ইতিমধ্যে ভোট দিয়ে থাকেন, তাহলে বাটনগুলো নিষ্ক্রিয় দেখান --}}
+                                            @if($userFeedback)
+                                                <div class="d-flex align-items-center">
+                                                    <button class="btn btn-sm {{ $userFeedback === 'yes' ? 'btn-success' : 'btn-white' }} d-inline-flex align-items-center me-2" disabled>
+                                                        <i class="material-icons-outlined me-1">thumb_up</i>Yes
+                                                    </button>
+                                                    <button class="btn btn-sm {{ $userFeedback === 'no' ? 'btn-danger' : 'btn-white' }} d-inline-flex align-items-center" disabled>
+                                                        <i class="material-icons-outlined me-1">thumb_down</i>No
+                                                    </button>
+                                                </div>
+                                                <small class="d-block text-muted mt-1">Thank you for your feedback!</small>
+                                            @else
+                                                {{-- ভোট দেওয়ার জন্য বাটন --}}
+                                                <div class="d-flex align-items-center">
+                                                    <a href="#" wire:click.prevent="giveFeedback('yes')" class="btn btn-sm btn-white d-inline-flex align-items-center me-2">
+                                                        <i class="material-icons-outlined me-1">thumb_up</i>Yes
+                                                    </a>
+                                                    <a href="#" wire:click.prevent="giveFeedback('no')" class="btn btn-sm btn-white d-inline-flex align-items-center">
+                                                        <i class="material-icons-outlined me-1">thumb_down</i>No
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        @else
+                                            {{-- লগইন না করা থাকলে লগইন করার জন্য বার্তা --}}
+                                            <p class="mb-0 fs-14"><a href="{{ route('login') }}">Login</a> to give feedback.</p>
+                                        @endauth
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -82,7 +128,7 @@
                     <div class="blog-carousel">
                         @foreach($this->relatedPosts as $relatedPost)
                             <div>
-                                @include('partials.blog-card', ['post' => $relatedPost])
+                                @include('livewire.blog.partials.blog-card', ['post' => $relatedPost])
                             </div>
                         @endforeach
                     </div>

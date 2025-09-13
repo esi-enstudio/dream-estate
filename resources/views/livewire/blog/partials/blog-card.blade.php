@@ -9,7 +9,7 @@
             <div class="d-flex align-items-center flex-wrap gap-3 author-details">
                 <div class="d-flex align-items-center me-3">
                     <a href="#">
-                        <img src="{{ $post->user->avatar_url ?? '' }}" alt="{{ $post->user->name }}" class="avatar avatar-sm rounded-circle me-2">
+                        <img src="{{ $post->user->avatar_url ?? asset('assets/img/users/default-avatar.png') }}" alt="{{ $post->user->name }}" class="avatar avatar-sm rounded-circle me-2">
                     </a>
                     <a href="#">{{ $post->user->name }}</a>
                 </div>

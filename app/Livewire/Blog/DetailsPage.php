@@ -3,6 +3,7 @@
 namespace App\Livewire\Blog;
 
 use App\Models\Post;
+use App\Models\PostFeedback;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Computed;
@@ -13,6 +14,7 @@ use Livewire\Component;
 class DetailsPage extends Component
 {
     public Post $post;
+    public ?string $userFeedback = null; // ব্যবহারকারীর বর্তমান ভোট ট্র্যাক করার জন্য
 
     public function mount(Post $post): void
     {
@@ -20,6 +22,39 @@ class DetailsPage extends Component
 
         // ভিউ কাউন্ট বৃদ্ধি
         $this->post->increment('views_count');
+        // মাউন্ট হওয়ার সময় ব্যবহারকারীর আগের ফিডব্যাক লোড করুন
+        $this->loadUserFeedback();
+    }
+
+    public function loadUserFeedback(): void
+    {
+        if (auth()->check()) {
+            $feedback = PostFeedback::where('user_id', auth()->id())
+                ->where('post_id', $this->post->id)
+                ->first();
+            $this->userFeedback = $feedback?->vote;
+        }
+    }
+
+    public function giveFeedback(string $vote)
+    {
+        if (!auth()->check()) {
+            return $this->redirect(route('filament.app.auth.login'));
+        }
+
+        // 'yes' বা 'no' ছাড়া অন্য কোনো ইনপুট গ্রহণ করবেন না
+        if (!in_array($vote, ['yes', 'no'])) {
+            return;
+        }
+
+        PostFeedback::updateOrCreate(
+            ['user_id' => auth()->id(), 'post_id' => $this->post->id],
+            ['vote' => $vote]
+        );
+
+        // UI তাৎক্ষণিকভাবে আপডেট করার জন্য
+        $this->userFeedback = $vote;
+        $this->post->refresh(); // Observer থেকে আসা নতুন কাউন্ট লোড করার জন্য
     }
 
     #[Computed(cache: true)]

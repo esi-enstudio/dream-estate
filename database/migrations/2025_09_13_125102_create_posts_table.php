@@ -24,6 +24,8 @@ return new class extends Migration
             $table->enum('status', ['published', 'draft'])->default('draft');
             $table->timestamp('published_at')->nullable();
             $table->unsignedInteger('views_count')->default(0);
+            $table->unsignedInteger('helpful_yes_count')->default(0);
+            $table->unsignedInteger('helpful_no_count')->default(0);
             $table->timestamps();
         });
     }

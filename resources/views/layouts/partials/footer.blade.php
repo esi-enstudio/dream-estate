@@ -3,10 +3,16 @@
 
         <div class="join-sec">
             <div>
-                <h2>Join now and redefine your work experience!</h2>
-                <p>Connect with us, streamline collaboration, and unlock success. </p>
+                <h2>“আপনার প্রোপার্টি বিজ্ঞাপন দিন সহজেই”</h2>
+                <p>মাত্র কয়েক মিনিটেই আপনার ফ্ল্যাট বা বাড়ির বিজ্ঞাপন প্রকাশ করুন এবং পৌঁছে যান হাজারো সম্ভাব্য ক্রেতা ও ভাড়াটিয়ার কাছে।</p>
             </div>
-            <a href="add-property-buy.html" class="btn btn-primary btn-lg">Start Post Your Property</a>
+            @auth
+                <a href="{{ route('filament.app.resources.properties.create') }}" class="btn btn-primary btn-lg"> Add Listing </a>
+            @endauth
+
+            @guest
+                <a href="{{ route('filament.app.auth.login') }}" class="btn btn-primary btn-lg"> Log In </a>
+            @endguest
         </div>
 
         <!-- Footer Top -->
