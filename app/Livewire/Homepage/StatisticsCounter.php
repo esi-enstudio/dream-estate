@@ -17,11 +17,14 @@ class StatisticsCounter extends Component
     public int $salesCompleted = 0;
     public int $totalUsers = 0;
 
+    public string $viewName = 'default'; // ডিফল্ট ভিউ
+
     /**
      * কম্পোনেন্টটি মাউন্ট হওয়ার সময় পরিসংখ্যানগুলো লোড করুন
      */
-    public function mount(): void
+    public function mount($viewName = 'default'): void
     {
+        $this->viewName = $viewName;
         $this->loadStatistics();
     }
 
@@ -66,6 +69,12 @@ class StatisticsCounter extends Component
 
     public function render(): Factory|View|Application
     {
+        // ভিউ নামের উপর ভিত্তি করে সঠিক Blade ফাইলটি রেন্ডার করুন
+        if ($this->viewName === 'about-us-stats') {
+            return view('livewire.homepage.partials.about-us-stats');
+        }
+
+        // ডিফল্ট ভিউ (হোমপেজের জন্য)
         return view('livewire.homepage.statistics-counter');
     }
 }

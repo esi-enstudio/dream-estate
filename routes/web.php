@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\PropertyViewController;
+use App\Livewire\AboutUsPage;
 use App\Livewire\Blog\DetailsPage;
 use App\Livewire\Blog\IndexPage;
+use App\Livewire\ContactUsPage;
 use App\Livewire\HomePage;
 use App\Livewire\PricingPage;
 use App\Livewire\Property\Rent\PropertiesPage;
@@ -32,4 +34,6 @@ Route::prefix('/blog')
 
 
 
+Route::get('/about-us', AboutUsPage::class)->name('about.us');
+Route::get('/contact-us', ContactUsPage::class)->name('contact.us');
 Route::get('/pricing', PricingPage::class)->name('pricing');

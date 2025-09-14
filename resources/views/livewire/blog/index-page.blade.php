@@ -23,35 +23,34 @@
     <!-- End Breadscrumb -->
 
     <div class="content">
-    <div class="container">
-        <div class="row row-gap-4">
-            <div class="col-md-12 col-lg-8">
-                {{-- পোস্ট লিস্ট --}}
-                @forelse($posts as $post)
-                    <div class="{{ !$loop->last ? 'mb-4' : '' }}">
-                        {{-- পুনঃব্যবহারযোগ্য ব্লগ কার্ড --}}
-                        @include('livewire.blog.partials.blog-card', ['post' => $post])
-                    </div>
-                @empty
-                    <p class="text-center">No posts found matching your criteria.</p>
-                @endforelse
+        <div class="container">
+            <div class="row row-gap-4">
+                <div class="col-md-12 col-lg-8">
+                    {{-- পোস্ট লিস্ট --}}
+                    @forelse($posts as $post)
+                        <div class="{{ !$loop->last ? 'mb-4' : '' }}">
+                            {{-- পুনঃব্যবহারযোগ্য ব্লগ কার্ড --}}
+                            @include('livewire.blog.partials.blog-card', ['post' => $post])
+                        </div>
+                    @empty
+                        <p class="text-center">No posts found matching your criteria.</p>
+                    @endforelse
 
-                {{-- Load More বাটন --}}
-                @if($hasMorePosts)
-                    <div class="d-flex align-items-center justify-content-center mt-4">
-                        <button wire:click="loadMore" class="btn btn-dark d-inline-flex align-items-center">
-                            <i class="material-icons-outlined me-1">autorenew</i>Load More
-                        </button>
-                    </div>
-                @endif
-            </div>
+                    {{-- Load More বাটন --}}
+                    @if($hasMorePosts)
+                        <div class="d-flex align-items-center justify-content-center mt-4">
+                            <button wire:click="loadMore" class="btn btn-dark d-inline-flex align-items-center">
+                                <i class="material-icons-outlined me-1">autorenew</i>Load More
+                            </button>
+                        </div>
+                    @endif
+                </div>
 
-            <div class="col-lg-4 theiaStickySidebar">
-                {{-- সাইডবার --}}
-                @include('livewire.blog.partials.sidebar')
+                <div class="col-lg-4 theiaStickySidebar">
+                    {{-- সাইডবার --}}
+                    @include('livewire.blog.partials.sidebar')
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 </div>

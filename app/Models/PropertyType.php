@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static find(mixed $originalCategoryId)
  * @method static withCount(string $string)
  * @method static count()
+ * @property int|mixed $properties_count
  */
 class PropertyType extends Model
 {

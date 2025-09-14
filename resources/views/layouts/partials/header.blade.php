@@ -61,6 +61,14 @@
                             <a href="{{ route('blog.index') }}">Blog</a>
                         </li>
 
+                        <li class="{{ request()->routeIs('about.us') ? 'active' : '' }}">
+                            <a href="{{ route('about.us') }}">About Us</a>
+                        </li>
+
+                        <li class="{{ request()->routeIs('contact.us') ? 'active' : '' }}">
+                            <a href="{{ route('contact.us') }}">Contact Us</a>
+                        </li>
+
                         <li class="{{ request()->routeIs('pricing') ? 'active' : '' }}">
                             <a href="{{ route('pricing') }}">Pricing</a>
                         </li>

@@ -1,5 +1,5 @@
-@if($this->testimonials->isNotEmpty())
 <section class="testimonials-section section-padding">
+    @if($this->testimonials->isNotEmpty())
     <div class="container">
         <!-- Section Heading -->
         <div class="section-heading aos" data-aos="fade-down">
@@ -27,5 +27,5 @@
             @endforeach
         </div>
     </div>
+    @endif
 </section>
-@endif

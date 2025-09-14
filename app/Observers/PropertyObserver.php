@@ -105,6 +105,9 @@ class PropertyObserver
             // This is the most efficient way inside an observer
             $type->properties_count = $type->properties()->count();
             $type->saveQuietly(); // saveQuietly() does not trigger any events
+
+            // Property Type-এর কাউন্ট আপডেট হওয়ার সাথে সাথেই স্লাইডার ক্যাশ পরিষ্কার করুন
+            Cache::forget('all-property-types-for-slider-optimized');
         }
     }
 }
