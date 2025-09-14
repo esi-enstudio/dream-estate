@@ -6,12 +6,12 @@
             <div class="col-lg-4 aos" data-aos="fade-down" data-aos-duration="1000">
                 <!-- start title -->
                 <div class="section-heading">
-                    <h2 class="mb-2 text-lg-start text-center text-white">Explore by  <span class="d-lg-block "> Property Type </span></h2>
+                    <h2 class="mb-2 text-lg-start text-center text-white">প্রোপার্টি টাইপ <span class="d-lg-block "> অনুযায়ী খুঁজুন </span></h2>
                     <div class="sec-line justify-content-lg-start">
                         <span class="sec-line1"></span>
                         <span class="sec-line2"></span>
                     </div>
-                    <p class="mb-0 text-lg-start text-center text-light">Whether you're looking for a cozy apartment, a luxurious villa, or a commercial investment, we’ve got you covered.</p>
+                    <p class="mb-0 text-lg-start text-center text-light">ফ্ল্যাট, বাড়ি, কমার্শিয়াল স্পেসসহ আপনার প্রয়োজন অনুযায়ী প্রোপার্টি খুঁজে নিন সহজেই।</p>
                 </div>
                 <!-- end title -->
             </div>

@@ -1,16 +1,3 @@
-<section class="how-work-section section-padding">
-    <div class="container">
-
-        <!-- start title -->
-        <div class="section-heading aos" data-aos="fade-down" data-aos-duration="1000">
-            <h2 class="mb-2 text-center">How It Works</h2>
-            <div class="sec-line">
-                <span class="sec-line1"></span>
-                <span class="sec-line2"></span>
-            </div>
-            <p class="mb-0 text-center">Follow these 3 steps to book your place</p>
-        </div>
-        <!-- end title -->
 
         <!-- start row -->
         <div class="row">
@@ -19,8 +6,8 @@
                     <div class="mb-3 bg-secondary avatar avatar-md rounded-circle p-2">
                         <img src="{{ asset('assets/img/home/icons/work-icon-1.svg') }}" alt="icon">
                     </div>
-                    <h5 class="mb-3">01. Search for Location</h5>
-                    <p class="mb-0">Find properties by location quickly, matching your lifestyle and preferences easily.</p>
+                    <h5 class="mb-3">ধাপ ১: খুঁজুন</h5>
+                    <p class="mb-0">👉 আপনার লোকেশন, বাজেট এবং প্রোপার্টি টাইপ নির্বাচন করে সহজেই পছন্দের প্রোপার্টি খুঁজে নিন।</p>
                 </div>
             </div> <!-- end col -->
 
@@ -29,8 +16,8 @@
                     <div class=" mb-3 bg-danger avatar avatar-md rounded-circle p-2">
                         <img src="{{ asset('assets/img/home/icons/work-icon-2.svg') }}" alt="icon">
                     </div>
-                    <h5 class="mb-3">02. Select Property Type</h5>
-                    <p class="mb-0">Choose your ideal property type easily, from apartments to villas.</p>
+                    <h5 class="mb-3">ধাপ ২: যোগাযোগ করুন</h5>
+                    <p class="mb-0">👉 পছন্দের প্রোপার্টির মালিক বা এজেন্টের সাথে সরাসরি যোগাযোগ করে বিস্তারিত তথ্য জেনে নিন।</p>
                 </div>
             </div> <!-- end col -->
 
@@ -39,8 +26,8 @@
                     <div class="mb-3 bg-success avatar avatar-md rounded-circle p-2">
                         <img src="{{ asset('assets/img/home/icons/work-icon-3.svg') }}" alt="icon">
                     </div>
-                    <h5 class="mb-3">03. Book Your Property</h5>
-                    <p class="mb-0">Secure your dream property quickly with a simple, hassle-free booking process.</p>
+                    <h5 class="mb-3">ধাপ ৩: চূড়ান্ত করুন</h5>
+                    <p class="mb-0">👉 আপনার পছন্দ অনুযায়ী ভাড়া বা কেনার সিদ্ধান্ত নিয়ে দ্রুত ও নিরাপদে প্রক্রিয়াটি সম্পন্ন করুন।</p>
                 </div>
             </div> <!-- end col -->
         </div>

@@ -2,9 +2,9 @@
     <div class="container">
         <!-- Section Heading -->
         <div class="section-heading aos" data-aos="fade-down">
-            <h2 class="mb-2 text-center">Latest Blog</h2>
+            <h2 class="mb-2 text-center">“রিয়েল এস্টেট ব্লগ”</h2>
             <div class="sec-line"><span class="sec-line1"></span><span class="sec-line2"></span></div>
-            <p class="mb-0 text-center">Explore our featured blog posts on premium properties for sales & rents.</p>
+            <p class="mb-0 text-center">বাড়ি কেনা-বেচা, ভাড়া এবং রিয়েল এস্টেট সম্পর্কিত সর্বশেষ টিপস, গাইড ও তথ্য পেতে পড়ুন আমাদের ব্লগ।</p>
         </div>
 
         @if($this->posts->isNotEmpty())
@@ -26,7 +26,7 @@
                                     <div class="d-flex align-items-center author-details">
                                         <div class="d-flex align-items-center me-3">
                                             {{-- ডাইনামিক অথর ইমেজ --}}
-                                            <a href="#"><img src="{{ $post->user?->avatar_url ?? asset('assets/img/users/default-avatar.png') }}" alt="{{ $post->user?->name }}" class="avatar avatar-sm rounded-circle me-2"></a>
+                                            <a href="#"><img src="{{ \Illuminate\Support\Facades\Storage::url($post->user?->avatar_url) ?? asset('assets/img/users/default-avatar.png') }}" alt="{{ $post->user?->name }}" class="avatar avatar-sm rounded-circle me-2"></a>
                                             {{-- ডাইনামিক অথর নাম --}}
                                             <a href="#">{{ $post->user?->name }}</a>
                                         </div>

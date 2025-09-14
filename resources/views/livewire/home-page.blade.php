@@ -15,7 +15,7 @@
     <!-- end banner section -->
 
     <!-- start how it works a section -->
-    @include('livewire.partials.homepage.how-it-work')
+    <livewire:homepage.how-it-works-section />
     <!-- end how it works a section -->
 
     <!-- start exploring by property type section -->

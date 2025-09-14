@@ -36,7 +36,7 @@
                                 <h5>{{ $post->title }}</h5>
                                 <div class="d-flex align-items-center justify-content-center flex-wrap gap-2 author-details">
                                     <div class="d-flex align-items-center me-3">
-                                        <a href="#"><img src="{{ $post->user->avatar_url ?? '' }}" alt="{{ $post->user->name }}" class="avatar avatar-sm rounded-circle me-2"></a>
+                                        <a href="#"><img src="{{ \Illuminate\Support\Facades\Storage::url($post->user->avatar_url) ?? asset('assets/img/users/default-avatar.png') }}" alt="{{ $post->user->name }}" class="avatar avatar-sm rounded-circle me-2"></a>
                                         <a href="#">{{ $post->user->name }}</a>
                                     </div>
                                     <div class="d-flex align-items-center">
@@ -56,7 +56,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center row-gap-2">
                                     <div class="col-lg-2">
-                                        <img src="{{ $post->user->avatar_url ?? '' }}" alt="{{ $post->user->name }}" class="img-fluid avatar avatar-xxxl rounded-circle">
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::url($post->user->avatar_url) ?? asset('assets/img/users/default-avatar.png') }}" alt="{{ $post->user->name }}" class="img-fluid avatar avatar-xxxl rounded-circle">
                                     </div>
                                     <div class="col-lg-10">
                                         <p class="fw-medium mb-1 text-primary">Author</p>

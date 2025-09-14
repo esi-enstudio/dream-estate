@@ -2,9 +2,9 @@
     <div class="container">
         <!-- Section Heading -->
         <div class="section-heading aos" data-aos="fade-down">
-            <h2 class="mb-2 text-center">Cities With Listing</h2>
+            <h2 class="mb-2 text-center">“যেসব এলাকায় আমাদের প্রোপার্টি রয়েছে”</h2>
             <div class="sec-line"><span class="sec-line1"></span><span class="sec-line2"></span></div>
-            <p class="mb-0 text-center">Destinations we love the most</p>
+            <p class="mb-0 text-center">ভৈরবের এই এলাকায় ভাড়া ও বিক্রয়ের জন্য খুঁজে নিন আপনার পছন্দের প্রোপার্টি।</p>
         </div>
 
         @if($this->areas->isNotEmpty())

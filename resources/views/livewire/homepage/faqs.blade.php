@@ -2,9 +2,9 @@
     <div class="container">
         <!-- Section Heading -->
         <div class="section-heading aos" data-aos="fade-down">
-            <h2 class="mb-2 text-center">Frequently Asked Questions</h2>
+            <h2 class="mb-2 text-center">“প্রশ্নোত্তর (FAQ)”</h2>
             <div class="sec-line"><span class="sec-line1"></span><span class="sec-line2"></span></div>
-            <p class="mb-0 text-center">Ready to buy your dream home? Find it here.</p>
+            <p class="mb-0 text-center">আমাদের প্ল্যাটফর্ম ব্যবহার, ভাড়া নেওয়া বা প্রোপার্টি বিক্রয় সম্পর্কিত সাধারণ প্রশ্নের উত্তর এখানে পাবেন।</p>
         </div>
 
         <div class="row">
