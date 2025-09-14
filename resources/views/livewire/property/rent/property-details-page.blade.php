@@ -41,7 +41,7 @@
 
                     <div class="col-xl-4 d-flex d-xl-block flex-wrap gap-3">
                         <div class="breadcrumb-icons d-flex align-items-center justify-content-xl-end justify-content-start gap-2 mb-xl-4 mb-2 mt-xl-0 mt-4">
-                            {{-- Wishlist, Bookmark, Compare functionalities can be implemented later --}}
+                            {{-- Wishlist, Bookmark, Compare functionalities can be implemented --}}
                             <livewire:wishlist-button :property="$property" :key="'wishlist-list-'.$property->id" />
 {{--                            <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">bookmark_add</i></a>--}}
 {{--                            <a href="javascript:void(0);" class=""><i class="material-icons-outlined rounded">compare_arrows</i></a>--}}
@@ -516,3 +516,34 @@
     </div>
     <!-- End Content -->
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            // একটি ভ্যারিয়েবল যা ট্র্যাক করবে যে ভিউ কাউন্ট করা হয়েছে কিনা
+            let viewCounted = false;
+
+            // ২০ সেকেন্ডের (২০,০০০ মিলিসেকেন্ড) টাইমার সেট করুন
+            const timer = setTimeout(() => {
+                // যদি এই সময়ের মধ্যে ভিউ কাউন্ট না হয়ে থাকে
+                if (!viewCounted) {
+                    // Livewire কম্পোনেন্টকে 'increment-view-count' ইভেন্টটি পাঠান
+                    Livewire.dispatch('increment-view-count');
+
+                    // ভিউ কাউন্ট করা হয়েছে হিসেবে চিহ্নিত করুন
+                    viewCounted = true;
+                }
+            }, 20000); // ২০ সেকেন্ড
+
+            // (ঐচ্ছিক কিন্তু খুবই গুরুত্বপূর্ণ উন্নতি)
+            // ব্যবহারকারী যদি ট্যাব পরিবর্তন করে বা পেজটি মিনিমাইজ করে, তাহলে টাইমারটি যেন না চলে
+            // এটি নিশ্চিত করে যে শুধুমাত্র "সক্রিয়" সময়ই গণনা করা হচ্ছে
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    // ব্যবহারকারী ট্যাব পরিবর্তন করলে টাইমারটি বন্ধ করুন
+                    clearTimeout(timer);
+                }
+            });
+        });
+    </script>
+@endpush

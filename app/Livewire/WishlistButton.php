@@ -6,6 +6,7 @@ use App\Models\Property;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class WishlistButton extends Component
@@ -19,6 +20,17 @@ class WishlistButton extends Component
     {
         $this->property = $property;
         $this->updateWishlistStatus();
+    }
+
+    /**
+     * প্যারেন্ট কম্পোনেন্ট থেকে 'refresh-wishlist-button' ইভেন্টটি শোনার জন্য
+     */
+    #[On('refresh-wishlist-button')]
+    public function refreshComponent()
+    {
+        // এই মেথডটি খালি থাকলেও, এটি Livewire-কে এই কম্পোনেন্টটিকে
+        // সম্পূর্ণরূপে re-render করার জন্য ট্রিগার করবে।
+        // এর ফলে, এর DOM এবং জাভাস্ক্রিপ্ট ইভেন্ট লিসেনারগুলো পুনরুদ্ধার হবে।
     }
 
     public function toggleWishlist()

@@ -6,9 +6,11 @@ use App\Models\Post;
 use App\Models\PostFeedback;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 #[Layout('layouts.app')]
 class DetailsPage extends Component
@@ -20,10 +22,27 @@ class DetailsPage extends Component
     {
         $this->post = $post;
 
-        // ভিউ কাউন্ট বৃদ্ধি
-        $this->post->increment('views_count');
         // মাউন্ট হওয়ার সময় ব্যবহারকারীর আগের ফিডব্যাক লোড করুন
         $this->loadUserFeedback();
+    }
+
+    /**
+     * JavaScript থেকে 'increment-post-view-count' ইভেন্টটি শোনার জন্য এই মেথডটি তৈরি করা হয়েছে
+     */
+    #[On('increment-post-view-count')]
+    public function incrementViewCount(): void
+    {
+        // সেশন কী তৈরি করুন, যাতে প্রতিটি পোস্টের জন্য আলাদাভাবে ট্র্যাক করা যায়
+        $viewedKey = 'post_viewed_' . $this->post->id;
+
+        // যদি এই সেশনে এই পোস্টটি ইতিমধ্যে ভিউ করা না হয়ে থাকে
+        if (!Session::has($viewedKey)) {
+            // ★★★ এখন এখানে ভিউ কাউন্ট বৃদ্ধি করা হচ্ছে ★★★
+            $this->post->increment('views_count');
+
+            // সেশনে এই পোস্টটিকে "ভিউ করা হয়েছে" হিসেবে চিহ্নিত করুন
+            Session::put($viewedKey, true);
+        }
     }
 
     public function loadUserFeedback(): void
@@ -72,6 +91,7 @@ class DetailsPage extends Component
 
     public function render(): Factory|View
     {
-        return view('livewire.blog.details-page');
+        return view('livewire.blog.details-page')
+            ->title($this->post->title . ' - ' . config('app.name'));
     }
 }

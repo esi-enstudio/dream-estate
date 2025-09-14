@@ -138,3 +138,30 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            // একটি ভ্যারিয়েবল যা ট্র্যাক করবে যে ভিউ কাউন্ট করা হয়েছে কিনা
+            let viewCounted = false;
+
+            // ২০ সেকেন্ডের (২০,০০০ মিলিসেকেন্ড) টাইমার সেট করুন
+            const timer = setTimeout(() => {
+                if (!viewCounted) {
+                    // ★★★ সুনির্দিষ্ট ইভেন্টের নাম ব্যবহার করা হচ্ছে ★★★
+                    Livewire.dispatch('increment-post-view-count');
+                    viewCounted = true;
+                }
+            }, 20000); // ২০ সেকেন্ড
+
+            // (ঐচ্ছিক কিন্তু খুবই গুরুত্বপূর্ণ উন্নতি)
+            // ব্যবহারকারী যদি ট্যাব পরিবর্তন করে বা পেজটি মিনিমাইজ করে, তাহলে টাইমারটি যেন না চলে
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    // ব্যবহারকারী ট্যাব পরিবর্তন করলে টাইমারটি বন্ধ করুন
+                    clearTimeout(timer);
+                }
+            });
+        });
+    </script>
+@endpush

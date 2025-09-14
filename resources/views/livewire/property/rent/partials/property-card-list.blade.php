@@ -38,9 +38,7 @@
                     <h6 class="text-white mb-0">৳{{ number_format($property->rent_price) }} <span class="fs-14 fw-normal">/ {{ $property->rent_type }}</span></h6>
 
                     {{-- ভবিষ্যতের জন্য: Wishlist কার্যকারিতা যোগ করার জন্য --}}
-                    <a href="javascript:void(0)" wire:click.prevent="toggleWishlist({{ $property->id }})" class="favourite">
-                        <i class="material-icons-outlined">favorite_border</i>
-                    </a>
+                    <livewire:wishlist-button :property="$property" :key="'wishlist-list-'.$property->id" class="favourite"/>
                 </div>
             </div>
 

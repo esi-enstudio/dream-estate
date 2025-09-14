@@ -98,7 +98,8 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
 
     public function wishlist(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class)->withTimestamps();
+        return $this->belongsToMany(Property::class, 'wishlists')
+            ->withTimestamps();
     }
 
     /**
@@ -115,10 +116,10 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
         }
 
         // যদি প্যানেলটি 'app' (ইউজার প্যানেল) হয়
-//        if ($panel->getId() === 'user') {
-//            // অ্যাডমিন এবং অন্যান্য সব লগইন করা ব্যবহারকারী প্রবেশ করতে পারবে
-//            return $this->hasRole(['user','super_admin']);
-//        }
+        if ($panel->getId() === 'app') {
+            // অ্যাডমিন এবং অন্যান্য সব লগইন করা ব্যবহারকারী প্রবেশ করতে পারবে
+            return $this->hasRole(['app','super_admin']);
+        }
 
         // অন্য কোনো প্যানেল থাকলে ডিফল্টভাবে অ্যাক্সেস দেওয়া হবে না
         return false;
