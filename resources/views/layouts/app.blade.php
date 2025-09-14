@@ -5,6 +5,7 @@
     <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 {{--    <meta name="description" content="{{ $metaDescription }}">--}}
     <meta name="keywords" content="real estate template, property management, real estate dashboard, property listings, rental template, agency admin, HTML real estate, React real estate, Vue dashboard, Angular real estate, Laravel property UI">
     <title>{{ $title ?? config('app.name') }}</title>

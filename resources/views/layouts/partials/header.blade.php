@@ -143,25 +143,6 @@
                     </ul>
 
                     <div class="menu-dropdown">
-                        <div class="dropdown mb-2">
-                            <a href="#" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                                <img src="{{ asset('assets/img/flags/us.svg') }}" alt="Language" class="me-1" height="16">English
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                    <img src="{{ asset('assets/img/flags/us.svg') }}" alt="" class="me-2" height="16"> <span class="align-middle">English</span>
-                                </a>
-                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                    <img src="{{ asset('assets/img/flags/de.svg') }}" alt="" class="me-2" height="16"> <span class="align-middle">German</span>
-                                </a>
-                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                    <img src="{{ asset('assets/img/flags/fr.svg') }}" alt="" class="me-2" height="16"> <span class="align-middle">French</span>
-                                </a>
-                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                    <img src="{{ asset('assets/img/flags/ae.svg') }}" alt="" class="me-2" height="16"> <span class="align-middle">Arabic</span>
-                                </a>
-                            </div>
-                        </div>
                         <div class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 Light
@@ -174,38 +155,19 @@
                     </div>
 
                     <div class="menu-login">
-                        <a href="signin.html" class="btn btn-primary w-100 mb-2">Sign In</a>
-                        <a href="signup.html" class="btn btn-secondary w-100">Register</a>
+                        @auth
+                            <a href="{{ route('filament.app.pages.dashboard') }}" target="_blank" class="btn btn-primary n-secondary w-100">Dashboard</a>
+                        @endauth
+
+                        @guest
+                            <a href="{{ route('filament.app.auth.login') }}" target="_blank" class="btn btn-primary n-secondary w-100">Sign In</a>
+                            <a href="{{ route('filament.app.auth.register') }}" target="_blank" class="btn btn-primary n-secondary w-100">Register</a>
+                        @endguest
                     </div>
 
                 </div>
 
                 <div class="nav header-items">
-
-                    <a href="#" class="topbar-link btn btn-light topbar-search" data-bs-toggle="modal" data-bs-target="#search-modal">
-                        <i class="material-icons-outlined">search</i>
-                    </a>
-
-                    <div class="dropdown topbar-lang">
-                        <a href="#" class="topbar-link btn btn-light" data-bs-toggle="dropdown">
-                            <img src="{{ asset('assets/img/flags/us.svg') }}" alt="Language" height="16">
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                <img src="{{ asset('assets/img/flags/us.svg') }}" alt="" class="me-2" height="16"> <span class="align-middle">English</span>
-                            </a>
-                            <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                <img src="{{ asset('assets/img/flags/de.svg') }}" alt="" class="me-2" height="16"> <span class="align-middle">German</span>
-                            </a>
-                            <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                <img src="{{ asset('assets/img/flags/fr.svg') }}" alt="" class="me-2" height="16"> <span class="align-middle">French</span>
-                            </a>
-                            <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                <img src="{{ asset('assets/img/flags/ae.svg') }}" alt="" class="me-2" height="16"> <span class="align-middle">Arabic</span>
-                            </a>
-                        </div>
-                    </div>
-
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="topbar-link btn btn-light" data-bs-toggle="dropdown">
                             <i class="material-icons-outlined">wb_sunny</i>
@@ -220,10 +182,15 @@
                         </div>
                     </div>
 
-                    <a href="signin.html" class="btn btn-lg btn-primary d-inline-flex align-items-center"><i class="material-icons-outlined me-1">lock</i>Sign In</a>
+                    @auth
+                        <a href="{{ route('filament.app.pages.dashboard') }}" target="_blank" class="btn btn-lg btn-primary d-inline-flex align-items-center"><i class="material-icons-outlined me-1">lock</i>Dashboard</a>
+                    @endauth
 
-                    <a href="signup.html" class="btn btn-lg btn-dark d-inline-flex align-items-center"><i class="material-icons-outlined me-1">perm_identity</i>Register</a>
+                    @guest
+                        <a href="{{ route('filament.app.auth.login') }}" target="_blank" class="btn btn-lg btn-primary d-inline-flex align-items-center"><i class="material-icons-outlined me-1">lock</i>Sign In</a>
 
+                        <a href="{{ route('filament.app.auth.register') }}" target="_blank" class="btn btn-lg btn-dark d-inline-flex align-items-center"><i class="material-icons-outlined me-1">perm_identity</i>Register</a>
+                    @endguest
                 </div>
             </nav>
 

@@ -519,28 +519,36 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('livewire:initialized', () => {
-            // একটি ভ্যারিয়েবল যা ট্র্যাক করবে যে ভিউ কাউন্ট করা হয়েছে কিনা
+        document.addEventListener('DOMContentLoaded', () => {
             let viewCounted = false;
 
-            // ২০ সেকেন্ডের (২০,০০০ মিলিসেকেন্ড) টাইমার সেট করুন
             const timer = setTimeout(() => {
-                // যদি এই সময়ের মধ্যে ভিউ কাউন্ট না হয়ে থাকে
                 if (!viewCounted) {
-                    // Livewire কম্পোনেন্টকে 'increment-view-count' ইভেন্টটি পাঠান
-                    Livewire.dispatch('increment-view-count');
+                    // ★★★★★ মূল সমাধানটি এখানে ★★★★★
+                    // Livewire dispatch-এর পরিবর্তে Fetch API ব্যবহার করে API endpoint-এ রিকোয়েস্ট পাঠানো হচ্ছে
+                    fetch("{{ route('listing.increment-view', $property) }}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log('View count updated successfully.');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
 
-                    // ভিউ কাউন্ট করা হয়েছে হিসেবে চিহ্নিত করুন
                     viewCounted = true;
                 }
             }, 20000); // ২০ সেকেন্ড
 
-            // (ঐচ্ছিক কিন্তু খুবই গুরুত্বপূর্ণ উন্নতি)
-            // ব্যবহারকারী যদি ট্যাব পরিবর্তন করে বা পেজটি মিনিমাইজ করে, তাহলে টাইমারটি যেন না চলে
-            // এটি নিশ্চিত করে যে শুধুমাত্র "সক্রিয়" সময়ই গণনা করা হচ্ছে
+            // সক্রিয় সময় গণনার জন্য visibilitychange লিসেনারটি আগের মতোই থাকবে
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
-                    // ব্যবহারকারী ট্যাব পরিবর্তন করলে টাইমারটি বন্ধ করুন
                     clearTimeout(timer);
                 }
             });

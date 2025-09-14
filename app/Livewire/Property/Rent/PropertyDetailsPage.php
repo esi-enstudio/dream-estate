@@ -41,25 +41,6 @@ class PropertyDetailsPage extends Component
     }
 
     /**
-     * JavaScript থেকে 'increment-view-count' ইভেন্টটি শোনার জন্য এই মেথডটি তৈরি করা হয়েছে
-     */
-    #[On('increment-view-count')]
-    public function incrementViewCount(): void
-    {
-        // সেশন কী তৈরি করুন, যাতে প্রতিটি প্রপার্টির জন্য আলাদাভাবে ট্র্যাক করা যায়
-        $viewedKey = 'property_viewed_' . $this->property->id;
-
-        // যদি এই সেশনে এই প্রপার্টিটি ইতিমধ্যে ভিউ করা না হয়ে থাকে
-        if (!Session::has($viewedKey)) {
-            // ★★★ এখন এখানে ভিউ কাউন্ট বৃদ্ধি করা হচ্ছে ★★★
-            $this->property->increment('views_count');
-
-            // সেশনে এই প্রপার্টিটিকে "ভিউ করা হয়েছে" হিসেবে চিহ্নিত করুন
-            Session::put($viewedKey, true);
-        }
-    }
-
-    /**
      * সম্পর্কিত প্রপার্টিগুলো দেখানোর জন্য (Computed Property)
      */
     #[Computed]

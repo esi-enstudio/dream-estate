@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostViewController;
 use App\Http\Controllers\PropertyViewController;
 use App\Livewire\AboutUsPage;
 use App\Livewire\Blog\DetailsPage;
@@ -19,13 +20,20 @@ Route::prefix('/rent')
     ->group(function (){
         Route::get('/properties', PropertiesPage::class)->name('rent');
         Route::get('/property/{property:slug}', PropertyDetailsPage::class)->name('details');
+
+        Route::post('/properties/{property}/increment-view', [PropertyViewController::class, 'increment'])
+            ->name('increment-view');
 });
+
 
 Route::prefix('/blog')
     ->name('blog.')
     ->group(function (){
         Route::get('/list', IndexPage::class)->name('index');
         Route::get('/details/{post:slug}', DetailsPage::class)->name('details');
+
+        Route::post('/posts/{post}/increment-view', [PostViewController::class, 'increment'])
+            ->name('increment-view');
     });
 
 

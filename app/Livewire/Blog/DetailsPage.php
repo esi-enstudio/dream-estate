@@ -26,25 +26,6 @@ class DetailsPage extends Component
         $this->loadUserFeedback();
     }
 
-    /**
-     * JavaScript থেকে 'increment-post-view-count' ইভেন্টটি শোনার জন্য এই মেথডটি তৈরি করা হয়েছে
-     */
-    #[On('increment-post-view-count')]
-    public function incrementViewCount(): void
-    {
-        // সেশন কী তৈরি করুন, যাতে প্রতিটি পোস্টের জন্য আলাদাভাবে ট্র্যাক করা যায়
-        $viewedKey = 'post_viewed_' . $this->post->id;
-
-        // যদি এই সেশনে এই পোস্টটি ইতিমধ্যে ভিউ করা না হয়ে থাকে
-        if (!Session::has($viewedKey)) {
-            // ★★★ এখন এখানে ভিউ কাউন্ট বৃদ্ধি করা হচ্ছে ★★★
-            $this->post->increment('views_count');
-
-            // সেশনে এই পোস্টটিকে "ভিউ করা হয়েছে" হিসেবে চিহ্নিত করুন
-            Session::put($viewedKey, true);
-        }
-    }
-
     public function loadUserFeedback(): void
     {
         if (auth()->check()) {
