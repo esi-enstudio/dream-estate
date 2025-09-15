@@ -413,13 +413,12 @@
             <!-- Price -->
             <div class="filter-set"
                  x-data="priceRangeSlider({
-                 from: @entangle('min_price').live,
-                 to: @entangle('max_price').live,
-                 min: 0,
-                 max: 50000,
-                 prefix: '৳'
-             })"
+                     from: @entangle('min_price').live,
+                     to: @entangle('max_price').live
+                 })"
                  x-init="init()"
+
+                 x-on:reset-price-slider-alpine.window="sliderInstance.reset()"
             >
                 <div class="d-flex align-items-center">
                     <div class="d-flex justify-content-between w-100 filter-search-head" data-bs-toggle="collapse" data-bs-target="#priceCollapse">

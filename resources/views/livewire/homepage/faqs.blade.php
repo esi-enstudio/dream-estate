@@ -36,6 +36,12 @@
                         @endforeach
                     </div>
                 </div>
+
+                <div class="text-center d-flex align-items-center justify-content-center m-auto mt-5">
+                    <a href="{{ route('faq') }}" class="btn btn-lg btn-dark d-flex align-items-center gap-1">
+                        All FAQ <i class="material-icons-outlined">arrow_forward</i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

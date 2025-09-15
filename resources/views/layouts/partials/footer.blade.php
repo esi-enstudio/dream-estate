@@ -22,26 +22,16 @@
                     <div class="footer-widget">
                         <h5 class="footer-title">Company</h5>
                         <ul class="footer-menu">
-                            <li><a href="about-us.html">About Us</a></li>
-                            <li><a href="javascript:void(0);">Careers</a></li>
-                            <li><a href="blog-grid.html">Blog</a></li>
-                            <li><a href="javascript:void(0);">Affiliate Program</a></li>
-                            <li><a href="add-property-buy.html">Add Your Listing</a></li>
+                            <li><a href="{{ route('about.us') }}">About Us</a></li>
+                            <li><a href="{{ route('faq') }}">FAQ</a></li>
+                            <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                            <li><a href="{{ route('filament.app.resources.properties.create') }}">Add Your Listing</a></li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-6 col-sm-6">
-                    <div class="footer-widget">
-                        <h5 class="footer-title">Destinations</h5>
-                        <ul class="footer-menu">
-                            <li><a href="javascript:void(0);">Hawai</a></li>
-                            <li><a href="javascript:void(0);">Istanbul</a></li>
-                            <li><a href="javascript:void(0);">San Diego</a></li>
-                            <li><a href="javascript:void(0);">Belgium</a></li>
-                            <li><a href="javascript:void(0);">Newyork</a></li>
-                        </ul>
-                    </div>
-                </div>
+
+                <livewire:footer.top-destinations />
+
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-widget footer-contacts">
                         <h5 class="footer-title">Reach Us</h5>

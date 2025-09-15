@@ -80,9 +80,9 @@ class PropertiesPage extends Component
 
     public function resetFilters(): void
     {
-        // ১. রিসেট করার আগে বর্তমান সর্টিং মানটি সংরক্ষণ করুন
+        // ১. রিসেট করার আগে প্রয়োজনীয় মানগুলো সংরক্ষণ করুন
         $currentSortBy = $this->sort_by;
-        $currentViewMode = $this->viewMode; // ViewMode-কেও সংরক্ষণ করা ভালো অভ্যাস
+        $currentViewMode = $this->viewMode;
 
         // ২. সমস্ত public প্রপার্টিকে তাদের ডিফল্ট মানে রিসেট করুন
         $this->reset();
@@ -91,8 +91,9 @@ class PropertiesPage extends Component
         $this->sort_by = $currentSortBy;
         $this->viewMode = $currentViewMode;
 
-        // ৪. শুধুমাত্র JS-ভিত্তিক উইজেটগুলোর জন্য রিসেট ইভেন্ট পাঠান
-        $this->dispatch('reset-price-slider');
+        // ৪. Alpine.js কম্পোনেন্টকে জানানোর জন্য একটি ইভেন্ট পাঠান
+        // এই ইভেন্টটি Alpine Bridge শুনবে এবং স্লাইডার রিসেট করবে
+        $this->dispatch('reset-price-slider-alpine');
     }
 
     // --- ফিল্টারের অপশনগুলো ডেটাবেস থেকে আনার জন্য ---
@@ -172,6 +173,6 @@ class PropertiesPage extends Component
             'properties' => $properties,
             'totalPropertiesCount' => $total_properties_count,
             'hasMoreProperties' => $properties->count() < $total_properties_count,
-        ]);
+        ])->title('Properties' .' - '. config('app.name'));
     }
 }

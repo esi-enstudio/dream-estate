@@ -77,52 +77,45 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('livewire:initialized', () => {
-            let priceSlider = $("#price_range_slider").ionRangeSlider({
-                type: "double",
-                grid: true,
-                min: 0,
-                max: 100000,
-                from: @json($min_price ?? 0),
-                to: @json($max_price ?? 100000),
-                prefix: "৳",
-                onFinish: function (data) {
-                    @this.set('min_price', data.from);
-                    @this.set('max_price', data.to);
-                }
-            }).data("ionRangeSlider");
+        {{--document.addEventListener('livewire:initialized', () => {--}}
+        {{--    let priceSlider = $("#price_range_slider").ionRangeSlider({--}}
+        {{--        type: "double",--}}
+        {{--        grid: true,--}}
+        {{--        min: 0,--}}
+        {{--        max: 100000,--}}
+        {{--        from: @json($min_price ?? 0),--}}
+        {{--        to: @json($max_price ?? 100000),--}}
+        {{--        prefix: "৳",--}}
+        {{--        onFinish: function (data) {--}}
+        {{--            @this.set('min_price', data.from);--}}
+        {{--            @this.set('max_price', data.to);--}}
+        {{--        }--}}
+        {{--    }).data("ionRangeSlider");--}}
 
-            // Livewire থেকে রিসেট ইভেন্ট শোনার জন্য
-            Livewire.on('reset-price-slider', () => {
-                priceSlider.reset();
-            });
-        });
+        {{--    // Livewire থেকে রিসেট ইভেন্ট শোনার জন্য--}}
+        {{--    Livewire.on('reset-price-slider', () => {--}}
+        {{--        priceSlider.reset();--}}
+        {{--    });--}}
+        {{--});--}}
 
 
         document.addEventListener('alpine:init', () => {
-            // priceRangeSlider কম্পোনেন্ট
+
+            // Alpine.js Bridge for Price Slider
             Alpine.data('priceRangeSlider', (config) => ({
-                // Livewire থেকে আসা entangled প্রপার্টি
                 from: config.from,
                 to: config.to,
-
-                // স্ট্যাটিক কনফিগারেশন
                 min: config.min || 0,
-                max: config.max || 1000000,
-                prefix: config.prefix || '$',
-
-                // অভ্যন্তরীণ state
+                max: config.max || 200000, // একটি বাস্তবসম্মত সর্বোচ্চ মান দিন
+                prefix: '৳',
                 sliderInstance: null,
 
-                // ডিসপ্লে টেক্সট তৈরি করার জন্য একটি "getter"
                 get displayRange() {
-                    // Intl.NumberFormat ব্যবহার করে সংখ্যাকে কমা সহ সুন্দরভাবে ফরম্যাট করা হচ্ছে
                     const formattedFrom = new Intl.NumberFormat().format(this.from || this.min);
                     const formattedTo = new Intl.NumberFormat().format(this.to || this.max);
                     return `${this.prefix}${formattedFrom} - ${this.prefix}${formattedTo}`;
                 },
 
-                // ইনিশিয়ালাইজেশন ফাংশন
                 init() {
                     this.sliderInstance = $(this.$refs.slider).ionRangeSlider({
                         skin: "flat",
@@ -132,29 +125,19 @@
                         from: this.from,
                         to: this.to,
                         onFinish: (data) => {
-                            // স্লাইডার পরিবর্তন শেষ হলে Livewire-কে আপডেট করুন
                             this.from = data.from;
                             this.to = data.to;
                         }
                     }).data("ionRangeSlider");
 
-                    // Livewire বা URL থেকে আসা পরিবর্তনে স্লাইডারকে দৃশ্যত আপডেট করার জন্য
                     this.$watch('from', (newValue) => {
                         if (this.sliderInstance && newValue !== this.sliderInstance.result.from) {
                             this.sliderInstance.update({ from: newValue });
                         }
                     });
-
                     this.$watch('to', (newValue) => {
                         if (this.sliderInstance && newValue !== this.sliderInstance.result.to) {
                             this.sliderInstance.update({ to: newValue });
-                        }
-                    });
-
-                    // Livewire-এর রিসেট ফিল্টার ইভেন্ট শোনার জন্য
-                    Livewire.on('reset-price-slider', () => {
-                        if (this.sliderInstance) {
-                            this.sliderInstance.reset();
                         }
                     });
                 },
@@ -175,9 +158,6 @@
                     let select2Options = {
                         width: '100%'
                     };
-                    // const select2 = $(this.$refs.select).select2({
-                    //     width: '100%'
-                    // });
 
                     // যদি showSearch false হয়, তাহলে সার্চ ফিল্ড 숨ানোর অপশন যোগ করুন
                     if (!this.showSearch) {
@@ -194,7 +174,8 @@
 
                     // Select2 থেকে একটি অপশন সিলেক্ট করা হলে
                     select2.on('select2:select', (e) => {
-                        const selectedValue = e.params.data.id;
+                        const selectedValue = e.params.data.id
+                            
                         // Livewire কম্পোনেন্টকে ম্যানুয়ালি আপডেট করার জন্য বলা হচ্ছে
                         @this.set(this.livewireModel, selectedValue);
                     });
@@ -205,11 +186,6 @@
                             $(this.$refs.select).val(newValue).trigger('change');
                         }
                     });
-
-                    // Livewire-এর রিসেট ফিল্টার ইভেন্ট শোনার জন্য
-                    // Livewire.on('reset-filters-select2', () => {
-                    //     $(this.$refs.select).val('').trigger('change');
-                    // });
                 },
             }));
         });

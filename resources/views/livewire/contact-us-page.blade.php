@@ -25,12 +25,15 @@
                     <div class="card border-0"><div class="card-body p-4">
                             <h4 class="mb-2">আমাদের বিক্রয় প্রতিনিধির সাথে কথা বলুন</h4>
                             <p class="mb-3">আপনার স্বপ্নের বাড়ি খুঁজে পেতে বা প্রোপার্টি সংক্রান্ত যেকোনো তথ্যের জন্য আমাদের অভিজ্ঞ বিক্রয় দলের সাথে কথা বলুন। আমরা আছি আপনার পাশে।</p>
-                            <p class="fw-semibold mb-0">টোল ফ্রি : +৮৮০ ৯৬xxxxxxxx</p>
+
+                            @if(!empty(app(\App\Settings\ContactPageSettings::class)->toll_free_number))
+                                <p class="fw-semibold mb-0">টোল ফ্রি : {{ app(\App\Settings\ContactPageSettings::class)->toll_free_number }}</p>
+                            @endif
                         </div></div>
                     <div class="card border-0 mb-0"><div class="card-body p-4">
                             <h4 class="mb-2">প্রোডাক্ট ও অ্যাকাউন্ট সাপোর্ট</h4>
                             <p class="mb-3">আমাদের প্ল্যাটফর্ম বা আপনার অ্যাকাউন্ট সম্পর্কিত যেকোনো প্রয়োজনে আমাদের সাপোর্ট টিমের সাহায্য নিন।</p>
-                            <a href="{{-- route('faq.index') --}}" class="btn btn-dark">সাধারণ জিজ্ঞাসা</a>
+                            <a href="{{ route('faq') }}" class="btn btn-dark">সাধারণ জিজ্ঞাসা</a>
                         </div></div>
                 </div>
                 <div class="col-lg-6">
@@ -53,8 +56,13 @@
                             <div>
                                 <h6 class="mb-2">ইমেইল অ্যাড্রেস</h6>
                                 {{-- এই তথ্যগুলো একটি সেটিংস টেবিল থেকে আসা উচিত --}}
-                                <p class="mb-0"><a href="mailto:info@yourdomain.com">info@yourdomain.com</a></p>
-                                <p class="mb-0"><a href="mailto:support@yourdomain.com">support@yourdomain.com</a></p>
+                                @if(!empty(app(\App\Settings\ContactPageSettings::class)->email1))
+                                    <p class="mb-0"><a href="mailto:{{ app(\App\Settings\ContactPageSettings::class)->email1 }}">{{ app(\App\Settings\ContactPageSettings::class)->email1 }}</a></p>
+                                @endif
+
+                                @if(!empty(app(\App\Settings\ContactPageSettings::class)->email2))
+                                    <p class="mb-0"><a href="mailto:{{ app(\App\Settings\ContactPageSettings::class)->email2 }}">{{ app(\App\Settings\ContactPageSettings::class)->email2 }}</a></p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -65,8 +73,13 @@
                             <span class="material-icons-outlined">call</span>
                             <div>
                                 <h6 class="mb-2">ফোন নাম্বার</h6>
-                                <p class="mb-0">+৮৮০ ১xxxxxxxxx</p>
-                                <p class="mb-0">+৮৮০ ১xxxxxxxxx</p>
+                                @if(!empty(app(\App\Settings\ContactPageSettings::class)->phone_number1))
+                                    <p class="mb-0">{{ app(\App\Settings\ContactPageSettings::class)->phone_number1 }}</p>
+                                @endif
+
+                                @if(!empty(app(\App\Settings\ContactPageSettings::class)->phone_number2))
+                                    <p class="mb-0">{{ app(\App\Settings\ContactPageSettings::class)->phone_number2 }}</p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -77,7 +90,10 @@
                             <span class="material-icons-outlined">location_on</span>
                             <div>
                                 <h6 class="mb-2">অফিসের ঠিকানা</h6>
-                                <p class="mb-0">বাড়ি #.., রোড #.., ধানমন্ডি, ঢাকা-১২০৯</p>
+
+                                @if(!empty(app(\App\Settings\ContactPageSettings::class)->address))
+                                    <p class="mb-0">{{ app(\App\Settings\ContactPageSettings::class)->address }}</p>
+                                @endif
                             </div>
                         </div>
                     </div>

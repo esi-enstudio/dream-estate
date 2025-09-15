@@ -108,6 +108,9 @@ class PropertyObserver
 
             // Property Type-এর কাউন্ট আপডেট হওয়ার সাথে সাথেই স্লাইডার ক্যাশ পরিষ্কার করুন
             Cache::forget('all-property-types-for-slider-optimized');
+
+            // Footer top destination আপডেট এর জন্য
+            Cache::forget('footer-top-destinations');
         }
     }
 }
